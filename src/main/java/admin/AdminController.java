@@ -47,6 +47,7 @@ public class AdminController {
     private static final String ATTR_ADD_MUNI = "add_muni";
     private static final String ATTR_DELETE_REGION = "delete_region";
     private static final String ATTR_DELETE_MUNI = "delete_muni";
+    private final int a = 0;
 
     public static Route serveAdminHomePage = (Request request, Response response) -> {
         if (isAdmin(request)) {
