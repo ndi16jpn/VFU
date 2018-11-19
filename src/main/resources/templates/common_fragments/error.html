@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<main th:fragment="error">
+    <section class="section">
+        <div class="container">
+            <h1 th:text="${text_title}" class="title">
+                text_title
+            </h1>
+            <hr>
+            <div th:text="${text_content}" class="content is-medium">
+                text_content
+            </div>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<th:block th:fragment="nav">
+    <nav th:replace="logged_in/fragments/navbar :: nav_before_menu"></nav>
+
+    <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link is-size-6">
+            Lägg till
+        </a>
+        <div class="navbar-dropdown">
+            <a class="navbar-item is-size-6" href="/admin/handle-regions/">
+                Studieorter / kommuner
+            </a>
+            <a class="navbar-item is-size-6" href="/admin/add-students/">
+                Studenter
+            </a>
+            <a class="navbar-item is-size-6" href="/admin/add-place/">
+                Platser / Handledare
+            </a>
+            <a class="navbar-item is-size-6" href="/admin/add-vfusam/">
+                VFU Samordnare
+            </a>
+        </div>
+    </div>
+
+    <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link is-size-6">
+            Visa
+        </a>
+        <div class="navbar-dropdown">
+            <a class="navbar-item is-size-6" href="/admin/show-students/">
+                Studenter
+            </a>
+            <a class="navbar-item is-size-6" href="/admin/show-vfusam/">
+                VFU Samordnare
+            </a>
+        </div>
+    </div>
+
+    <a class="navbar-item is-size-6" href="/admin/match/">
+        Matchning
+    </a>
+
+    <a class="navbar-item is-size-6" href="/admin/delete-all/">
+        Ta bort
+    </a>
+
+
+
+    <nav th:replace="logged_in/fragments/navbar :: nav_after_menu"></nav>
+</th:block>
+
+</body>
+</html>

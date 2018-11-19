@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="has-navbar-fixed-top">
+<head th:replace="common_fragments/header :: header">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<div id="navbar-top">
+<nav th:replace="logged_in/admin/fragments/navbar :: nav"></nav>
+</div>
+<main>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Verifiera matchning
+            </h1>
+            <hr>
+            <div class="content is-medium">
+                <table id="table" class="table is-bordered is-narrow is-hoverable">
+                    <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Enhet</th>
+                        <th>Handledare</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="match : ${match_result}">
+                        <td th:text="${match.student.studentData.name}"></td>
+                        <td th:text="|${match.place.unit.name} (${match.place.unit.municipality.region.name}, ${match.place.unit.municipality.name})|"></td>
+                        <td th:if="${match.place.getHandledare} != null" th:text="${match.place.getHandledare.email}"></td>
+                        <td th:if="${match.place.getHandledare} == null">
+                            <p class="icon has-text-danger">
+                                <i class="fa fa-lg fa-times"></i>
+                            </p>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th>Student</th>
+                        <th>Enhet</th>
+                        <th>Handledare</th>
+                    </tr>
+                    </tfoot>
+                </table>
+                <br>
+                <form action="/admin/match/verify-result/" method="post">
+                    <button class="button is-large is-success" type="submit" name="button_clicked" value="okey">Ser bra ut</button>
+                    <button class="button is-large is-danger" type="submit" name="button_clicked" value="cancel">Avbryt</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="common_fragments/footer :: footer"></footer>
+
+</body>
+</html>

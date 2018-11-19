@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<th:block th:fragment="nav_before_menu">
+<nav class="navbar is-fixed-top is-primary">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item" th:href="${home_link}">
+                <img id="navbarLogo" th:src="'/tempLogga.png'" src="../../public/tempLogga.png">
+                <div class="is-unselectable has-text-weight-bold is-size-6">
+                    VFU-portal SOCIONOM
+                </div>
+            </a>
+            <div id="navbarBurger" class="navbar-burger burger" data-target="navMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        <div id="navMenu" class="navbar-menu">
+            <div class="navbar-start">
+</th:block>
+<th:block th:fragment="nav_after_menu">
+            </div>
+            <div class="navbar-end">
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link is-hidden-touch">
+                        <span th:text="|${name} (${role})|" class="is-size-5">
+                            name (role)
+                        </span>
+                    </a>
+                    <div class="navbar-dropdown">
+                        <div class="navbar-item is-hidden-desktop">
+                            <hr>
+                            <span th:text="|${name} (${role})|" class="is-size-5">
+                                name (role)
+                            </span>
+                        </div>
+                        <div class="navbar-item">
+                            <form action="/logout/" method="post">
+                                <button type="submit" class="button is-danger is-large">
+                                    Logga ut
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+</th:block>
+
+</body>
+</html>

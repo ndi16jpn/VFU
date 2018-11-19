@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<section class="hero is-primary" th:fragment="hero(activeTab)">
+    <div class="hero-body">
+
+        <div class="container">
+            <div class="columns is-mobile">
+                <div class="column is-narrow">
+                    <img th:src="'/tempLogga.png'" src="../../../public/tempLogga.png" class="image is-64x64">
+                </div>
+                <div class="column">
+                    <h1 class="title">
+                        VFU-portal SOCIONOM
+                    </h1>
+                    <h2 class="subtitle">
+                        Högskolan i Gävle
+                    </h2>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="hero-foot">
+        <div class="tabs is-medium is-boxed">
+            <div class="container">
+                <ul>
+                    <li th:class="${activeTab == 'index'}? 'is-active'">
+                        <a href="/">Hem</a>
+                    </li>
+                    <li th:class="${activeTab == 'contact'}? 'is-active'">
+                        <a href="/contact/">Kontakt</a>
+                    </li>
+                    <li th:class="${activeTab == 'login'}? 'is-active'">
+                        <a href="/login/">Logga in</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

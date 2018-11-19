@@ -1,0 +1,229 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="js">
+<script th:src="'/js/vue.min.js'" src="../../../../public/js/vue.js"></script>
+<script id="region-template" type="text/x-template">
+    <article th:replace="logged_in/admin/handle_regions/region_fragment :: region_vue"></article>
+</script>
+<script>
+    function init() {
+        var eventBus = new Vue();
+        vueAddRegion(eventBus);
+        vueRegionComponent();
+        vueRegions(eventBus);
+    }
+
+    function vueAddRegion(eventBus) {
+        new Vue({
+            el: "#vue-add-region",
+            data: {
+                region: "",
+                isAjaxWaiting: false,
+                showError: false,
+                error: ""
+            },
+            computed: {
+                regionIsValid: function() {
+                    return isAllLettersAndMinSizeTwo(this.region);
+                }
+            },
+            methods: {
+                ajaxAddRegion: function() {
+                    this.showError = false;
+                    this.error = "";
+                    this.isAjaxWaiting = true;
+                    var regionToAdd = this.region;
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", "/admin/handle-regions/add-region-ajax/", true);
+                    var self = this;
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status === 200) {
+                                var jsonResult = JSON.parse(xhr.response);
+                                if (jsonResult.alreadyExisted) {
+                                    self.error = "Studieorten '" + regionToAdd + "' fanns redan";
+                                    self.showError = true;
+                                } else {
+                                    eventBus.$emit("ajax-add-region",
+                                        {
+                                            "key": regionToAdd,
+                                            "value": jsonResult.regionMunis
+                                        }
+                                    );
+                                    self.region = "";
+                                }
+                            } else {
+                                self.error = "Ett problem uppstod";
+                                self.showError = true;
+                            }
+                            self.isAjaxWaiting = false;
+                        }
+                    };
+                    xhr.send(regionToAdd);
+                    return false;
+                }
+            }
+        });
+    }
+
+    function isAllLettersAndMinSizeTwo(name) {
+        var isLetter = function isLetter(c) {
+            return c.toLowerCase() !== c.toUpperCase();
+        };
+        for (var i = 0; i < name.length; i++) {
+            if (!isLetter(name.charAt(i))) {
+                return false;
+            }
+        }
+        return name.trim().length >= 2;
+    }
+
+    function vueRegionComponent() {
+        var foreignKeyConstraint = 409;
+        Vue.component("vue-region", {
+            props: {
+                regionMuni: {
+                    type: Object,
+                    required: true
+                }
+            },
+            template: "#region-template",
+            data: function() {
+                return {
+                    muni: '',
+                    displayRegion: false,
+                    showError: false,
+                    error: "",
+                    isAjaxWaitingAddMuni: false,
+                    isAjaxWaitingDelMuni: false
+                }
+            },
+            computed: {
+                muniIsValid: function () {
+                    return isAllLettersAndMinSizeTwo(this.muni);
+                }
+            },
+            methods: {
+                regionToggleClick: function() {
+                    this.displayRegion = !this.displayRegion;
+                    if (!this.displayRegion) {
+                        this.hasBeenFocused = false;
+                    }
+                },
+                ajaxAddMuni: function() {
+                    if (!this.muniIsValid) {
+                        return;
+                    }
+                    this.isAjaxWaitingAddMuni = true;
+                    this.showError = false;
+                    this.error = "";
+                    var muniToAdd = this.muni;
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", "/admin/handle-regions/add-muni-ajax/" + this.regionMuni.key + "/", true);
+                    var self = this;
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status === 200) {
+                                var jsonResult = JSON.parse(xhr.response);
+                                if (jsonResult.alreadyExisted) {
+                                    self.error = "Kommunen '" + muniToAdd + "' fanns redan";
+                                    self.showError = true;
+                                } else {
+                                    self.regionMuni.value.push(muniToAdd);
+                                    self.muni = "";
+                                }
+                            } else {
+                                self.error = "Ett problem uppstod";
+                                self.showError = true;
+                            }
+                            self.isAjaxWaitingAddMuni = false;
+                        }
+                    };
+                    xhr.send(muniToAdd);
+                    return false;
+                },
+                deleteRegion: function() {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", "/admin/handle-regions/delete-region-ajax/", true);
+                    var self = this;
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status === 200) {
+                                self.$emit("delete-region", [self.regionMuni.key]);
+                            } else if (xhr.status === foreignKeyConstraint) {
+                                self.error = "Går ej att ta bort studieort om någon tillhör den orten";
+                                self.showError = true;
+                                self.displayRegion = true;
+                            } else {
+                                self.error = "Ett problem uppstod";
+                                self.showError = true;
+                                self.displayRegion = true;
+                            }
+                        }
+                    };
+                    xhr.send(this.regionMuni.key);
+                },
+                deleteMuni: function(muni) {
+                    this.isAjaxWaitingDelMuni = true;
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", "/admin/handle-regions/delete-muni-ajax/", true);
+                    var self = this;
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status === 200) {
+                                for (var i = 0; i < self.regionMuni.value.length; i++) {
+                                    if (self.regionMuni.value[i] === muni) {
+                                        self.regionMuni.value.splice(i, 1);
+                                        break;
+                                    }
+                                }
+                            } else if (xhr.status === foreignKeyConstraint) {
+                                self.error = "Går ej att ta bort kommun om någon tillhör den kommunen";
+                                self.showError = true;
+                                self.displayRegion = true;
+                            } else {
+                                self.error = "Ett problem uppstod";
+                                self.showError = true;
+                                self.displayRegion = true;
+                            }
+                            self.isAjaxWaitingDelMuni = false;
+                        }
+                    };
+                    xhr.send(muni);
+                }
+            }
+        });
+    }
+
+    window.addEventListener("DOMContentLoaded", init);
+</script>
+<script th:inline="javascript">
+    function vueRegions(eventBus) {
+        new Vue({
+            el: "#vue-regions",
+            data: {
+                noscript: false,
+                regionMunis: [[${region_muni_list}]]
+            },
+            created: function() {
+                var self = this;
+                eventBus.$on("ajax-add-region", function(regionMuni) {
+                    self.regionMunis.unshift(regionMuni);
+                });
+            },
+            methods: {
+                deleteRegion: function(region) {
+                    for (var i = 0; i < this.regionMunis.length; i++) {
+                        if (this.regionMunis[i].key === region[0]) {
+                            this.regionMunis.splice(i, 1);
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+    }
+</script>
+</th:block>
+
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="has-navbar-fixed-top">
+<head th:replace="common_fragments/header :: header">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<nav th:replace="logged_in/student/fragments/navbar :: nav"></nav>
+
+<main>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Tillgängliga platser för studieorten '[[${region}]]'
+            </h1>
+            <hr>
+            <div class="content is-medium">
+                <th:block th:each="unit : ${unitsForRegion}">
+                    <div class="card block">
+                        <header class="card-header">
+                            <p class="card-header-title" th:text="|${unit.name} (${unit.municipality.name} kommun)|"></p>
+                        </header>
+                        <div class="card-content">
+                            <span th:text="${unit.info}"></span>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Val för VFU-platser
+            </h1>
+            <hr>
+            <div class="content is-medium">
+                <h4>
+                    Observera! Läs noga igenom platsbeskrivningar, om det finns särskilda krav om t ex ålder.
+                </h4>
+                <p>
+                    Platserna matchas slumpvis utifrån de val du fyllt i. Om flera studenter har önskemål om
+                    samma VFU-plats, är det systemet som slumpvis väljer vilken student som erbjuds platsen.
+                </p>
+                <p>
+                    Alla kommuner erbjuder olika VFU-platser från år till år, och de vet inte alltid exakt
+                    verksamhet under placeringsprocessen. Av den anledningen är platserna ibland beskrivna endast som områden.
+                </p>
+                <p>
+                    HiG förbinder sig att erbjuda en (1) praktikplats till varje student.
+                    Platserna tilldelas i kommuner som ingår i den studieort man tillhör, med pendlingsavstånd.
+                    Om en student av särskilda skäl* vill göra VFU på annan ort, tas kontakt med VFU-samordnare på HiG.
+                </p>
+                <p>
+                    Besked om VFU-plats ges till studenter i slutet av maj varje år.
+                </p>
+                <p class="is-italic">
+                    *särskilda skäl kan vara funktionsvariation, sjukdom, familjesituation etc.
+                </p>
+                <br>
+
+                <div th:if="${error}" class="notification is-danger is-size-5">
+                    <p th:text="${error_msg}"></p>
+                </div>
+                <form action="/student/apply-choice/" method="post">
+
+                    <div id="vue-choices">
+                        <div class="notification is-danger is-size-5"
+                             v-if="isDuplicateSelections" v-cloak>Flera val är lika</div>
+                        <vue-unit-choice v-for="index in numOfSelectionsToShow" :key="index"
+                                         :units="units" :choice-num="index" @select-event="selectEvent">
+                        </vue-unit-choice>
+
+                        <th:block th:each="_,iterStat : ${unitsForRegion}" th:if="${iterStat.count <= 5}">
+                        <div class="field block" v-if="noscript">
+                            <div class="control has-icons-left">
+                                <div class="select is-medium">
+                                    <select th:name="|choice${iterStat.count}|">
+                                        <th:block th:switch="${iterStat.count}">
+                                            <option selected disabled th:case="'1'">Välj förstahandsval..</option>
+                                            <option selected disabled th:case="'2'">Välj andrahandsval..</option>
+                                            <option selected disabled th:case="'3'">Välj tredjehandsval..</option>
+                                            <option selected disabled th:case="'4'">Välj fjärdehandsval..</option>
+                                            <option selected disabled th:case="'5'">Välj femtehandsval..</option>
+                                        </th:block>
+                                        <option th:each="unit : ${unitsForRegion}" th:value="${unit.id}">
+                                            [[${unit.name}]] ([[${unit.municipality.name}]] kommun)
+                                        </option>
+                                    </select>
+                                </div>
+                                <span class="icon is-medium is-left" th:text="${iterStat.count}"></span>
+                            </div>
+                        </div>
+                        </th:block>
+
+                        <div class="field">
+                            <div class="control">
+                                <button type="submit" class="button is-primary is-large" :disabled="notValidSelections">
+                                    Skicka in
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="common_fragments/footer :: footer"></footer>
+
+<script th:src="'/js/vue.min.js'" src="../../../../public/js/vue.js"></script>
+<script id="unit-choice-template" type="text/x-template">
+    <div class="field block">
+        <div class="control has-icons-left">
+            <div class="select is-medium">
+                <select v-model="selectedUnit" :name="'choice'+choiceNum" @change="selectChange">
+                    <option selected disabled value="" v-if="choiceNum === 1">Välj förstahandsval..</option>
+                    <option selected disabled value="" v-else-if="choiceNum === 2">Välj andrahandsval..</option>
+                    <option selected disabled value="" v-else-if="choiceNum === 3">Välj tredjehandsval..</option>
+                    <option selected disabled value="" v-else-if="choiceNum === 4">Välj fjärdehandsval..</option>
+                    <option selected disabled value="" v-else-if="choiceNum === 5">Välj femtehandsval..</option>
+                    <option v-for="unit in units" :value="unit.id">
+                        {{ unit.name }} ({{ unit.municipality.name }} kommun)
+                    </option>
+                </select>
+            </div>
+            <span class="icon is-medium is-left" v-text="choiceNum"></span>
+        </div>
+    </div>
+</script>
+<script th:inline="javascript">
+    function init() {
+        choiceComponent();
+        vueUnits();
+    }
+
+    function choiceComponent() {
+        Vue.component("vue-unit-choice", {
+            props: {
+                choiceNum: {
+                    type: Number,
+                    required: true
+                },
+                units: {
+                    type: Array,
+                    required: true
+                }
+            },
+            template: "#unit-choice-template",
+            data: function() {
+                return {
+                    selectedUnit: ""
+                }
+            },
+            methods: {
+                selectChange: function() {
+                    this.$emit("select-event", this.choiceNum, this.selectedUnit);
+                }
+            }
+        });
+    }
+
+    function vueUnits() {
+        new Vue({
+            el: "#vue-choices",
+            data: {
+                noscript: false,
+                units: [[${unitsForRegion}]],
+                numOfChoices: 0,
+                selections: {}
+            },
+            methods: {
+                selectEvent: function(choiceNum, selectedUnit) {
+                    this.$set(this.selections, choiceNum, selectedUnit);
+                }
+            },
+            computed: {
+                numOfSelectionsToShow: function() {
+                    var numOfSelections = Object.keys(this.selections).length;
+                    if (numOfSelections === 0) {
+                        return 1;
+                    }
+                    return numOfSelections < this.numOfChoices ? numOfSelections+1 : this.numOfChoices;
+                },
+                selectedAll: function() {
+                    var numOfSelections = Object.keys(this.selections).length;
+                    return numOfSelections === this.numOfChoices;
+                },
+                isDuplicateSelections: function() {
+                    var seen = {};
+                    for (var choiceNum in this.selections) {
+                        var currentValue = this.selections[choiceNum];
+                        if (seen.hasOwnProperty(currentValue)) {
+                            return true;
+                        } else {
+                            seen[currentValue] = true;
+                        }
+                    }
+                    return false;
+                },
+                notValidSelections: function() {
+                    return !this.selectedAll || this.isDuplicateSelections;
+                }
+            },
+            created: function() {
+                var numOfUnits = this.units.length;
+                this.numOfChoices = numOfUnits >= 5 ? 5 : numOfUnits;
+            }
+        });
+    }
+
+    window.addEventListener("DOMContentLoaded", init);
+</script>
+
+</body>
+</html>

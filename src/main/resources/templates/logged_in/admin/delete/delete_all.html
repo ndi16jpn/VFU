@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="has-navbar-fixed-top">
+<head th:replace="common_fragments/header :: header">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<nav th:replace="logged_in/admin/fragments/navbar :: nav"></nav>
+
+<main>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Ta bort
+            </h1>
+            <hr>
+            <div class="content is-medium">
+                På den här sidan kan du ta bort alla studenter och handledare.<br>
+                Exempelvis när du ska ta bort alla studenter från året innan och lägga in nya till årets VFU.
+            </div>
+            <div class="content is-medium has-text-danger" >
+                [[${cantDelete}]]
+            </div>
+            <form onsubmit="return submitForm(this)"  style="margin-top:40px;" action="/admin/delete-all/" method="post" >
+
+                        <div class="field">
+                            <label class="label">Ta bort alla: </label>
+                        </div>
+                        <div class="field-body has-icons-left">
+                            <div class="field">
+                                <p class="control has-icons-left">
+                         <span class="select">
+                             <select name="deleteOption">
+                                 <option id="cantDelete" disabled selected>---Välj vad som ska tas bort---</option>
+                                 <option>Studenter</option>
+                                 <option>Handledare</option>
+                             </select>
+                         </span>
+                                    <span class="icon is-small is-left">
+                                 <i class="fa fa-user"></i>
+                            </span>
+
+                                </p>
+                            </div>
+                        </div>
+
+
+                    <div class="field">
+                        <!-- Left empty for spacing -->
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <button type="submit" class="button is-primary" >
+                                    Ta bort
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+            </form>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="common_fragments/footer :: footer"></footer>
+
+
+<script>
+function submitForm() {
+    return confirm('Är du säker på att du vill genomföra borttagningen?');
+
+}
+</script>
+</body>
+
+</html>

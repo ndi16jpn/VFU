@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<th:block th:fragment="nav">
+    <nav th:replace="logged_in/fragments/navbar :: nav_before_menu"></nav>
+    <nav th:replace="logged_in/fragments/navbar :: nav_after_menu"></nav>
+</th:block>
+
+</body>
+</html>

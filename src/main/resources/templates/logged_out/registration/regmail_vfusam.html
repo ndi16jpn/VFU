@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common_fragments/header :: header">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<main>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Välkommen VFU Samordnare
+            </h1>
+            <hr>
+            <div class="content is-medium">
+                <label class="label">Namn</label>
+                <p class="is-size-5" th:text="${vfu_name}">name</p>
+                <label class="label">Email</label>
+                <p class="is-size-5" th:text="${vfu_email}">email</p>
+                <label class="label">Telefon</label>
+                <p class="is-size-5" th:if="${vfu_phone.length == 0}">ej angivet</p>
+                <p class="is-size-5" th:text="${vfu_phone}" th:if="${vfu_phone.length != 0}">phone</p>
+                <label class="label">Region</label>
+                <p class="is-size-5" th:text="${vfu_region.name}">region</p>
+
+                <h3 class="title is-3">
+                    Välj lösenord nedan för att registrera dig
+                </h3>
+                <div class="columns">
+                    <div class="column is-half">
+                        <div class="notification is-warning is-size-5">
+                            <p>Lösenordet måste bestå av minst 6 stycken tecken</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="columns" th:if="${error}">
+                    <div class="column is-half">
+                        <div class="notification is-danger is-size-5">
+                            <p th:text="${error_msg}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div id="vue">
+                <form th:action="|/reg/vfu-samordnare/${reg_link}/|" method="post">
+                    <div class="columns">
+                        <div class="column is-half">
+                            <div class="field">
+                                <p class="control has-icons-left">
+                                    <input v-model="passwordInput" class="input is-medium" type="password" name="password" placeholder="Lösenord">
+                                    <span class="icon is-left">
+                                        <i class="fa fa-lock"></i>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="columns">
+                        <div class="column is-half">
+                            <div class="field">
+                                <p class="control has-icons-left">
+                                    <input v-model="passwordInputAgain" class="input is-medium" type="password" name="password_again" placeholder="Lösenordet igen">
+                                    <span class="icon is-left">
+                                        <i class="fa fa-lock"></i>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <p class="control">
+                            <button type="submit" class="button is-primary is-large" :disabled="invalidPasswordInput">
+                                Registrera dig
+                            </button>
+                        </p>
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="common_fragments/footer :: footer"></footer>
+
+<script th:src="'/js/vue.min.js'" src="../../../public/js/vue.js"></script>
+<script>
+    function init() {
+        new Vue({
+            el: "#vue",
+            data: {
+                passwordInput: "",
+                passwordInputAgain: ""
+            },
+            computed: {
+                passwordsDontMatch: function() {
+                    return this.passwordInput !== this.passwordInputAgain;
+                },
+                passwordToShort: function() {
+                    return this.passwordInput.length < 6;
+                },
+                invalidPasswordInput: function() {
+                    return this.passwordsDontMatch || this.passwordToShort;
+                }
+            }
+        });
+    }
+    window.addEventListener("DOMContentLoaded", init);
+</script>
+
+</body>
+</html>

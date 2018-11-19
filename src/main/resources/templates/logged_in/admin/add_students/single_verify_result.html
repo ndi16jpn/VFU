@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="has-navbar-fixed-top">
+<head th:replace="common_fragments/header :: header">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<nav th:replace="logged_in/admin/fragments/navbar :: nav"></nav>
+
+<main>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Ny student resultat
+            </h1>
+            <hr>
+            <div class="content is-medium">
+                <div th:switch="${student_data_exists}">
+                    <p th:case="true">Studenten ej tillagd, existerade redan</p>
+                    <div th:case="*">
+                        <h4 class="title is-4">Studenten tillagd</h4>
+                        <div class="notification is-success is-size-5">
+                            <p>
+                                Ett email har skickats till studenten om att han/hon nu kan logga in
+                            </p>
+                        </div>
+                        <table id="table" class="table is-bordered is-narrow is-hoverable">
+                            <thead>
+                            <tr>
+                                <th>Namn</th>
+                                <th>Email</th>
+                                <th>Födelseår</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td th:text="${student_name}">Namn</td>
+                                <td th:text="${student_email}">Email</td>
+                                <td th:text="${student_year_birth}">Födelseår</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="common_fragments/footer :: footer"></footer>
+
+</body>
+</html>

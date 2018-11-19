@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="has-navbar-fixed-top">
+<head th:replace="common_fragments/header :: header">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<nav th:replace="logged_in/handledare/fragments/navbar :: nav"></nav>
+
+<main th:replace="common_fragments/error :: error"></main>
+
+<footer th:replace="common_fragments/footer :: footer"></footer>
+
+</body>
+</html>

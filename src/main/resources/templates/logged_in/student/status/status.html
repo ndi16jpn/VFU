@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="has-navbar-fixed-top">
+<head th:replace="common_fragments/header :: header">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<nav th:replace="logged_in/student/fragments/navbar :: nav"></nav>
+
+<main>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Matchning status
+            </h1>
+            <hr>
+            <div class="content is-medium">
+                <span th:if="${not match_info}">Väntar på matching</span>
+                <span th:if="${match_info}">
+                    <p>Platsnamn: [[${match_info.unit.name}]], [[${match_info.unit.municipality.name}]]</p>
+                    <p th:if="${not match_info.handledare}">Handledare: Ingen Handledare har tilldelats än</p>
+                    <p th:if="${match_info.handledare}">Handledare: [[${match_info.handledare.email}]]</p>
+
+                </span>
+            </div>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Val för VFU-platser
+            </h1>
+            <hr>
+            <div class="content is-medium">
+                <div class="columns">
+                    <div class="column is-narrow has-text-weight-bold">
+                        <p th:if="${stud_choice1} != 'no_choice'">Förstahandsval</p>
+                        <p th:if="${stud_choice2} != 'no_choice'">Andrahandsval</p>
+                        <p th:if="${stud_choice3} != 'no_choice'">Tredjehandsval</p>
+                        <p th:if="${stud_choice4} != 'no_choice'">Fjärdehandsval</p>
+                        <p th:if="${stud_choice5} != 'no_choice'">Femtehandsval</p>
+                    </div>
+                    <div class="column">
+                        <p th:if="${stud_choice1} != 'no_choice'" th:text="${stud_choice1}"></p>
+                        <p th:if="${stud_choice2} != 'no_choice'" th:text="${stud_choice2}"></p>
+                        <p th:if="${stud_choice3} != 'no_choice'" th:text="${stud_choice3}"></p>
+                        <p th:if="${stud_choice4} != 'no_choice'" th:text="${stud_choice4}"></p>
+                        <p th:if="${stud_choice5} != 'no_choice'" th:text="${stud_choice5}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Personlig information
+            </h1>
+            <hr>
+            <div class="content is-medium">
+                <div class="field">
+                    <label class="label">Namn</label>
+                    <p class="is-size-5" th:text="${name}"></p>
+                </div>
+                <div class="field">
+                    <label class="label">Email</label>
+                    <p class="is-size-5" th:text="${stud_email}"></p>
+                </div>
+                <div class="field">
+                    <label class="label">Födelseår</label>
+                    <p class="is-size-5" th:text="${stud_yob}"></p>
+                </div>
+                <div class="field">
+                    <label class="label">Studieort</label>
+                    <p class="is-size-5" th:text="${stud_region}"></p>
+                </div>
+                <div class="field">
+                    <label class="label">Telefonnummer</label>
+                    <p class="is-size-5" th:text="${stud_tfn}"></p>
+                </div>
+                <div class="field">
+                    <label class="label">Personligt brev</label>
+                    <div class="control">
+                        <textarea th:text="${stud_pbrev}" class="textarea is-medium" rows="10" readonly></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="common_fragments/footer :: footer"></footer>
+
+</body>
+</html>

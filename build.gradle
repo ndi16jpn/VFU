@@ -1,0 +1,36 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '2.0.1'
+}
+
+group 'se.hig.projekt_vfu'
+version '0.1.0'
+
+apply plugin: 'java'
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'main.Main'
+    }
+}
+
+shadowJar {
+    baseName = 'projekt_vfu'
+    version = null
+    classifier = null
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.12'
+    implementation 'com.sparkjava:spark-core:2.7.1'
+    implementation 'com.sparkjava:spark-template-thymeleaf:2.7.1'
+    implementation 'org.slf4j:slf4j-simple:1.7.25'
+    implementation 'org.xerial:sqlite-jdbc:3.21.0'
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'org.simplejavamail:simple-java-mail:4.4.5'
+}

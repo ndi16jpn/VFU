@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="has-navbar-fixed-top">
+<head th:replace="common_fragments/header :: header">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<nav th:replace="logged_in/admin/fragments/navbar :: nav"></nav>
+
+<main>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                På denna sida kan du göra följande
+            </h1>
+            <hr>
+            <div class="content is-medium">
+                <ul class="is-size-5">
+                    <li>Ladda upp fil innehållande årets socionom studenter</li>
+                    <li>Manuellt lägga till studenter av årets socionom studenter</li>
+                </ul>
+                <br>
+                <h4>Varför behövs detta?</h4>
+                <p>
+                    Detta behövs så att systemet ska veta vilka studenter som ska kunna logga in.
+                    Annars skulle vilken student som helst på skolan kunna logga in.
+                </p>
+                <p>
+                    Uppladdning utav fil är ett sätt för att göra det enklare för dig, så du inte behöver
+                    lägga till 80 stycken studenter manuellt.
+                </p>
+                <p>
+                    Dock är även möjligt att lägga till studenter manuellt, vilket kanske kan behövas ibland.
+                    T.ex. utifall en student inte var registrerad i ladok när du laddade hem filen med årets studenter.
+                </p>
+                <div class="notification is-warning is-size-5">
+                    <p>
+                        Ett email kommer att skickas till alla tillagda studenter om att de kan logga in.
+                    </p>
+                    <p>
+                        Det är därför viktigt att lägga till alla studieorter/kommuner och platser först,
+                        innan du lägger till studenterna.
+                    </p>
+                    <p>
+                        Annars kommer dem att logga in och så finns det ingen
+                        studieort att välja. Eller inga platser att välja som sina val.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Ladda upp fil innehållande årets socionom studenter
+            </h1>
+            <hr>
+            <div class="content is-medium">
+                <ol class="is-size-5">
+                    <li>Logga in på ladok</li>
+                    <li>Välj och ladda ner årets klasslista som .csv</li>
+                    <li>Klicka på knappen nedan och välj den nyligen nedladdade filen</li>
+                </ol>
+                <form action="/admin/add-students/upload-csv/" method="post" enctype="multipart/form-data">
+                    <div class="file has-name block">
+                        <label class="file-label">
+                            <input id="fileInput" class="file-input" type="file" accept=".csv" name="students_csv">
+                            <span class="file-cta">
+                                <span class="file-icon">
+                                    <i class="fa fa-upload"></i>
+                                </span>
+                                <span class="file-label">
+                                    Välj fil från ladok
+                                </span>
+                            </span>
+                            <span id="fileName" class="file-name">
+                                *.csv
+                            </span>
+                        </label>
+                    </div>
+                    <button id="submitButton" type="submit" class="button is-primary is-large">Ladda upp</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Manuellt lägga till socionom student
+            </h1>
+            <hr>
+            <div class="content is-medium">
+                <div id="vue-single-add-form">
+                    <form action="/admin/add-students/add-single/" method="post">
+                        <div class="field is-horizontal">
+                            <div class="field-label">
+                                <label class="label">Namn</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <p class="control is-expanded has-icons-left has-icons-right">
+                                        <input class="input is-medium" type="text" name="studentFName" placeholder="Förnamn"
+                                               :class="fNameTextClass" v-model.trim="fName"
+                                               @focus.once="hasBeenFocused = true">
+                                        <span class="icon is-small is-left">
+                                            <i class="fa fa-user"></i>
+                                        </span>
+                                        <span class="icon is-small is-right">
+                                            <i class="fa" :class="[fNameIsValid ? 'fa-check' : 'fa-times']"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <p class="control is-expanded has-icons-left has-icons-right">
+                                        <input class="input is-medium" type="text" name="studentLName" placeholder="Efternamn"
+                                               :class="lNameTextClass" v-model.trim="lName"
+                                               @focus.once="hasBeenFocused = true">
+                                        <span class="icon is-small is-left">
+                                            <i class="fa fa-user"></i>
+                                        </span>
+                                        <span class="icon is-small is-right">
+                                            <i class="fa" :class="[lNameIsValid ? 'fa-check' : 'fa-times']"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label">
+                                <label class="label">Email</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field has-addons">
+                                    <p class="control is-expanded has-icons-left has-icons-right">
+                                        <input class="input is-medium" type="text" name="studentId" placeholder="abc17def"
+                                               :class="studIdTextClass" v-model.trim="studId"
+                                               @focus.once="hasBeenFocused = true">
+                                        <span class="icon is-small is-left">
+                                            <i class="fa fa-envelope"></i>
+                                        </span>
+                                        <span class="icon is-small is-right">
+                                            <i class="fa" :class="[studIdIsValid ? 'fa-check' : 'fa-times']"></i>
+                                        </span>
+                                    </p>
+                                    <p class="control">
+                                        <a class="button is-static is-medium">
+                                            @student.hig.se
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label">
+                                <label class="label">Födelseår</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control has-icons-left">
+                                        <div class="select is-medium">
+                                            <select name="studentYearBirth" @focus.once="hasBeenFocused = true">
+                                                <option th:each="year : ${#numbers.sequence(1950,1989)}" th:text="${year}">year</option>
+                                                <option selected>1990</option>
+                                                <option th:each="year : ${#numbers.sequence(1991,2017)}" th:text="${year}">year</option>
+                                            </select>
+                                        </div>
+                                        <div class="icon is-small is-left">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="field is-horizontal">
+                            <div class="field-label">
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <div class="control">
+                                        <button type="submit" class="button is-primary is-large" :disabled="invalidInput">
+                                            Lägg till socionom student
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="common_fragments/footer :: footer"></footer>
+
+<script th:src="'/js/vue.min.js'" src="../../../../public/js/vue.js"></script>
+<script>
+    function init() {
+        csvFileChangeSubmitButton();
+        setupVue();
+    }
+
+    function csvFileChangeSubmitButton() {
+        var fileInput = document.getElementById("fileInput");
+        fileInput.addEventListener("change", function() {
+            document.getElementById("fileName").innerHTML = fileInput.files.item(0).name;
+            document.getElementById("submitButton").disabled = false;
+        });
+        document.getElementById("submitButton").disabled = true;
+    }
+
+    function setupVue() {
+        new Vue({
+            el: '#vue-single-add-form',
+            data: {
+                fName: '',
+                lName: '',
+                studId: '',
+                hasBeenFocused: false
+            },
+            computed: {
+                fNameTextClass: function () {
+                    if (!this.hasBeenFocused) {
+                        return "";
+                    }
+                    return this.fNameIsValid ? 'is-success' : 'is-danger';
+                },
+                lNameTextClass: function () {
+                    if (!this.hasBeenFocused) {
+                        return "";
+                    }
+                    return this.lNameIsValid ? 'is-success' : 'is-danger';
+                },
+                studIdTextClass: function () {
+                    if (!this.hasBeenFocused) {
+                        return "";
+                    }
+                    return this.studIdIsValid ? 'is-success' : 'is-danger';
+                },
+                fNameIsValid: function () {
+                    return this.validName(this.fName);
+                },
+                lNameIsValid: function () {
+                    return this.validName(this.lName);
+                },
+                studIdIsValid: function () {
+                    if (!(this.studId.length === 8)) {
+                        return false;
+                    }
+                    var isLetters = this.isLetter(this.studId[0]) &&
+                        this.isLetter(this.studId[1]) &&
+                        this.isLetter(this.studId[2]) &&
+                        this.isLetter(this.studId[5]) &&
+                        this.isLetter(this.studId[6]) &&
+                        this.isLetter(this.studId[7]);
+                    var isNumeric = function isNumeric(n) {
+                        return !isNaN(parseFloat(n)) && isFinite(n);
+                    };
+                    return isLetters && isNumeric(parseInt(this.studId.slice(3, 5)));
+                },
+                invalidInput: function () {
+                    return !this.fNameIsValid || !this.lNameIsValid || !this.studIdIsValid;
+                }
+            },
+            methods: {
+                validName: function (name) {
+                    for (i = 0; i < name.length; i++) {
+                        if (!this.isLetter(name.charAt(i))) {
+                            return false;
+                        }
+                    }
+                    return name.trim().length >= 2;
+                },
+                isLetter: function isLetter(c) {
+                    return c.toLowerCase() !== c.toUpperCase();
+                }
+            }
+        });
+    }
+
+    window.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>

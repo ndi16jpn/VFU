@@ -1,0 +1,7 @@
+{
+  "host": "smtp.hig.se",
+  "port": 25,
+  "username": "",
+  "password": "",
+  "smtpProtocol": "plain"
+}

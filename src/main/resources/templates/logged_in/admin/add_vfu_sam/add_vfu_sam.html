@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="has-navbar-fixed-top">
+<head th:replace="common_fragments/header :: header">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<nav th:replace="logged_in/admin/fragments/navbar :: nav"></nav>
+
+<main>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Lägg till VFU samordnare
+            </h1>
+            <hr>
+            <div class="content is-medium">
+                Här lägger du till nya vfu samordnare
+            </div>
+            <div class="content is-medium">
+                <div th:if="${error}" class="notification is-danger is-size-5">
+                    <p th:text="${error_msg}"></p>
+                </div>
+                <div th:if="${vfu_sam_added}" class="notification is-success is-size-5">
+                    <p>
+                        VFU Samordnaren '[[${vfu_sam_name}]]' tillagd
+                    </p>
+                    <p>
+                        Ett mail har skickats med en länk till '[[${vfu_sam_email}]]'
+                    </p>
+                    <p>
+                        När VFU Samordnaren klickar på den länken kommer han/hon till en sida
+                        där han/hon får välja lösenord för att slutföra registreringen
+                    </p>
+                </div>
+                <div id="form-vue">
+                    <form action="/admin/add-vfusam/" method="post">
+                        <div class="columns">
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Namn</label>
+                                    <div class="control has-icons-left">
+                                        <input class="input is-medium" type="text" name="vfuName" required
+                                               v-model="nameInput">
+                                        <span class="icon is-small is-left">
+                                            <i class="fa fa-user"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="columns">
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Email</label>
+                                    <div class="control has-icons-left">
+                                        <input class="input is-medium" type="email" name="email" required
+                                               ref="emailInput" @input="validateEmail">
+                                        <span class="icon is-small is-left">
+                                            <i class="fa fa-envelope"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="columns">
+                            <div class="column is-half">
+                                <div class="field">
+                                    <label class="label">Telefonnummer</label>
+                                    <div class="control has-icons-left">
+                                        <input class="input is-medium" type="text" name="vfuTfn">
+                                        <span class="icon is-small is-left">
+                                            <i class="fa fa-phone"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Studieort</label>
+                            <div class="control has-icons-left">
+                                <div class="select is-medium">
+                                    <select name="region" v-model="regionSelected">
+                                        <option selected disabled>Välj..</option>
+                                        <option th:each="region: ${all_regions}" th:text="${region}"></option>
+                                    </select>
+                                </div>
+                                <div class="icon is-small is-left">
+                                    <i class="fa fa-globe"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="field">
+                            <div class="control">
+                                <button type="submit" class="button is-primary is-large" :disabled="invalidInput">
+                                    Lägg till VFU samordnare
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="common_fragments/footer :: footer"></footer>
+
+<script th:src="'/js/vue.min.js'" src="../../../../public/js/vue.js"></script>
+<script>
+    function init() {
+        new Vue({
+            el: "#form-vue",
+            data: {
+                regionSelected: "Välj..",
+                invalidEmail: true,
+                nameInput: ""
+            },
+            computed: {
+                invalidName: function() {
+                    return this.nameInput.length < 2;
+                },
+                invalidRegion: function() {
+                    return this.regionSelected === "Välj..";
+                },
+                invalidInput: function() {
+                    return this.invalidName || this.invalidEmail || this.invalidRegion;
+                }
+            },
+            methods: {
+                validateEmail: function() {
+                    this.invalidEmail = !this.$refs.emailInput.checkValidity();
+                }
+            }
+        });
+    }
+    window.addEventListener("DOMContentLoaded", init);
+</script>
+
+</body>
+</html>

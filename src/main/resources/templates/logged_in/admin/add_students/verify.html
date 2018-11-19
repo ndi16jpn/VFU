@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="has-navbar-fixed-top">
+<head th:replace="common_fragments/header :: header">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<nav th:replace="logged_in/admin/fragments/navbar :: nav"></nav>
+
+<main>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Uppladdning bekräftelse
+            </h1>
+            <hr>
+            <div class="content is-medium">
+                Filen från ladok som du laddade upp innehöll
+                <span class="has-text-weight-bold is-size-4" th:text="${student_data_list.size}">??</span> stycken studenter.
+                <br>
+                <br>
+                <button id="toggleShowStudents" class="button is-large block">
+                    <span class="icon is-large">
+                        <i id="toggleArrow" class="fa fa-caret-down"></i>
+                    </span>
+                    <span id="showHideToggleText">Visa</span><span>&nbsp;studenter</span>
+                </button>
+
+                <table id="table" class="table is-bordered is-narrow is-hoverable">
+                    <thead>
+                        <tr>
+                            <th>Namn</th>
+                            <th>Email</th>
+                            <th>Födelseår</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="student : ${student_data_list}">
+                            <td th:text="${student.getName}">Namn</td>
+                            <td th:text="${student.getEmail}">Email</td>
+                            <td th:text="${student.getDob}">Födelseår</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Namn</th>
+                            <th>Email</th>
+                            <th>Födelseår</th>
+                        </tr>
+                    </tfoot>
+                </table>
+                <button id="toggleShowStudentsBottom" class="button is-large block">
+                    <span class="icon is-large">
+                        <i id="toggleArrowBottom" class="fa fa-caret-up"></i>
+                    </span>
+                    <span id="showHideToggleTextBottom">Dölj</span><span>&nbsp;studenter</span>
+                </button>
+                <br>
+                <br>
+                <div class="buttons">
+                    <form action="/admin/add-students/upload-csv/result/" method="post">
+                        <button class="button is-large is-success" type="submit" name="button_clicked" value="okey">Ser bra ut</button>
+                        <button class="button is-large is-danger" type="submit" name="button_clicked" value="cancel">Avbryt</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="common_fragments/footer :: footer"></footer>
+
+<script>
+    function init() {
+        var table = document.getElementById("table");
+        var bottomButton = document.getElementById("toggleShowStudentsBottom");
+        var showHideText = document.getElementById("showHideToggleText");
+        var toggleArrow = document.getElementById("toggleArrow");
+
+        var toggleFunc = function() {
+            if (table.style.display === "table") {
+                table.style.display = "none";
+                showHideText.innerHTML = "Visa";
+                toggleArrow.classList.remove("fa-rotate-180");
+                bottomButton.style.display = "none";
+            } else {
+                table.style.display = "table";
+                showHideText.innerHTML = "Dölj";
+                toggleArrow.classList.add("fa-rotate-180");
+                bottomButton.style.display = "inline-flex";
+            }
+        };
+
+        document.getElementById("toggleShowStudents").addEventListener("click", toggleFunc);
+        bottomButton.addEventListener("click", toggleFunc);
+
+        table.style.display = "none";
+        bottomButton.style.display = "none";
+    }
+
+    window.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>

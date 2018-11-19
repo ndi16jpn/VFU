@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="has-navbar-fixed-top">
+<head th:replace="common_fragments/header :: header">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<nav th:replace="logged_in/admin/fragments/navbar :: nav"></nav>
+
+<main>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Uppladdning resultat
+            </h1>
+            <hr>
+            <div class="content is-medium">
+                <div th:switch="${csv_approved}">
+                    <div th:if="${num_of_students_added > 0}" class="notification is-success is-size-5">
+                        <p>
+                            Ett email har skickats till alla tillagda studenter om att dem nu kan logga in
+                        </p>
+                    </div>
+                    <div th:case="true">
+                        <p>
+                            Totalt antal studenter i systemet innan:
+                            <span class="has-text-weight-bold is-size-4" th:text="${db_num_of_students}">??</span>
+                        </p>
+                        <p>
+                            Antal studenter från filen du laddade upp:
+                            <span class="has-text-weight-bold is-size-4" th:text="${csv_num_of_students}">??</span>
+                        </p>
+                        <p>
+                            Totalt antal nya studenter tillagda:
+                            <span class="has-text-weight-bold is-size-4" th:text="${num_of_students_added}">??</span>
+                            <br>
+                            <span th:if="${csv_num_of_students} != ${num_of_students_added}">
+                                Anledningen till att det bara lades till
+                                <span class="has-text-weight-bold is-size-4" th:text="${num_of_students_added}">??</span>
+                                studenter är därför
+                                <span class="has-text-weight-bold is-size-4" th:text="${csv_num_of_students} - ${num_of_students_added}">??</span>
+                                stycken studenter redan fanns tillagda i systemet
+                            </span>
+                        </p>
+                        <p>
+                            Totalt antal studenter i systemet nu:
+                            <span class="has-text-weight-bold is-size-4" th:text="${db_num_of_students} + ${num_of_students_added}">??</span>
+                        </p>
+                    </div>
+                    <p th:case="*">Tilläggning utav studenter avbruten.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="common_fragments/footer :: footer"></footer>
+
+</body>
+</html>

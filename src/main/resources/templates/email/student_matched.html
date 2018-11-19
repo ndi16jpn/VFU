@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <p>
+        Hejsan [[${student_name}]]!
+    </p>
+    <p>
+        Du har nu blivit tilldelad VFU platsen: [[${unit_name}]].
+    </p>
+    <p th:if="${handledare_exists}">
+        Handledare: [[${handledare}]]
+    </p>
+    <a href="https://vfusocionom.hig.se/">https://vfusocionom.hig.se/</a>
+    <br>
+    <p style="font-size: 20px;">Detta mail går ej att svara på!</p>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="has-navbar-fixed-top">
+<head th:replace="common_fragments/header :: header">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<div id="navbar-top">
+<nav th:replace="logged_in/admin/fragments/navbar :: nav"></nav>
+</div>
+<main>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Statistik
+            </h1>
+            <hr>
+            <div class="content is-medium">
+                <p>
+                    <span class="has-text-weight-bold is-size-4" th:text="${total_num_vfu_sam}"></span>
+                    VFU Samordnare totalt
+                </p>
+                <p>
+                    <span class="has-text-weight-bold is-size-4" th:text="${total_num_vfu_sam_not_pass}"></span>
+                    VFU Samordnare har
+                    <span class="has-text-danger">INTE</span>
+                    klickat på länken från mailet och valt lösenord
+                </p>
+            </div>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Visa all VFU Samordnare
+            </h1>
+            <hr>
+            <div class="content is-medium">
+                <div id="vue-vfu-sam">
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            <input class="input is-medium" type="text" placeholder="Sök namn / email / ort"
+                                   v-model.trim="searchValue">
+                            <span class="icon is-small is-left">
+                            <i class="fa fa-search"></i>
+                        </span>
+                        </p>
+                    </div>
+                    <br>
+                    <vue-vfu-sam v-for="vfuSam in vfuSams" :key="vfuSam.email" :vfu-sam="vfuSam"
+                                 :vfu-sam-reg-links="vfuSamRegLinks" v-if="search(vfuSam)"></vue-vfu-sam>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="common_fragments/footer :: footer"></footer>
+
+<script th:src="'/js/vue.min.js'" src="../../../../public/js/vue.js"></script>
+<script id="vfu-sam-template" type="text/x-template">
+    <div>
+        <div @click="toggleModal" class="card card-link block">
+            <header class="card-header">
+                <p class="card-header-title" style="justify-content: space-between;">
+                    <span v-text="vfuSam.name"></span>
+                    <span v-text="vfuSam.region.name"></span>
+                </p>
+            </header>
+            <div class="card-content">
+                <div class="columns">
+                    <div class="column">
+                        <p>Klickat på länk och valt lösenord</p>
+                    </div>
+                    <div class="column is-narrow">
+                        <p class="icon" v-if="vfuSam.hashedPassword !== null && vfuSam.hashedPassword !== ''">
+                            <i class="fa fa-lg fa-check-square-o"></i>
+                        </p>
+                        <p class="icon" v-else>
+                            <i class="fa fa-lg fa-square-o"></i>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ref="modal" class="modal">
+            <div @click="toggleModal" class="modal-background"></div>
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <span class="modal-card-title" v-text="vfuSam.name"></span>
+                    <button @click="toggleModal" class="delete"></button>
+                </header>
+                <section class="modal-card-body">
+                    <div v-if="vfuSam.hashedPassword === null || vfuSam.hashedPassword === ''"
+                         class="notification is-warning is-size-5">
+                        <p>
+                            VFU Samordnaren har inte klickat på länken från mailet och valt lösenord ännu
+                        </p>
+                        <p>
+                            Länk:
+                            <br>
+                            <span class="has-text-weight-bold" v-text="getRegLink(vfuSam.email)"
+                                  style="word-wrap:break-word;"></span>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Email</label>
+                        <a :href="'mailto:' + vfuSam.email" class="is-size-5 has-text-info"
+                           v-text="vfuSam.email" target="_blank"></a>
+                    </div>
+                    <div class="field">
+                        <label class="label">Studieort</label>
+                        <p class="is-size-5" v-text="vfuSam.region.name"></p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Telefonnummer</label>
+                        <p class="is-size-5"
+                           v-text="vfuSam.phoneNumber ? vfuSam.phoneNumber : 'ej angivet'"></p>
+                    </div>
+                </section>
+                <footer class="modal-card-foot">
+                    <form onsubmit="return submitForm(this)" action="/admin/delete-vfusam/" method="post">
+                        <button type="submit" class="button is-medium is-danger" name="vfuSamToDel"
+                                :value="vfuSam.email">
+                            Ta bort VFU Samordnare
+                        </button>
+                    </form>
+                </footer>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script>
+function submitForm() {
+    return confirm('Är du säker på att du vill ta bort vfu-samordnaren?');
+}
+</script>
+<script th:inline="javascript">
+    function init() {
+        vfuSamComponent();
+        vueVfuSams();
+    }
+
+    function vfuSamComponent() {
+        var navbarTop = document.getElementById("navbar-top");
+        Vue.component("vue-vfu-sam", {
+            props: {
+                vfuSam: {
+                    type: Object,
+                    required: true
+                },
+                vfuSamRegLinks: {
+                    type: Object,
+                    required: true
+                }
+            },
+            template: "#vfu-sam-template",
+            data: function() {
+                return {
+                    navbarVisible: true
+                }
+            },
+            methods: {
+                toggleModal: function() {
+                    this.$refs.modal.classList.toggle("is-active");
+                    navbarTop.style.display = this.navbarVisible ? "none" : "flex";
+                    this.navbarVisible = !this.navbarVisible;
+                },
+                getRegLink: function(vfuEmail) {
+                    var proto = location.protocol === "https:" ? "https://" : "http://";
+                    var host = location.host;
+                    var regLink = this.vfuSamRegLinks[vfuEmail];
+                    return proto + host + "/reg/vfu-samordnare/" + regLink + "/";
+                }
+            }
+        });
+    }
+
+    function vueVfuSams() {
+        new Vue({
+            el: "#vue-vfu-sam",
+            data: {
+                vfuSams: [[${vfu_samordnare}]],
+                vfuSamRegLinks: [[${vfu_samordnare_reg_links}]],
+                searchValue: ""
+            },
+            methods: {
+                search: function(vfuSam) {
+                    var searchValue = this.searchValue;
+                    var containsIgnoreCase = function(string) {
+                        return string.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1;
+                    };
+                    return containsIgnoreCase(vfuSam.email)
+                        || containsIgnoreCase(vfuSam.name)
+                        || containsIgnoreCase(vfuSam.region.name);
+                }
+            }
+        });
+    }
+
+    window.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<div class="columns" th:fragment="login_form">
+    <div class="column is-half">
+        <div class="content">
+            <h1 class="title is-4">Här kan följande logga in</h1>
+            <ul class="is-size-5">
+                <li>
+                    <span class="has-text-weight-bold">Student</span><br>
+                    Studenter loggar in med sitt datorkonto.
+                </li>
+                <li>
+                    <span class="has-text-weight-bold">VFU Samordnare</span><br>
+                    Ett registreringsmail skickas till angivna VFU samordnare därefter loggar VFU Samordnare in med sin email.
+                </li>
+                <li>
+                    <span class="has-text-weight-bold">Handledare</span><br>
+                    Handledare loggar in med email och givet lösenord.
+                  <!--TODO:  Ett registreringsmail skickas till angivna handledare därefter loggar handledare in sin med email.-->
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="column is-half">
+        <div th:if="${login_failed}" class="notification is-danger is-size-5">
+            <span>Felaktiga inloggningsuppgifter, sorry</span>
+        </div>
+        <form action="/login/" method="post">
+            <div class="field">
+                <p class="control has-icons-left">
+                    <input class="input is-medium" type="text" name="email" placeholder="StudentID / Email"
+                           th:value="${email_input}">
+                    <span class="icon is-left">
+                    <i class="fa fa-envelope"></i>
+                </span>
+                </p>
+            </div>
+            <div class="field">
+                <p class="control has-icons-left">
+                    <input class="input is-medium" type="password" name="password" placeholder="Lösenord">
+                    <span class="icon is-left">
+                    <i class="fa fa-lock"></i>
+                </span>
+                </p>
+            </div>
+            <div class="field">
+                <p class="control">
+                    <button type="submit" class="button is-primary is-large">
+                        Logga in
+                    </button>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

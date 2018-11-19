@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common_fragments/header :: header">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<section th:replace="logged_out/fragments/hero :: hero('login')"></section>
+
+<main>
+    <section class="section">
+        <div class="container">
+            <h1 th:text="${text_title}" class="title">
+                text_title
+            </h1>
+            <hr>
+            <div th:replace="logged_out/fragments/login_form :: login_form"></div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="common_fragments/footer :: footer"></footer>
+
+</body>
+</html>

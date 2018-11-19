@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <p>
+        Hejsan [[${vfu_name}]]!
+    </p>
+    <p>
+        Du har blivit tillagd som VFU Samordnare på Högskolan i Gävles Socionom program
+    </p>
+    <p>
+        Det du behöver göra nu för att slutföra registreringen är att
+        klicka på nedanstående länk och välja ditt lösenord
+    </p>
+    <a th:href="${reg_link}" th:text="${reg_link}"></a>
+    <p>
+        Fungerar inte länken att klicka på kan du kopiera den manuellt:
+    </p>
+    <p th:text="${reg_link}"></p>
+    <br>
+    <p style="font-size: 20px;">Detta mail går ej att svara på!</p>
+</body>
+</html>

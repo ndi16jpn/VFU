@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="has-navbar-fixed-top">
+<head th:replace="common_fragments/header :: header">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<div id="navbar-top">
+    <nav th:replace="logged_in/admin/fragments/navbar :: nav"></nav>
+</div>
+<main>
+    <section class="section">
+        <div class="container">
+            <div class="notification is-success is-size-5" th:if="${mail_sent}">
+                <p>
+                    Email har skickats till alla studenter
+                </p>
+            </div>
+            <h1 class="title">
+                Statistik
+            </h1>
+            <hr>
+            <div class="content">
+
+
+                    <div class="container">
+                        <div class="card is-fullwidth">
+                            <header class="card-header">
+                                <p class="card-header-title">Totalt</p>
+                                <a class="card-header-icon card-toggle">
+                                    <i class="fa fa-angle-down"></i>
+                                </a>
+                            </header>
+                            <div class="card-content is-hidden">
+                                <div class="content">
+                                    <p>
+
+                                        <span class="has-text-weight-bold is-size-4" th:text="${total_num_students-num_stud_region}"></span>
+                                        Studenter har ej valt studieort
+
+                                    </p>
+                                    <p>
+
+                                        <span class="has-text-weight-bold is-size-4" th:text="${all_students_without_place}"></span>
+                                        /
+                                        <span class="has-text-weight-bold is-size-4" th:text="${total_num_students}"></span>
+                                        Studenter har ingen plats
+
+                                    </p>
+                                    <p>
+
+                                        <span class="has-text-weight-bold is-size-4" th:text="${all_places_without_student}"></span>
+                                        /
+                                        <span class="has-text-weight-bold is-size-4" th:text="${all_places.size}"></span>
+                                        Platser har ingen student
+                                    </p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="container" th:each="region : ${all_regions}">
+                        <div class="card is-fullwidth">
+                            <header class="card-header">
+                                <p class="card-header-title">[[${region}]]</p>
+                                <a class="card-header-icon card-toggle">
+                                    <i class="fa fa-angle-down"></i>
+                                </a>
+                            </header>
+                            <div class="card-content is-hidden">
+                                <div class="content">
+                                    <p>
+                                        <span class="has-text-weight-bold is-size-4" th:text="${region_students.get(region)}"></span>
+                                        studenter i [[${region}]]
+                                    </p>
+                                    <p>
+                                        <span class="has-text-weight-bold is-size-4" th:text="${region_places.get(region)}"></span>
+                                        platser i [[${region}]]
+                                    </p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <p>
+                    <span class="has-text-weight-bold is-size-4 is-medium"></span>
+                    Om det finns någon student som ska matchas manuellt så är det bäst att göra det innan du genomför den automatiska matchningen.
+                </p>
+                <form action="/admin/do-match/" method="post">
+                    <button type="submit" class="button is-large is-primary">
+                        Genomför automatisk matchning
+                    </button>
+
+                </form>
+                <br>
+                <br>
+                <div class="notification is-warning is-size-5">
+                    <p>
+                        Inget email kommer att skickas till studenterna när du genomför automatiskt eller manuell
+                        matchning
+                    </p>
+                    <p>
+                        Klicka på knappen nedan för att skicka email till alla studenter
+                        med information om vilken plats dem fått
+                    </p>
+                </div>
+                <form onsubmit="return confirm('Är du säker på att du vill skicka email till alla studenter?')" action="/admin/send-email-matched/" method="post">
+                    <button type="submit" class="button is-large is-danger">
+                        Skicka mail till alla matchade studenter
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Alla platser
+            </h1>
+            <hr>
+            <div id="vue">
+                <div class="content is-medium">
+                    <table id="table" class="table is-bordered is-narrow is-hoverable">
+                        <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Enhet</th>
+                            <th>Handledare</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="place : ${all_places}">
+                            <td th:if="${place.getStudent} != null">
+                                <div class="columns is-mobile">
+                                    <div class="column">
+                                        <span th:text="${place.getStudent.studentData.name}"></span>
+                                    </div>
+                                    <div class="column is-narrow">
+                                        <form action="/admin/delete-student-from-place/" method="post">
+                                            <button type="submit" class="button has-text-danger"
+                                                    name="studentToDelFromPlace" th:value="${place.getStudent.email}"
+                                                    th:title="|Ta bort '${place.getStudent.studentData.name}' från denna plats|">
+                                                <span class="icon has-text-danger">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </span>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </td>
+                            <td th:if="${place.getStudent} == null">
+                                <a class="button" th:@click="|openModal(${place.id}, '${place.unit.name}')|">
+                                    <span>Manuellt matcha ej matchad student till denna plats</span>
+                                </a>
+                            </td>
+                            <td th:text="|${place.unit.name} (${place.unit.municipality.region.name}, ${place.unit.municipality.name})|"></td>
+                            <td th:if="${place.getHandledare} != null" th:text="${place.getHandledare.name}"></td>
+                            <td th:if="${place.getHandledare} == null">
+                                <p class="icon has-text-danger">
+                                    <i class="fa fa-lg fa-times"></i>
+                                </p>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th>Student</th>
+                            <th>Enhet</th>
+                            <th>Handledare</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div ref="modal" class="modal">
+                    <div @click="toggleModal" class="modal-background"></div>
+                    <div class="modal-card">
+                        <header class="modal-card-head">
+                            <p class="modal-card-title" v-text="unitName"></p>
+                            <button @click="toggleModal" class="delete"></button>
+                        </header>
+                        <section class="modal-card-body">
+                            <div class="control has-icons-left" v-if="unmatchedStudents.length > 0">
+                                <div class="select is-medium">
+                                    <select v-model="selectedUnmatchedStudentEmail">
+                                        <option selected disabled>Välj..</option>
+                                        <option v-for="unmatchedStudent in unmatchedStudents"
+                                                :value="unmatchedStudent.email"
+                                                v-text="unmatchedStudent.studentData.name + ' (' + unmatchedStudent.region.name + ')'">
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="icon is-small is-left">
+                                    <i class="fa fa-user"></i>
+                                </div>
+                            </div>
+                            <p v-else class="is-size-4">
+                                Finns inga icke matchade studenter
+                            </p>
+                        </section>
+                        <footer class="modal-card-foot">
+                            <form action="/admin/manual-match-student/" method="post">
+                                <input type="hidden" name="placeId" :value="placeId">
+                                <input type="hidden" name="email" :value="selectedUnmatchedStudentEmail">
+                                <button type="submit" class="button is-medium is-success"
+                                    :disabled="selectedUnmatchedStudentEmail == 'Välj..'">
+                                    Matcha student till plats
+                                </button>
+                            </form>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="common_fragments/footer :: footer"></footer>
+
+<script th:src="'/js/vue.min.js'" src="../../../../public/js/vue.js"></script>
+<script th:inline="javascript">
+    function init() {
+        vue();
+    }
+
+    function vue() {
+        var navbarTop = document.getElementById("navbar-top");
+        new Vue({
+            el: "#vue",
+            data: {
+                placeId: null,
+                unitName: null,
+                navbarVisible: true,
+                unmatchedStudents: [[${unmatched_students}]],
+                selectedUnmatchedStudentEmail: "Välj.."
+            },
+            methods: {
+                openModal: function (placeId, unitName) {
+                    this.placeId = placeId;
+                    this.unitName = unitName;
+                    this.toggleModal();
+                },
+                toggleModal: function () {
+                    this.$refs.modal.classList.toggle("is-active");
+                    navbarTop.style.display = this.navbarVisible ? "none" : "flex";
+                    this.navbarVisible = !this.navbarVisible;
+                }
+            }
+        });
+    }
+
+    window.addEventListener("DOMContentLoaded", init);
+</script>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+	var cardToggles = document.getElementsByClassName('card-toggle');
+        for (var i = 0; i < cardToggles.length; i++) {
+            cardToggles[i].addEventListener('click', function (e) {
+                e.currentTarget.parentElement.parentElement.childNodes[3].classList.toggle('is-hidden');
+            });
+	}
+});
+
+</script>
+
+</body>
+</html>

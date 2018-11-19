@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="has-navbar-fixed-top">
+<head th:replace="common_fragments/header :: header">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<div id="navbar-top">
+<nav th:replace="logged_in/admin/fragments/navbar :: nav"></nav>
+</div>
+<main>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Statistik
+            </h1>
+            <hr>
+            <div class="content is-medium">
+                <p>
+                    <span class="has-text-weight-bold is-size-4" th:text="${total_num_students}"></span>
+                    socionomstudenter totalt
+                </p>
+                <p>
+                    <span class="has-text-weight-bold is-size-4" th:text="${num_stud_region}"></span>
+                    studenter har valt studieort och skrivit personligt brev
+                </p>
+                <p>
+                    <span class="has-text-weight-bold is-size-4" th:text="${num_stud_choices}"></span>
+                    studenter har lämnat in val för VFU-platser
+                </p>
+            </div>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Visa all studenter
+            </h1>
+            <hr>
+            <div class="content is-medium">
+                <div id="vue-students">
+                    <div class="field">
+                        <p class="control has-icons-left">
+                            <input class="input is-medium" type="text" placeholder="Sök namn / email / tfn / födelseår"
+                                   v-model.trim="searchValue">
+                            <span class="icon is-small is-left">
+                            <i class="fa fa-search"></i>
+                        </span>
+                        </p>
+                    </div>
+                    <br>
+                    <vue-student v-for="studentInfo in studentsInfo" :key="studentInfo.key.email" :student-info="studentInfo"
+                                 v-if="search(studentInfo.key)"></vue-student>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="common_fragments/footer :: footer"></footer>
+
+<script th:src="'/js/vue.min.js'" src="../../../../public/js/vue.js"></script>
+<script id="student-template" type="text/x-template">
+    <div>
+        <div @click="toggleModal" class="card card-link block">
+            <header class="card-header">
+                <p class="card-header-title" v-text="studentInfo.key.name"></p>
+            </header>
+            <div class="card-content">
+                <div class="columns">
+                    <div class="column">
+                        <p>Valt studieort och skrivit personligt brev</p>
+                        <p>Lämnat in val för VFU-platser</p>
+                    </div>
+                    <div class="column is-narrow">
+                        <p class="icon" v-if="studentInfo.value !== null">
+                            <i class="fa fa-lg fa-check-square-o"></i>
+                        </p>
+                        <p class="icon" v-else>
+                            <i class="fa fa-lg fa-square-o"></i>
+                        </p>
+                        <br>
+                        <p class="icon"
+                           v-if="studentInfo.value !== null && studentInfo.value.choice_1.id !== 0">
+                            <i class="fa fa-lg fa-check-square-o"></i>
+                        </p>
+                        <p class="icon" v-else>
+                            <i class="fa fa-lg fa-square-o"></i>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ref="modal" class="modal">
+            <div @click="toggleModal" class="modal-background"></div>
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <span class="modal-card-title" v-text="studentInfo.key.name"></span>
+                    <button @click="toggleModal" class="delete"></button>
+                </header>
+                <section class="modal-card-body">
+                    <div v-if="studentInfo.value !== null" class="block">
+                        <h4 class="title is-4">
+                            Val för VFU-platser
+                        </h4>
+                        <div class="columns">
+                            <div class="column is-narrow has-text-weight-bold">
+                                <p v-if="studentInfo.value.choice_1.id !== 0">Förstahandsval</p>
+                                <p v-if="studentInfo.value.choice_2.id !== 0">Andrahandsval</p>
+                                <p v-if="studentInfo.value.choice_3.id !== 0">Tredjehandsval</p>
+                                <p v-if="studentInfo.value.choice_4.id !== 0">Fjärdehandsval</p>
+                                <p v-if="studentInfo.value.choice_5.id !== 0">Femtehandsval</p>
+                            </div>
+                            <div class="column">
+                                <p v-if="studentInfo.value.choice_1.id !== 0"
+                                   v-text="studentInfo.value.choice_1.name"></p>
+                                <p v-if="studentInfo.value.choice_2.id !== 0"
+                                   v-text="studentInfo.value.choice_2.name"></p>
+                                <p v-if="studentInfo.value.choice_3.id !== 0"
+                                   v-text="studentInfo.value.choice_3.name"></p>
+                                <p v-if="studentInfo.value.choice_4.id !== 0"
+                                   v-text="studentInfo.value.choice_4.name"></p>
+                                <p v-if="studentInfo.value.choice_5.id !== 0"
+                                   v-text="studentInfo.value.choice_5.name"></p>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="field">
+                        <label class="label">Email</label>
+                        <p class="is-size-5" v-text="studentInfo.key.email"></p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Födelseår</label>
+                        <p class="is-size-5" v-text="studentInfo.key.dob"></p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Studieort</label>
+                        <p class="is-size-5"
+                           v-text="studentInfo.value !== null ? studentInfo.value.region.name : 'ej angivet'"></p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Telefonnummer</label>
+                        <p class="is-size-5"
+                           v-text="studentInfo.key.phoneNumber !== '' ? studentInfo.key.phoneNumber : 'ej angivet'"></p>
+                    </div>
+                    <div class="field">
+                        <label class="label">Personligt brev</label>
+                        <div class="control">
+                            <textarea class="textarea is-medium" rows="10" readonly
+                                      v-text="studentInfo.value !== null ? studentInfo.value.personalLetter : 'ej angivet'">
+                            </textarea>
+                        </div>
+                    </div>
+                </section>
+                <footer class="modal-card-foot">
+                    <form onsubmit="return submitForm(this)" action="/admin/delete-student/" method="post">
+                        <button type="submit" class="button is-medium is-danger" name="studentToDel"
+                                :value="studentInfo.key.email">
+                            Ta bort Student
+                        </button>
+                    </form>
+                </footer>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script>
+function submitForm() {
+    return confirm('Är du säker på att du vill ta bort studenten?');
+}
+</script>
+<script th:inline="javascript">
+    function init() {
+        studentComponent();
+        vueStudents();
+    }
+
+    function studentComponent() {
+        var navbarTop = document.getElementById("navbar-top");
+        Vue.component("vue-student", {
+            props: {
+                studentInfo: {
+                    type: Object,
+                    required: true
+                }
+            },
+            template: "#student-template",
+            data: function() {
+                return {
+                    navbarVisible: true
+                }
+            },
+            methods: {
+                toggleModal: function() {
+                    this.$refs.modal.classList.toggle("is-active");
+                    navbarTop.style.display = this.navbarVisible ? "none" : "flex";
+                    this.navbarVisible = !this.navbarVisible;
+                }
+            }
+        });
+    }
+
+    function vueStudents() {
+        new Vue({
+            el: "#vue-students",
+            data: {
+                studentsInfo: [[${studentsInfo}]],
+                searchValue: ""
+            },
+            methods: {
+                search: function(studentData) {
+                    var searchValue = this.searchValue;
+                    var containsIgnoreCase = function(string) {
+                        return string.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1;
+                    };
+                    return containsIgnoreCase(studentData.email)
+                        || containsIgnoreCase(studentData.name)
+                        || containsIgnoreCase(studentData.dob)
+                        || containsIgnoreCase(studentData.phoneNumber);
+                }
+            }
+        });
+    }
+
+    window.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>
