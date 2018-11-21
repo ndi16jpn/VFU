@@ -125,6 +125,7 @@ public class AdminController {
             model.put(ATTR_ROLE, LoggedInRole.ADMIN.getRoleName());
             model.put(ATTR_NAME, request.session().attribute(ATTR_NAME));
 
+
             return render(model, Path.Template.ADMIN_ADD_STUDENTS);
         } else {
             response.redirect(Path.Web.LOGIN);
@@ -1018,7 +1019,7 @@ public class AdminController {
     }
 
     private static String getQueryStudentEmail(Request request) {
-        return request.queryParams("studentId") + "@student.hig.se";
+        return request.queryParams("studentId"); // + "@student.hig.se";
     }
 
     private static String getQueryEmail(Request request) {
