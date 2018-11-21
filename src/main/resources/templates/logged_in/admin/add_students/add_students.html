@@ -141,7 +141,7 @@
                                             <i class="fa fa-envelope"></i>
                                         </span>
                                         <span class="icon is-small is-right">
-                                            <i class="fa" :class="[studIdIsValid ? 'fa-check' : 'fa-times']"></i>
+                                            <i class="fa" :class="[emailIsValid ? 'fa-check' : 'fa-times']"></i>
                                         </span>
                                     </p>
                                     <p class="control">
@@ -238,7 +238,7 @@
                     if (!this.hasBeenFocused) {
                         return "";
                     }
-                    return this.studIdIsValid ? 'is-success' : 'is-danger';
+                    return this.emailIsValid ? 'is-success' : 'is-danger';
                 },
                 fNameIsValid: function () {
                     return this.validName(this.fName);
@@ -246,7 +246,7 @@
                 lNameIsValid: function () {
                     return this.validName(this.lName);
                 },
-                studIdIsValid: function () {
+                emailIsValid: function () {
                     if (!(this.studId.length === 8)) {
                         return false;
                     }
