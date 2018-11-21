@@ -145,9 +145,7 @@
                                         </span>
                                     </p>
                                     <p class="control">
-                                        <a class="button is-static is-medium">
-                                            @student.hig.se
-                                        </a>
+
                                     </p>
                                 </div>
                             </div>
@@ -247,19 +245,9 @@
                     return this.validName(this.lName);
                 },
                 emailIsValid: function () {
-                    if (!(this.studId.length === 8)) {
-                        return false;
-                    }
-                    var isLetters = this.isLetter(this.studId[0]) &&
-                        this.isLetter(this.studId[1]) &&
-                        this.isLetter(this.studId[2]) &&
-                        this.isLetter(this.studId[5]) &&
-                        this.isLetter(this.studId[6]) &&
-                        this.isLetter(this.studId[7]);
-                    var isNumeric = function isNumeric(n) {
-                        return !isNaN(parseFloat(n)) && isFinite(n);
-                    };
-                    return isLetters && isNumeric(parseInt(this.studId.slice(3, 5)));
+
+
+                    return false;
                 },
                 invalidInput: function () {
                     return !this.fNameIsValid || !this.lNameIsValid || !this.emailIsValid;
