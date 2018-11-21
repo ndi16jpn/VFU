@@ -246,8 +246,14 @@
                 },
                 emailIsValid: function () {
 
-
-                    return false;
+                    char[] mail = this.studId;
+                    boolean containsAt = false;
+                    for(char character: mail) {
+                        if (character == '@') {
+                            containsAt = true;
+                        }
+                    }
+                    return containsAt;
                 },
                 invalidInput: function () {
                     return !this.fNameIsValid || !this.lNameIsValid || !this.emailIsValid;
