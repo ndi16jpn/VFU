@@ -1018,7 +1018,7 @@ public class AdminController {
     }
 
     private static String getQueryStudentEmail(Request request) {
-        return request.queryParams("studentId") + "@student.hig.se";
+        return request.queryParams("studentId"); //+ "@student.hig.se";
     }
 
     private static String getQueryEmail(Request request) {
