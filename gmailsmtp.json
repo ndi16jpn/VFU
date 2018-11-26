@@ -1,0 +1,7 @@
+{
+  "host": "aspmx.l.google.com",
+  "port": 25,
+  "username": "",
+  "password": "",
+  "smtpProtocol": "plain"
+}
