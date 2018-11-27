@@ -141,13 +141,11 @@
                                             <i class="fa fa-envelope"></i>
                                         </span>
                                         <span class="icon is-small is-right">
-                                            <i class="fa" :class="[emailIsValid ? 'fa-check' : 'fa-times']"></i>
+                                            <i class="fa" :class="[studIdIsValid ? 'fa-check' : 'fa-times']"></i>
                                         </span>
                                     </p>
                                     <p class="control">
-                                        <a class="button is-static is-medium">
-                                            @student.hig.se
-                                        </a>
+
                                     </p>
                                 </div>
                             </div>
@@ -238,7 +236,7 @@
                     if (!this.hasBeenFocused) {
                         return "";
                     }
-                    return this.emailIsValid ? 'is-success' : 'is-danger';
+                    return this.studIdIsValid ? 'is-success' : 'is-danger';
                 },
                 fNameIsValid: function () {
                     return this.validName(this.fName);
@@ -246,20 +244,10 @@
                 lNameIsValid: function () {
                     return this.validName(this.lName);
                 },
-                emailIsValid: function () {
-                    if (!(this.studId.length === 8)) {
-                        return false;
-                    }
-                    var isLetters = this.isLetter(this.studId[0]) &&
-                        this.isLetter(this.studId[1]) &&
-                        this.isLetter(this.studId[2]) &&
-                        this.isLetter(this.studId[5]) &&
-                        this.isLetter(this.studId[6]) &&
-                        this.isLetter(this.studId[7]);
-                    var isNumeric = function isNumeric(n) {
-                        return !isNaN(parseFloat(n)) && isFinite(n);
-                    };
-                    return isLetters && isNumeric(parseInt(this.studId.slice(3, 5)));
+                studIdIsValid: function () {
+
+
+                    return emailIsValid(this.studId);
                 },
                 invalidInput: function () {
                     return !this.fNameIsValid || !this.lNameIsValid || !this.studIdIsValid;
@@ -276,7 +264,16 @@
                 },
                 isLetter: function isLetter(c) {
                     return c.toLowerCase() !== c.toUpperCase();
-                }
+                },
+                emailIsValid: function (c) {
+
+                    boolean containsAt = false;
+                    for(int i = 0; i < c.length; i++){
+                        if(c[i] == '@'){
+                            containsAt = true;
+                        }
+                    }
+                    return containsAt;
             }
         });
     }
