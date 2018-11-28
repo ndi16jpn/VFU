@@ -1,5 +1,5 @@
 {
-  "host": "smtp.hig.se",
+  "host": "vm-smtp-01.hig.se",//"smtp.hig.se",
   "port": 25,
   "username": "",
   "password": "",

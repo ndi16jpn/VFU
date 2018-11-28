@@ -6,7 +6,7 @@ import data.StudentData;
 import database.*;
 import email.MailSender;
 import email.MailSenderProvider;
-import email.PrivateMailSenderProvider;
+import email.TestMailSenderProvider;
 import json.JsonHandler;
 import json.JsonHelper;
 import matching.Match;
@@ -417,7 +417,7 @@ public class AdminController {
                 Map<String, Object> emailModel = new HashMap<>();
                 emailModel.put("student_name", studentName);
                 // 2018-11-26 Changed to Privatemailsender
-                PrivateMailSenderProvider.getMailSender().sendMail(
+                MailSenderProvider.getMailSender().sendMail(
                         studentEmail,
                         "VFU Socionom - Högskolan i Gävle",
                         ViewUtil.render(emailModel, Path.Template.EMAIL_STUDENT_ADDED)
