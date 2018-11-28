@@ -11,12 +11,12 @@ import java.nio.file.Paths;
 /**
  * Läser in smtp.json och ställer in smtpsettings
  */
-public class PrivateMailSenderProvider {
+public class TestMailSenderProvider {
 
     private static final SmtpSettings defaultSmtpSettings = new SmtpSettings(
-            "smtp-relay.gmail.com", 25,
+            "vm-smtp-01.hig.se", 25,
             "", "",
-            SmtpSettings.SmtpProtocol.ssl
+            SmtpSettings.SmtpProtocol.plain
     );
     private static final Path SMTP_CONF_PATH = Paths.get("gmailsmtp.json");
 

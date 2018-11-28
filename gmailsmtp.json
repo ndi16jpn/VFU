@@ -1,7 +1,7 @@
 {
-  "host": "aspmx.l.google.com",
-  "port": 25,
-  "username": "",
-  "password": "",
-  "smtpProtocol": "plain"
+  "host": "smtp.gmail.com",
+  "port": 465,
+  "username": "testaregustav63782@gmail.com",
+  "password": "36248742shsadikhglds",
+  "smtpProtocol": "ssl"
 }

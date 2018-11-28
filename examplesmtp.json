@@ -1,0 +1,7 @@
+{
+  "host": "smtp-mail.outlook.com",
+  "port": 25,
+  "username": "vfusocionom@outlook.com",
+  "password": "k2f6i8ishfke3",
+  "smtpProtocol": "tls"
+}
