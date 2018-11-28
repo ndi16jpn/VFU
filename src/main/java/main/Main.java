@@ -19,7 +19,7 @@ import static spark.Spark.*;
  * Main klass som initierar spark samt skapar default smtp.json config fil om den ej finns
  */
 public class Main {
-    // Sebastian was heree
+    // Sebastian was heree hejehj
     public static void main(String[] args) throws Exception {
         MailSenderProvider.createDefaultConfFileIfNotExists();
         initSpark();
