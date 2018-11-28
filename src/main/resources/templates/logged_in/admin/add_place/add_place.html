@@ -180,7 +180,16 @@
                                     <span>Student: </span><span class="has-text-weight-bold has-text-danger" style="margin-right:100px;" th:if="${not place.student}" > Ingen student</span>
                                     <span class="has-text-weight-bold has-text-success" style="margin-right:100px;" th:if="${place.student}" >[[${place.student.studentData.name}]]</span>
 
-                                    Handledare: <span class="has-text-weight-bold has-text-danger" th:if="${not place.handledare}" > Ingen handledare</span>
+
+                                <form class="block" action="/admin/add-handledare/" method="post" th:if="${not place.handledare}">
+                                    <button type="submit" style="margin-right:10px;" th:if="${not place.handledare}" class="button is-primary" name="handledareToAdd">
+                                        <span>Lägg till handledare </span>
+                                        <span class="icon is-small">
+                                         <i class="fa fa-plus"></i>
+                                      </span>
+                                    </button>
+                                </form>
+                                    Handledare: <span class="has-text-weight-bold has-text-danger" style="margin-right:10px;" th:if="${not place.handledare}" > Ingen handledare</span>
                                     <span class="has-text-weight-bold has-text-success" th:if="${place.handledare}" >[[${place.handledare.name}]]</span>
 
                                 <form onsubmit="return formDelPlace(this)" style="display:inline-block" action="/admin/delete-one-place/" method="post">
