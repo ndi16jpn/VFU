@@ -14,7 +14,7 @@ import java.nio.file.Paths;
 public class MailSenderProvider {
 
     private static final SmtpSettings defaultSmtpSettings = new SmtpSettings(
-            "smtp.hig.se", 25,
+            "vm-smtp-01.hig.se", 25,
             "", "",
             SmtpSettings.SmtpProtocol.plain
     );
