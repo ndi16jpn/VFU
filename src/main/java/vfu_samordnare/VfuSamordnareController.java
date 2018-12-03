@@ -215,8 +215,13 @@ public class VfuSamordnareController {
                 request.attribute("errDelPlaceStud", true);
                 return serveVfuSamordnareAddPlacePage.handle(request,response);
             }if(place.getHandledare() != null){
-                db.getDeleter().deleteHandledareFromPlace(place.getHandledare());
-                db.getDeleter().deleteHandledareContent(place.getHandledare());
+                List<Handledare> handledare = db.getSelector().getHandledareForPlace(place.getId());
+                for (Handledare hand:  handledare) {
+                    db.getDeleter().deleteHandledareFromPlace(hand);
+                    db.getDeleter().deleteHandledareContent(hand);
+                }
+
+
             }
             db.getInserter().deleteOneNumberOfSlotsUnit(unit);
             db.getDeleter().deleteSinglePlace(db.getSelector().getPlace(Integer.valueOf(placeID)));

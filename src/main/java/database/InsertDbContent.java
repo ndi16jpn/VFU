@@ -328,12 +328,12 @@ class InsertDbContent implements DatabaseInserter {
     public void addHandledareToPlace(Place place, Handledare handledare) throws DatabaseException {
         try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "UPDATE " + PLACE_TABLE +
-                            " SET " + PLACE_COLUMN_HANDLEDARE + " = ? " +
-                            " WHERE place.id = "+place.getId()
+                    "INSERT INTO " + PLACE_HANDLEDARE_TABLE +
+                            " VALUES ( ?, ?)"
 
             );
-            preparedStatement.setString(1,handledare.getEmail());
+            preparedStatement.setInt(1,place.getId());
+            preparedStatement.setString(2,handledare.getEmail());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

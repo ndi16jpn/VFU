@@ -48,11 +48,14 @@ class SelectDbContent implements DatabaseSelector {
             String sql = "SELECT * "
                     + " FROM " + PLACE_TABLE + " WHERE student is null";
             ResultSet rs = statement.executeQuery(sql);
+
             while (rs.next()) {
-                if(rs.getString(PLACE_COLUMN_HANDLEDARE) == null){
-                    places.add(new Place( rs.getInt(PLACE_COLUMN_ID), getUnit(rs.getInt(PLACE_COLUMN_UNIT))));
+                int placeId = rs.getInt(PLACE_COLUMN_ID);
+                List<Handledare> handledare = getHandledareForPlace(placeId);
+                if(handledare.isEmpty()){
+                    places.add(new Place( placeId, getUnit(rs.getInt(PLACE_COLUMN_UNIT))));
                 }else{
-                    places.add(new Place( rs.getInt(PLACE_COLUMN_ID),getHandledare(rs.getString(PLACE_COLUMN_HANDLEDARE)), getUnit(rs.getInt(PLACE_COLUMN_UNIT))));
+                    places.add(new Place( placeId, handledare, getUnit(rs.getInt(PLACE_COLUMN_UNIT))));
                 }
             }
             return places;
@@ -70,10 +73,12 @@ class SelectDbContent implements DatabaseSelector {
                     + " FROM " + PLACE_TABLE + " WHERE student is not null";
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
-                if(rs.getString(PLACE_COLUMN_HANDLEDARE) == null){
-                    places.add(new Place( rs.getInt(PLACE_COLUMN_ID),getStudent(rs.getString(PLACE_COLUMN_STUDENT)), getUnit(rs.getInt(PLACE_COLUMN_UNIT))));
+                int placeId = rs.getInt(PLACE_COLUMN_ID);
+                List<Handledare> handledare = getHandledareForPlace(placeId);
+                if(handledare.isEmpty()){
+                    places.add(new Place( placeId,getStudent(rs.getString(PLACE_COLUMN_STUDENT)), getUnit(rs.getInt(PLACE_COLUMN_UNIT))));
                 }else{
-                    places.add(new Place( rs.getInt(PLACE_COLUMN_ID),getUnit(rs.getInt(PLACE_COLUMN_UNIT)),getStudent(rs.getString(PLACE_COLUMN_STUDENT)),getHandledare(rs.getString(PLACE_COLUMN_HANDLEDARE))));
+                    places.add(new Place(placeId,getUnit(rs.getInt(PLACE_COLUMN_UNIT)),getStudent(rs.getString(PLACE_COLUMN_STUDENT)), handledare));
                 }
             }
             return places;
@@ -291,7 +296,8 @@ class SelectDbContent implements DatabaseSelector {
             String student = rs.getString(PLACE_COLUMN_STUDENT);
             int unit = rs.getInt(PLACE_COLUMN_UNIT);
 
-            Place place = new Place(id,getHandledare(hand),getUnit(unit));
+            //Place place = new Place(id,getHandledare(hand),getUnit(unit));
+            Place place = new Place(id,getHandledareForPlace(id),getUnit(unit));
 
             if(student == null){
                 return place;
@@ -309,24 +315,33 @@ class SelectDbContent implements DatabaseSelector {
     @Override
     public Place getPlace(int id) throws DatabaseException {
         try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
-            String sql = "SELECT * FROM " + PLACE_TABLE + " WHERE id = ? ";
-            PreparedStatement statement = connection.prepareStatement(sql);
+            String sqlGetPlace = "SELECT * FROM " + PLACE_TABLE + " WHERE id = ? ";
+            String sqlGetHandledare = "SELECT * FROM " + PLACE_HANDLEDARE_TABLE + " WHERE " + PLACE_REFERENCE_COLUMN + " = ? ";
+            PreparedStatement getPlaceStatement = connection.prepareStatement(sqlGetPlace);
+            PreparedStatement getHandledareStatement = connection.prepareStatement(sqlGetHandledare);
+            getPlaceStatement.setInt(1, id);
+            getHandledareStatement.setInt(1, id);
+            ResultSet placeRs = getPlaceStatement.executeQuery();
+            ResultSet handledareRs = getHandledareStatement.executeQuery();
 
-            statement.setInt(1, id);
-            ResultSet rs = statement.executeQuery();
+            //String handledare = placeRs.getString(PLACE_COLUMN_HANDLEDARE);
+            //String handledare = handledareRs.getString(HANDLEDARE_REFERENCE_COLUMN);
+            //while (handledareRs.next()) {
+            //handledare = handledare + ", " + handledareRs.getString(HANDLEDARE_REFERENCE_COLUMN);
+            //}
+            List<Handledare> handledare = getHandledareForPlace(id);
 
-            String handledare = rs.getString(PLACE_COLUMN_HANDLEDARE);
-            String unit = rs.getString(PLACE_COLUMN_UNIT);
-            String student = rs.getString(PLACE_COLUMN_STUDENT);
-            if (handledare == null && student == null) {
+            String unit = placeRs.getString(PLACE_COLUMN_UNIT);
+            String student = placeRs.getString(PLACE_COLUMN_STUDENT);
+            if (handledare.isEmpty() && student == null) {
                 return new Place(id, getUnit(Integer.valueOf(unit)));
-            }else if(handledare == null){
+            }else if(handledare.isEmpty()){
                 return new Place(id, getStudent(student), getUnit(Integer.valueOf(unit)));
-            }else if(handledare != null && student == null){
-                return new Place(id, getHandledare(handledare), getUnit(Integer.valueOf(unit)));
+            }else if(!handledare.isEmpty() && student == null){
+                return new Place(id, handledare, getUnit(Integer.valueOf(unit)));
             }
             else {
-                return new Place(id, getHandledare(handledare), getStudent(student), getUnit(Integer.valueOf(unit)));
+                return new Place(id,handledare, getStudent(student), getUnit(Integer.valueOf(unit)));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -599,11 +614,12 @@ class SelectDbContent implements DatabaseSelector {
             List<Place> allPlaces = new ArrayList<>();
             while (rs.next()) {
                 String student = rs.getString(PLACE_COLUMN_STUDENT);
-                String handledare = rs.getString(PLACE_COLUMN_HANDLEDARE);
+                int placeId = rs.getInt(PLACE_COLUMN_ID);
+                List<Handledare> handledare = getHandledareForPlace(placeId);
                 if(student == null) {
                     int id = rs.getInt(PLACE_COLUMN_ID);
                     allPlaces.add(new Place(id, unit));
-                }else if(handledare == null){
+                }else if(handledare.isEmpty()){
                     int id = rs.getInt(PLACE_COLUMN_ID);
                     allPlaces.add(new Place(id, getStudent(student), unit));
 
@@ -672,7 +688,9 @@ class SelectDbContent implements DatabaseSelector {
     @Override
     public boolean handledareExistsOnPlace(String handledareEmail) throws DatabaseException {
         try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
-            String sql = "SELECT * FROM " + PLACE_TABLE + " WHERE handledare = ?";
+            String sql = "SELECT * FROM " + PLACE_TABLE + " WHERE ID IN (SELECT "
+                    + PLACE_REFERENCE_COLUMN + " FROM " + PLACE_HANDLEDARE_TABLE
+                    + " WHERE " + HANDLEDARE_REFERENCE_COLUMN + " = ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, handledareEmail);
             ResultSet rs = statement.executeQuery();
@@ -708,17 +726,19 @@ class SelectDbContent implements DatabaseSelector {
                 return null;
             }
             int id = rs.getInt(PLACE_COLUMN_ID);
-            String hand = rs.getString(PLACE_COLUMN_HANDLEDARE);
+            //String hand = rs.getString(PLACE_COLUMN_HANDLEDARE);
             int unit = rs.getInt(PLACE_COLUMN_UNIT);
 
             Place place = new Place(id,getStudent(studentEmail),getUnit(unit));
+            List<Handledare> handledare = getHandledareForPlace(id);
 
-            if(hand == null){
+            if(handledare.isEmpty()){
                 return place;
             }else{
-                place.setHandledare(getHandledare(hand));
+                place.setHandledare(handledare);
                 return place;
             }
+
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -758,14 +778,14 @@ class SelectDbContent implements DatabaseSelector {
                 int id = rs.getInt(PLACE_COLUMN_ID);
                 int unit = rs.getInt(PLACE_COLUMN_UNIT);
                 String student = rs.getString(PLACE_COLUMN_STUDENT);
-                String handledare = rs.getString(PLACE_COLUMN_HANDLEDARE);
-
-                if(handledare == null && student == null){
+                //String handledare = rs.getString(PLACE_COLUMN_HANDLEDARE);
+                List<Handledare> handledare = getHandledareForPlace(id);
+                if(handledare.isEmpty() && student == null){
                     places.add(new Place(id,getUnit(unit),null, null));
-                }else if(handledare == null){
+                }else if(handledare.isEmpty()){
                     places.add(new Place(id, getStudent(student), getUnit(unit)));
                 }else{
-                    places.add(new Place(id, getUnit(unit),getStudent(student),getHandledare(handledare)));
+                    places.add(new Place(id, getUnit(unit),getStudent(student),getHandledareForPlace(id)));
                 }
 
             }
@@ -774,5 +794,28 @@ class SelectDbContent implements DatabaseSelector {
             e.printStackTrace();
             throw new DatabaseException("database error", e);
         }
+    }
+    public List<Handledare> getHandledareForPlace(int placeId) throws DatabaseException{
+        List<Handledare> handledare = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
+            String sqlGetHandledare = "SELECT * FROM " + HANDLEDARE_TABLE + " WHERE " + HANDLEDARE_COLUMN_EMAIL
+                    + " IN ( SELECT " + HANDLEDARE_REFERENCE_COLUMN + " FROM " + PLACE_HANDLEDARE_TABLE + " WHERE " + PLACE_REFERENCE_COLUMN + " = ?)";
+            PreparedStatement getHandledareStatement = connection.prepareStatement(sqlGetHandledare);
+            getHandledareStatement.setInt(1, placeId);
+            ResultSet handledareRs = getHandledareStatement.executeQuery();
+
+            while (handledareRs.next()) {
+                String name = handledareRs.getString(HANDLEDARE_COLUMN_NAME);
+                String email = handledareRs.getString(HANDLEDARE_COLUMN_EMAIL);
+                String phoneNumber = handledareRs.getString(HANDLEDARE_COLUMN_PHONE_NUMBER);
+                String hashedPassword = handledareRs.getString(HANDLEDARE_COLUMN_HASHED_PASSWORD);
+                handledare.add(new Handledare(name, email, phoneNumber, hashedPassword));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseException("database error", e);
+        }
+        return handledare;
     }
 }

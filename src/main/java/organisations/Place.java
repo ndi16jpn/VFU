@@ -3,17 +3,19 @@ package organisations;
 import roles.Handledare;
 import roles.Student;
 
+import java.util.List;
+
 /**
  * Datahållare för plats
  */
 public class Place {
 
     private int id;
-    private Handledare handledare;
+    private List<Handledare> handledare;
     private Student student;
     private Unit unit;
 
-    public Place(int id, Handledare handledare, Unit unit) {
+    public Place(int id, List<Handledare> handledare, Unit unit) {
         this.id = id;
         this.handledare = handledare;
         this.unit = unit;
@@ -23,7 +25,7 @@ public class Place {
         this.student = student;
         this.unit = unit;
     }
-    public Place(int id,  Handledare handledare, Student student, Unit unit) {
+    public Place(int id,  List<Handledare> handledare, Student student, Unit unit) {
         this.id = id;
         this.handledare = handledare;
         this.student = student;
@@ -37,11 +39,11 @@ public class Place {
     public Place(Unit unit) {
         this.unit = unit;
     }
-    public Place(Unit unit, Handledare handledare) {
+    public Place(Unit unit, List<Handledare> handledare) {
         this.handledare = handledare;
         this.unit = unit;
     }
-    public Place(int id, Unit unit, Student student, Handledare handledare){
+    public Place(int id, Unit unit, Student student, List<Handledare> handledare){
         this.handledare = handledare;
         this.id = id;
         this.unit = unit;
@@ -52,7 +54,7 @@ public class Place {
         this.student = student;
     }
 
-    public void setHandledare(Handledare handledare) {
+    public void setHandledare(List<Handledare> handledare) {
         this.handledare = handledare;
     }
 
@@ -60,7 +62,7 @@ public class Place {
         return id;
     }
 
-    public Handledare getHandledare() {
+    public List<Handledare> getHandledare() {
         return handledare;
     }
 
