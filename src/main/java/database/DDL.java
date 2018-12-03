@@ -128,6 +128,13 @@ class DDL {
             + PLACE_COLUMN_HANDLEDARE + " TEXT REFERENCES handledare,"
             + PLACE_COLUMN_UNIT + " TEXT NOT NULL REFERENCES unit);";
 
+    static final String PLACE_HANDLEDARE_TABLE = "place_handledare";
+    static final String PLACE_REFERENCE_COLUMN = "place_id";
+    static final String HANDLEDARE_REFERENCE_COLUMN = "handledare_email";
+    static final String CREATE_TABLE_PLACE_HANDLEDARE = "CREATE TABLE IF NOT EXISTS " + PLACE_HANDLEDARE_TABLE + "("
+            + PLACE_REFERENCE_COLUMN + " INTEGER NOT NULL REFERENCES " + PLACE_TABLE + ", "
+            + HANDLEDARE_REFERENCE_COLUMN + " TEXT NOT NULL REFERENCES " + HANDLEDARE_TABLE + ", "
+            + "PRIMARY KEY ("+ PLACE_REFERENCE_COLUMN + "," + HANDLEDARE_REFERENCE_COLUMN + "));";
     private String dbUrl;
     private Properties sqLiteConfig;
 
@@ -186,6 +193,8 @@ class DDL {
             statement.executeUpdate(CREATE_TABLE_UNIT);
 
             statement.executeUpdate(CREATE_TABLE_PLACE);
+
+            statement.executeUpdate(CREATE_TABLE_PLACE_HANDLEDARE);
             if (!adminUserExists(connection)) {
                 createDefaultAdmin(connection);
                 createDefaultRegion(connection);

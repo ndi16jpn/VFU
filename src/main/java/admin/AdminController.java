@@ -373,8 +373,13 @@ public class AdminController {
                 request.attribute("errDelPlaceStud", true);
                 return serveAdminAddPlacePage.handle(request,response);
             }if(place.getHandledare() != null){
-                db.getDeleter().deleteHandledareFromPlace(place.getHandledare());
-                db.getDeleter().deleteHandledareContent(place.getHandledare());
+                List<Handledare> handledare = place.getHandledare();
+                for (Handledare handledareObject: handledare) {
+                    db.getDeleter().deleteHandledareFromPlace(handledareObject);
+                    db.getDeleter().deleteHandledareContent(handledareObject);
+                }
+                //db.getDeleter().deleteHandledareFromPlace(place.getHandledare());
+                //db.getDeleter().deleteHandledareContent(place.getHandledare());
             }
             db.getInserter().deleteOneNumberOfSlotsUnit(unit);
             db.getDeleter().deleteSinglePlace(db.getSelector().getPlace(Integer.valueOf(placeID)));
@@ -717,11 +722,22 @@ public class AdminController {
                 emailModel.put("unit_name",
                         place.getUnit().getName() + " (" + place.getUnit().getMunicipality().getRegion().getName() + ")"
                 );
-                Handledare handledare = place.getHandledare();
+                List<Handledare> handledare = place.getHandledare();
                 boolean handledareExists = handledare != null;
+                if (handledareExists) {
+                    handledareExists = handledareExists && !handledare.isEmpty();
+                }
                 emailModel.put("handledare_exists", handledareExists);
                 if (handledareExists) {
-                    emailModel.put("handledare", handledare.getName() + " (" + handledare.getEmail() + ")");
+                    String handledareNameString = "";
+                    String handledareEmailString = "";
+                    for (Handledare hand: handledare) {
+                        handledareNameString = handledareNameString + hand.getName();
+                        handledareEmailString = handledareEmailString + hand.getEmail();
+
+                    }
+
+                    emailModel.put("handledare", handledareNameString + " (" + handledareEmailString + ")");
                 }
                 mailSender.sendMail(
                         student.getEmail(),

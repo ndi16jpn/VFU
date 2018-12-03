@@ -267,4 +267,12 @@ public interface DatabaseSelector {
      * @throws DatabaseException
      */
     boolean isChosen(int id) throws DatabaseException;
+
+    /**
+     * Gets all supervisors for a place
+     * @param placeId
+     * @return
+     * @throws DatabaseException
+     */
+    List<Handledare> getHandledareForPlace(int placeId) throws DatabaseException;
 }
