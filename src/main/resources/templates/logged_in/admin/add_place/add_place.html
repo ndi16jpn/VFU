@@ -168,7 +168,7 @@
 
                                     <button class="button is-primary" th:id="'btn' + ${place.id}" name="placeModal" th:value="|${unit.name}@@${unit.municipality.name}|">
 
-                                        <span>Plats</span>
+                                        <span>Plats </span>
                                         <span class="icon is-small">
                                          <i class="fa fa-globe"></i>
                                      </span>
@@ -181,17 +181,16 @@
                                     <span class="has-text-weight-bold has-text-success" style="margin-right:100px;" th:if="${place.student}" >[[${place.student.studentData.name}]]</span>
 
 
-                                <form class="block" action="/admin/add-handledare/" method="post" th:if="true">
-                                    <button type="submit" style="margin-right:10px;" class="button is-primary" name="handledareToAdd">
+                                <!-- <form class="block" action="/admin/add-handledare/" method="post" th:if="true"> -->
+                                    <button class="button is-primary" th:id="'open-add-handledare-window' + ${place.id}" name="placeModal" th:value="|${unit.name}@@${unit.municipality.name}|">
                                         <span>Lägg till handledare </span>
                                         <span class="icon is-small">
                                          <i class="fa fa-plus"></i>
                                       </span>
                                     </button>
-                                </form>
+                                <!-- </form>-->
                                     Handledare: <span class="has-text-weight-bold has-text-danger" style="margin-right:10px;" th:if="${not place.handledare}" > Ingen handledare</span>
-                                    <span class="has-text-weight-bold has-text-success" th:if="${place.handledare}" >[[${place.handledare[0].name}]]</span>
-
+                                    <span class="has-text-weight-bold has-text-success" th:if="${place.handledare}" th:each="hand : ${place.handledare}" th:text = ${hand.name}></span>
                                 <form onsubmit="return formDelPlace(this)" style="display:inline-block" action="/admin/delete-one-place/" method="post">
                                     <input type="hidden" name="unitName" th:value="${unit.name}">
                                     <input type="hidden" name="regionMunis" th:value="${unit.municipality.name}">
@@ -221,7 +220,7 @@
                                                 Handledare
                                             </h2>
                                             <hr>
-                                            <form class="block" action="/admin/add-handledare/" method="post" th:if="${not place.handledare}">
+                                            <form class="block" action="/admin/add-handledare/" method="post" th:if="true">
                                                 <span>Email: </span> <input class="input" type="email" name="handledareToAdd" placeholder="Handledare Email" required>
 
                                                     <span>Namn: </span> <input class="input"  type="text" name="handledareName" placeholder="Handledare Namn" required>
@@ -230,7 +229,7 @@
                                                     <br>
                                                     <input type="hidden" name="placeId" th:value="${place.id}">
                                                      <input type="hidden" name="unitNameMuni" th:value="|${unit.name}###${unit.municipality.name}|">
-                                                    <button type="submit" style="margin-top:20px;" th:if="${not place.handledare}" class="button is-primary" name="handledareToAdd">
+                                                    <button type="submit" style="margin-top:20px;" th:if="true" class="button is-primary" name="handledareToAdd">
                                                         <span>Lägg till handledare </span>
                                                     </button>
                                             </form>
@@ -408,6 +407,12 @@ for(i = 0; i < places.length; i++){
         };
     })(i);
 
+    document.getElementById("open-add-handledare-window" + places[i].id).onclick = (function(i){ return function() {
+           var index = i;
+           document.getElementById("modal" + places[index].id).className = "modal is-active";
+        };
+    })(i);
+
     span.onclick = (function(i){ return function() {
       var index = i;
        document.getElementById("modal" + places[index].id).className = "modal";
@@ -439,5 +444,32 @@ function submitForm() {
     return confirm('Är du säker på att du vill ta bort enheten?');
 }
 </script>
+<!-- <script th:inline="javascript">
+var places = [[${place_id}]];
+for(i = 0; i < places.length; i++){
+
+     var span = document.getElementById("span" + places[i].id);
+     var background = document.getElementById("bg" + places[i].id);
+
+     document.getElementById("open-add-handledare-window" + places[i].id).onclick = (function(i){ return function() {
+           var index = i;
+           document.getElementById("modal" + places[index].id).className = "modal is-active";
+        };
+    })(i);
+
+    span.onclick = (function(i){ return function() {
+      var index = i;
+       document.getElementById("modal" + places[index].id).className = "modal";
+    };
+    })(i);
+
+    background.onclick = (function(i){ return function() {
+        var index = i;
+       document.getElementById("modal" + places[index].id).className = "modal";
+    };
+    })(i);
+
+}
+</script> -->
 </body>
 </html>
