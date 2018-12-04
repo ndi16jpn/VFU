@@ -190,7 +190,7 @@
                                     </button>
                                 <!-- </form>-->
                                     Handledare: <span class="has-text-weight-bold has-text-danger" style="margin-right:10px;" th:if="${not place.handledare}" > Ingen handledare</span>
-                                    <span class="has-text-weight-bold has-text-success" th:if="${place.handledare}" th:each="hand : ${place.handledare}" th:text = ${hand.name}></span>
+                                    <span class="has-text-weight-bold has-text-success" th:if="${place.handledare}" th:each="hand : ${place.handledare}" ><!--th:text = ${hand.name}-->[[${hand.name}]], </span>
                                 <form onsubmit="return formDelPlace(this)" style="display:inline-block" action="/admin/delete-one-place/" method="post">
                                     <input type="hidden" name="unitName" th:value="${unit.name}">
                                     <input type="hidden" name="regionMunis" th:value="${unit.municipality.name}">
