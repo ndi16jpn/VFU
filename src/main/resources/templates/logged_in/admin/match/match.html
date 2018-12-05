@@ -160,7 +160,7 @@
                                 </a>
                             </td>
                             <td th:text="|${place.unit.name} (${place.unit.municipality.region.name}, ${place.unit.municipality.name})|"></td>
-                            <td th:if="${place.getHandledare} != null" th:text="${place.getHandledare.name}"></td>
+                            <td th:if="${place.getHandledare} != null"><span th:if="${place.handledare}" th:each="hand : ${place.handledare}">[[${hand.name}]], </span></td>
                             <td th:if="${place.getHandledare} == null">
                                 <p class="icon has-text-danger">
                                     <i class="fa fa-lg fa-times"></i>
