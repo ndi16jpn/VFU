@@ -653,23 +653,25 @@ public class AdminController {
     };
 
     public static Route handleDoMatchPost = (Request request, Response response) -> {
+
         if (isAdmin(request)) {
-            Map<String, Object> model = new HashMap<>();
-            model.put("page_title", "VFU-portal SOCIONOM");
-            model.put("home_link", Path.Web.ADMIN_HOME);
-            model.put(ATTR_ROLE, LoggedInRole.ADMIN.getRoleName());
-            model.put(ATTR_NAME, request.session().attribute(ATTR_NAME));
+                Map<String, Object> model = new HashMap<>();
+                model.put("page_title", "VFU-portal SOCIONOM");
+                model.put("home_link", Path.Web.ADMIN_HOME);
+                model.put(ATTR_ROLE, LoggedInRole.ADMIN.getRoleName());
+                model.put(ATTR_NAME, request.session().attribute(ATTR_NAME));
 
-            Match match = new Match();
-            DatabaseSelector dbSelector = DatabaseHandler.getDatabase().getSelector();
-            List<Place> allPlaces = dbSelector.getAllPlaces();
-            List<Student> allStudents = dbSelector.getAllStudents();
+                Match match = new Match();
+                DatabaseSelector dbSelector = DatabaseHandler.getDatabase().getSelector();
+                List<Place> allPlaces = dbSelector.getAllPlaces();
+                List<Student> allStudents = dbSelector.getAllStudents();
 
-            List<MatchStudentPlace> matchResult = match.getMatchEachPlace(allPlaces, allStudents);
-            request.session().attribute("match_result", matchResult);
-            model.put("match_result", matchResult);
+                List<MatchStudentPlace> matchResult = match.getMatchEachPlace(allPlaces, allStudents);
+                request.session().attribute("match_result", matchResult);
+                model.put("match_result", matchResult);
 
-            return render(model, Path.Template.ADMIN_MATCH_VERIFY);
+                return render(model, Path.Template.ADMIN_MATCH_VERIFY);
+
         } else {
             response.redirect(Path.Web.LOGIN);
             return null;
@@ -1038,6 +1040,9 @@ public class AdminController {
 
     private static String getQueryStudentEmail(Request request) {
         return request.queryParams("studentId"); //+ "@student.hig.se";
+    }
+    private static String getQueryVerifyDoMatchButtonClicked(Request request) {
+        return request.queryParams("button_clicked");
     }
 
     private static String getQueryEmail(Request request) {
