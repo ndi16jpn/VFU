@@ -47,6 +47,7 @@ public class Path {
         public static final String ADMIN_DELETE_VFU_SAM = "/admin/delete-vfusam/";
 
         public static final String STUDENT_HOME = "/student/";
+        public static final String STUDENT_CONFIRM_LETTER = "/logged_in/student/confirm_letter/";
         public static final String STUDENT_APPLY_FIRST = "/student/apply-first/";
         public static final String STUDENT_APPLY_CHOICE = "/student/apply-choice/";
 
@@ -93,6 +94,7 @@ public class Path {
         public static final String STUDENT_CHOICE = "logged_in/student/choice/choice";
         public static final String STUDENT_STATUS = "logged_in/student/status/status";
         public static final String STUDENT_ERROR = "logged_in/student/error";
+
 
         public static final String HANDLEDARE_HOME = "logged_in/handledare/handledare";
         public static final String HANDLEDAER_CRITERIA = "logged_in/handledare/evaluation_criteria/evaluation_criteria";
