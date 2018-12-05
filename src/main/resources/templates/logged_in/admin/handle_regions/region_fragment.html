@@ -1,129 +1,118 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<html xmlns:th="http://www.thymeleaf.org" class="has-navbar-fixed-top">
+<head th:replace="common_fragments/header :: header">
     <meta charset="utf-8">
     <link rel="stylesheet" href="../../../../public/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="../../../../public/css/bulma_custom.min.css"/>
 </head>
 <body>
 
-<article class="message" th:fragment="region_noscript">
-    <div class="message-header">
-        <button class="button is-medium">
-            <span class="icon is-large">
-                <i class="fa fa-caret-up"></i>
-            </span>
-            <span th:text="|Studieort: ${region_munis.key}|">Studieort</span>
-        </button>
-        <span class="is-size-5">
-            [[${region_munis.value.size}]] kommuner
-        </span>
-        <form action="/admin/handle-regions/delete-region/" method="post">
-            <button type="submit" class="button is-danger is-medium" name="regionToDelete" th:value="${region_munis.key}">
-                <span>Ta bort [[${region_munis.key}]] (inkl. kommuner)</span>
-                <span class="icon is-small">
-                    <i class="fa fa-times"></i>
-                </span>
-            </button>
-        </form>
-    </div>
+<nav th:replace="logged_in/admin/fragments/navbar :: nav"></nav>
 
-    <div class="message-body">
-        <form th:action="|/admin/handle-regions/add-muni/${region_munis.key}/|" method="post" class="block">
-            <div class="field has-addons">
-                <p class="control is-expanded has-icons-left has-icons-right">
-                    <input class="input is-medium" type="text" name="muni" placeholder="Kommun">
-                    <span class="icon is-small is-left">
-                        <i class="fa fa-globe"></i>
-                    </span>
-                    <span class="icon is-small is-right">
-                        <i class="fa fa-times"></i>
-                    </span>
+<main>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                På denna sida kan du göra följande
+            </h1>
+            <hr>
+            <div class="content is-medium">
+                <ul class="is-size-5">
+                    <li>Lägga till studieorter</li>
+                    <li>Lägga till kommuner till studieorter</li>
+                    <li>Ta bort studieorter (inklusive tillhörande kommuner)</li>
+                    <li>Ta bort kommuner</li>
+                </ul>
+                <br>
+                <h4>Varför behövs detta?</h4>
+                <p>
+                    Studieorterna som läggs till här är dem som kommer visas för studenterna,
+                    när dem ska välja sin studieort
                 </p>
-                <p class="control">
-                    <button type="submit" class="button is-primary is-medium">
-                        Lägg till ny kommun i [[${region_munis.key}]]
-                    </button>
+                <p>
+                    Kommunerna som läggs till här är dem som kommer visas för vfu samordnarna,
+                    när dem ska välja kommun för platser
                 </p>
             </div>
-        </form>
-        <p class="is-size-4">
-            Kommuner:
-        </p>
-        <br>
-        <div class="field is-grouped is-grouped-multiline">
-            <th:block th:each="muni : ${region_munis.value}">
-            <div class="control">
-                <form action="/admin/handle-regions/delete-muni/" method="post">
-                    <button type="submit" class="button is-warning is-medium"
-                            name="muniToDelete" th:value="${muni}" th:title="|Ta bort ${muni}|">
-                        <span th:text="${muni}">muni</span>
-                        <span class="icon is-small">
-                            <i class="fa fa-times"></i>
-                        </span>
-                    </button>
-                </form>
+        </div>
+    </section>
+    <section id="handle_regions_title" class="section">
+        <div class="container">
+            <h1 class="title">
+                Hantera studieorter och kommuner
+            </h1>
+            <hr>
+            <div th:if="${region_existed}" class="notification is-danger is-size-5">
+                Studieorten '[[${region}]]' fanns redan
             </div>
-            </th:block>
-        </div>
-    </div>
-</article>
-
-<article class="message" th:fragment="region_vue">
-    <div class="message-header">
-        <button @click="regionToggleClick" class="button is-medium">
-            <span class="icon is-large">
-                <i class="fa" :class="[displayRegion ? 'fa-caret-up' : 'fa-caret-down']"></i>
-            </span>
-            <span v-text="'Studieort: ' + regionMuni.key"></span>
-        </button>
-        <span class="is-size-5">
-            {{ regionMuni.value.length }} kommuner
-        </span>
-        <button @click="deleteRegion" class="button is-danger is-medium">
-            <span>Ta bort {{ regionMuni.key }} (inkl. kommuner)</span>
-            <span class="icon is-small">
-                <i class="fa fa-times"></i>
-            </span>
-        </button>
-    </div>
-
-    <div class="message-body" v-if="displayRegion">
-        <div class="field has-addons block">
-            <p class="control is-expanded has-icons-left has-icons-right">
-                <input ref="muniInput" class="input is-medium" type="text" name="muni" placeholder="Kommun"
-                       v-model.trim="muni" @keyup.enter="ajaxAddMuni">
-                <span class="icon is-small is-left">
-                    <i class="fa fa-globe"></i>
-                </span>
-                <span class="icon is-small is-right">
-                    <i class="fa" :class="[muniIsValid ? 'fa-check' : 'fa-times']"></i>
-                </span>
-            </p>
-            <p class="control">
-                <a @click="ajaxAddMuni" class="button is-primary is-medium"
-                   :class="{'is-loading': isAjaxWaitingAddMuni}" :disabled="!muniIsValid">
-                    Lägg till ny kommun i {{ regionMuni.key }}
-                </a>
-            </p>
-        </div>
-        <div class="notification is-danger is-size-5" v-show="showError" v-text="error" v-cloak></div>
-        <p class="is-size-4">
-            Kommuner:
-        </p>
-        <br>
-        <div class="field is-grouped is-grouped-multiline">
-            <div class="control" v-for="muni in regionMuni.value">
-                <a @click="deleteMuni(muni)" class="button is-warning is-medium"
-                   name="muniToDelete" :title="'Ta bort ' + muni" :class="{'is-loading': isAjaxWaitingDelMuni}">
-                    <span v-text="muni"></span>
-                    <span class="icon is-small">
-                        <i class="fa fa-times"></i>
-                    </span>
-                </a>
+            <div th:if="${region_added}" class="notification is-success is-size-5">
+                Studieorten '[[${region}]]' tillagd
             </div>
+            <div th:if="${muni_existed}" class="notification is-danger is-size-5">
+                Kommunen '[[${muni}]]' fanns redan
+            </div>
+            <div th:if="${muni_added}" class="notification is-success is-size-5">
+                Kommunen '[[${muni}]]' tillagd
+            </div>
+            <div th:if="${region_deleted}" class="notification is-danger is-size-5">
+                Studieorten '[[${region}]]' borttagen
+            </div>
+            <div th:if="${muni_deleted}" class="notification is-success is-size-5">
+                Kommunen '[[${muni}]]' borttagen
+            </div>
+            <div th:if="${region_foreign_key}" class="notification is-success is-size-5">
+                Går ej att ta bort studieort om någon tillhör den orten
+            </div>
+            <div th:if="${muni_foreign_key}" class="notification is-success is-size-5">
+                Går ej att ta bort kommun om någon tillhör den kommunen
+            </div>
+            <br>
+
+            <div class="content is-medium">
+                <div id="vue-add-region">
+                    <div class="notification is-danger is-size-5" v-show="showError" v-text="error" v-cloak></div>
+                    <form @submit.prevent="ajaxAddRegion" action="/admin/handle-regions/add-region/" method="post">
+                        <div class="field has-addons">
+                            <p class="control has-icons-left has-icons-right">
+                                <input class="input is-medium" type="text" name="region" placeholder="Studieort"
+                                       v-model.trim="region">
+                                <span class="icon is-small is-left">
+                                    <i class="fa fa-globe"></i>
+                                </span>
+                                <span class="icon is-small is-right">
+                                    <i class="fa" :class="[regionIsValid ? 'fa-check' : 'fa-times']"></i>
+                                </span>
+                            </p>
+                            <p class="control">
+                                <button type="submit" class="button is-primary is-medium"
+                                        :class="{'is-loading': isAjaxWaiting}" :disabled="!regionIsValid">
+                                    Lägg till ny studieort
+                                </button>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div id="vue-regions">
+                <vue-region v-for="regionMuni in regionMunis" :region-muni="regionMuni" :key="regionMuni.key"
+                            @delete-region="deleteRegion" class="block"></vue-region>
+                <div v-if="noscript">
+                    <th:block th:each="region_munis : ${region_muni_list}">
+                        <div class="block">
+                            <article th:replace="logged_in/admin/handle_regions/region_fragment :: region_noscript"></article>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+
         </div>
-    </div>
-</article>
+    </section>
+</main>
+
+<footer th:replace="common_fragments/footer :: footer"></footer>
+
+<script th:replace="logged_in/admin/handle_regions/js_fragment :: js"></script>
+
+</body>
+</html>

@@ -160,6 +160,14 @@ public class StudentController {
         }
     };
 
+    public static Route handleConfirmLetter = (Request request, Response response) -> {
+        if (isStudent(request)) {
+            response.redirect(Path.Web.STUDENT_HOME);
+        }
+
+        return null;
+        };
+
     public static Route handleApplyChoice = (Request request, Response response) -> {
         if (isStudent(request)) {
             int[] choices;
