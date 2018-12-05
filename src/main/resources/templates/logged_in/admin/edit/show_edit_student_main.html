@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="has-navbar-fixed-top">
+<head th:replace="common_fragments/header :: header">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<nav th:replace="logged_in/admin/fragments/navbar :: nav"></nav>
+
+<main>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Hej blivande socionom!
+            </h1>
+            <hr>
+            <div class="content is-medium">
+                <p>
+
+
+                    När du fyllt i dina uppgifter och skrivit ett personligt brev, kommer du att kunna göra 5 val till
+                    VFU-platser du önskar göra din VFU på. Du börjar med ditt förstahandsval, sedan ditt andrahandsval osv, alltså i den ordning du önskar platserna. Du gör dina val på den studieort du tillhör.
+                <p class="has-text-danger">
+                    Observera! Läs noga igenom platsbeskrivningar, om det finns särskilda krav om t ex ålder.
+                    Läs också noga igenom informationen på den här sidan innan du börjar.
+                </p>
+                </p>
+                <p>
+                    Om flera studenter har gjort samma förstahandsval, fördelar systemet platserna slumpvis. Samma gäller med valen som följer efter.
+                </p>
+                <p>
+                <p class="has-text-danger">
+                    Tid när systemet är öppet för studenter att göra sina val är 1-10 mars varje år.
+                </p>
+
+                Alla kommuner erbjuder olika VFU-platser från år till år, och de vet inte alltid exakta verksamheter under fördelningsprocessen. Av den anledningen är platserna oftast beskrivna endast som områden. Som student har du alltså främst möjlighet att välja område/förvaltning.
+                De lokala VFU-samordnarna på våra studieorter meddelar verksamheter i ett senare skede, eftersom de behöver ta hänsyn till om det finns handledare som kan ta emot, samt hur läget är i de olika verksamheterna aktuellt år.
+                I ditt personliga brev kan du beskriva om det är någon verksamhet du är särskilt intresserad av, och också om det av någon anledning finns verksamheter du inte kan/vill vara på av personliga skäl.
+                </p>
+                <p >
+                    HiG förbinder sig att erbjuda en (1) praktikplats till varje student. Platserna tilldelas i kommuner med omnejd som ingår i den studieort man tillhör, med pendlingsavstånd. Om en student av särskilda skäl* vill göra VFU på annan ort, tas kontakt med VFU-samordnare på HiG innan 1 mars.
+                    eraehn@hig.se
+                </p>
+
+
+                Besked om VFU-plats ges till studenter då fördelningsprocessen är gjord, och varje student får ett mail när det är klart.
+                <p class="has-text-danger">
+                    HiG reserverar sig för ev. ändringar av plats om verksamheter meddelar förhinder att ta emot student.
+                </p>
+                <p>
+                    *särskilda skäl kan vara funktionsvariation, sjukdom, familjesituation etc.
+                </p>
+                <p>
+                    Det personliga brevet kan komma att skickas till de lokala VFU-samordnarna och/eller verksamhetschef, om de önskar det, inför sin matchning av platser. Det är olika rutiner inom olika förvaltningar hur de vill göra den interna fördelningen.
+                </p>
+
+                <p class="has-text-danger has-text-weight-bold">
+                    Om du väljer att gå vidare så godkänner du att följande uppgifter lagras i systemets databas:
+                <ul>
+                    <li>Namn</li>
+                    <li>Student id</li>
+                    <li>Telefonnummer</li>
+                    <li>Mailadress</li>
+                    <li>Födelseår</li>
+                </ul>
+                </p>
+                <p>
+                    När du fyllt i dina uppgifter och skrivit ett personligt brev, kommer du att kunna göra 5 val till
+                    VFU-platser du önskar göra din praktik på.
+                </p>
+                <br>
+                <div class="field">
+                    <label class="label">Namn</label>
+                    <p class="is-size-5" th:text="${name}"></p>
+                </div>
+                <div class="field">
+                    <label class="label">Email</label>
+                    <p class="is-size-5" th:text="${stud_email}"></p>
+                </div>
+                <div class="field">
+                    <label class="label">Födelseår</label>
+                    <p class="is-size-5" th:text="${stud_yob}"></p>
+                </div>
+                <br>
+                <div th:if="${error}" class="notification is-danger is-size-5">
+                    <p th:text="${error_msg}"></p>
+                </div>
+                <div id="form-vue">
+                    <form onsubmit="return confirm('Är du säker på att du är klar med ditt brev? Du kan inte redigera brevet senare.')" action="/student/apply-first/" method="post">
+                        <div class="field">
+                            <label class="label">Studieort</label>
+                            <p>
+                                Om du vill utföra VFU på annan än din egen studieort logga ut nu
+                                och kontakta läraren innan du loggar in igen och fortsätter
+                            </p>
+                            <div class="control">
+                                <div class="select is-medium">
+                                    <select name="studieort" v-model="regionSelected">
+                                        <option selected disabled>Välj..</option>
+                                        <option th:each="region: ${all_regions}" th:text="${region}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Telefonnummer</label>
+                            <div class="control">
+                                <input class="input is-medium" type="text" name="tfnnummer" placeholder="07..."
+                                       th:value="${stud_tfn}">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Personligt brev</label>
+                            <p>
+                                Om du har speciella önskemål angående platsval skriv det i ditt personliga brev
+                                och kontakta läraren
+                            </p>
+                            <div class="control">
+                                <textarea class="textarea is-medium" placeholder="Skriv här..." rows="10" name="pbrev"
+                                          maxlength="10000" v-model="personalLetter"></textarea>
+                            </div>
+                            <p class="help is-pulled-right" v-cloak>{{ personalLetterLength }} / 10000</p>
+                        </div>
+                        <div class="field">
+                            <div class="control">
+
+                                <button type="submit" class="button is-primary is-large"
+                                        :title="invalidInput ? 'Fyll i fälten först' : ''" :disabled="invalidInput">
+                                    Skicka in
+                                </button>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="common_fragments/footer :: footer"></footer>
+
+</body>
+</html>

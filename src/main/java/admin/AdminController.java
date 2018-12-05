@@ -379,8 +379,7 @@ public class AdminController {
                     db.getDeleter().deleteHandledareFromPlace(handledareObject);
                     db.getDeleter().deleteHandledareContent(handledareObject);
                 }
-                //db.getDeleter().deleteHandledareFromPlace(place.getHandledare());
-                //db.getDeleter().deleteHandledareContent(place.getHandledare());
+
             }
             db.getInserter().deleteOneNumberOfSlotsUnit(unit);
             db.getDeleter().deleteSinglePlace(db.getSelector().getPlace(Integer.valueOf(placeID)));
@@ -1025,6 +1024,15 @@ public class AdminController {
                 response.status(409);
             }
             return "";
+        } else {
+            response.redirect(Path.Web.LOGIN);
+            return null;
+        }
+    };
+
+    public static Route handleEditStudentFirstPage = (Request request, Response response)-> {
+        if (isAdmin(request)) {
+            return render(new HashMap<>(), Path.Template.STUDENT_FIRST);
         } else {
             response.redirect(Path.Web.LOGIN);
             return null;
