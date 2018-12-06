@@ -252,11 +252,16 @@ class DeleteDbContent implements DatabaseDeleter {
     @Override
     public void deleteHandledareContent(Handledare handledare) throws DatabaseException {
         try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "DELETE FROM " + HANDLEDARE_TABLE + " WHERE email= ?"
+            PreparedStatement preparedStatementReferenceTable = connection.prepareStatement(
+                    "DELETE FROM " + PLACE_HANDLEDARE_TABLE + " WHERE "+ HANDLEDARE_REFERENCE_COLUMN +"= ?"
             );
-            preparedStatement.setString(1, handledare.getEmail());
-            preparedStatement.executeUpdate();
+            PreparedStatement preparedStatementHandledareTable = connection.prepareStatement(
+                    "DELETE FROM " + HANDLEDARE_TABLE + " WHERE "+ HANDLEDARE_COLUMN_EMAIL +"= ?"
+            );
+            preparedStatementReferenceTable.setString(1, handledare.getEmail());
+            preparedStatementHandledareTable.setString(1, handledare.getEmail());
+            preparedStatementReferenceTable.executeUpdate();
+            preparedStatementHandledareTable.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DatabaseException("database error", e);
