@@ -46,6 +46,9 @@ public class Path {
         public static final String ADMIN_SHOW_VFU_SAM = "/admin/show-vfusam/";
         public static final String ADMIN_DELETE_VFU_SAM = "/admin/delete-vfusam/";
 
+        public static final String ADMIN_SHOW_EDIT_STUDENT_MAIN = "/admin/edit/show_edit_student_main/";
+        public static final String ADMIN_EDIT_STUDENT_FIRST_TEXT = "/admin/edit-studentFirstText/";
+
         public static final String STUDENT_HOME = "/student/";
         public static final String STUDENT_CONFIRM_LETTER = "/logged_in/student/confirm_letter/";
         public static final String STUDENT_APPLY_FIRST = "/student/apply-first/";

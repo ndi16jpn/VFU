@@ -275,4 +275,12 @@ public interface DatabaseSelector {
      * @throws DatabaseException
      */
     List<Handledare> getHandledareForPlace(int placeId) throws DatabaseException;
+
+    /**
+     * Gets all supervisors for a place
+     * @param paragraphNr
+     * @return
+     * @throws DatabaseException
+     */
+    String getStudentFirstParagraph(int paragraphNr) throws DatabaseException;
 }
