@@ -94,7 +94,9 @@ public class AdminController {
             model.put(ATTR_NAME, request.session().attribute(ATTR_NAME));
             Database db = DatabaseHandler.getDatabase();
             List<String> regions = db.getSelector().getAllRegionNames();
+            List<Handledare> allHandledare = db.getSelector().getAllHandledare();
             model.put("region_list", regions);
+            model.put("all_handledare", allHandledare);
             Map regionMuni = new HashMap();
             if(request.attribute("errDel") != null){
                 model.put("cantDelete", "Du kan inte ta bort en enhet som har en student eller en enhet som en student har som ett val.");

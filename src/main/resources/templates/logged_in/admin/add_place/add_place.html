@@ -123,6 +123,7 @@
             <h1 class="title">
                 Platser
             </h1>
+
                 <div class="content">
 
                 <ul class="is-size-5">
@@ -133,6 +134,12 @@
 
                 </ul>
                 </div>
+
+            <button class="button is-primary" th:id="'open-all-handledare-window' + ${all_handledare}" >
+                <span>Alla Handledare Email </span>
+            </button>
+
+
             <hr>
 
             <div class="field">
@@ -144,6 +151,9 @@
                         </span>
                 </p>
             </div>
+
+
+
             <div class="block" id="myBlock">
             <th:block th:each="unit : ${unit_list}">
 
@@ -160,6 +170,8 @@
                         </form>
 
                     </div>
+
+
 
                     <div class="message-body">
                         <div class="block"  th:each="place : ${place_id}" th:if="${place.unit.id} == ${unit.id} ">
@@ -203,8 +215,6 @@
                                     </button>
                                 </form>
                                 </p>
-
-
 
                                 <div class="modal" th:id="'modal' + ${place.id}" style="z-index: 5000">
                                     <div class="modal-background" th:id="'bg' + ${place.id}"></div>
@@ -280,6 +290,7 @@
                                     </div>
                                 </div>
                                 <div class="modal" th:id="'modal2' + ${place.id}" style="z-index: 5000">
+
                                     <div class="modal-background" th:id="'bg2' + ${place.id}"></div>
                                     <div class="modal-card">
                                         <header class="modal-card-head">
@@ -442,6 +453,7 @@ for(i = 0; i < places.length; i++){
         };
     })(i);
 
+
     span.onclick = (function(i){ return function() {
       var index = i;
        document.getElementById("modal" + places[index].id).className = "modal";
@@ -465,8 +477,6 @@ for(i = 0; i < places.length; i++){
        document.getElementById("modal2" + places[index].id).className = "modal";
     };
     })(i);
-
-}
 </script>
 
 
