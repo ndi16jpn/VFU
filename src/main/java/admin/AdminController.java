@@ -1031,7 +1031,18 @@ public class AdminController {
 
     public static Route handleEditStudentFirstPage = (Request request, Response response)-> {
         if (isAdmin(request)) {
-            return render(new HashMap<>(), Path.Template.STUDENT_FIRST);
+            Database db = DatabaseHandler.getDatabase();
+            Map<String, Object> model = new HashMap<>();
+
+            model.put("paragraph_1",db.getSelector().getStudentFirstParagraph(1));
+            model.put("paragraph_2",db.getSelector().getStudentFirstParagraph(2));
+            model.put("paragraph_3",db.getSelector().getStudentFirstParagraph(3));
+
+            model.put("page_title", "VFU-portal SOCIONOM");
+            model.put("home_link", Path.Web.ADMIN_SHOW_EDIT_STUDENT_MAIN);
+            model.put(ATTR_ROLE, LoggedInRole.ADMIN.getRoleName());
+            model.put(ATTR_NAME, request.session().attribute(ATTR_NAME));
+            return render(model, Path.Template.ADMIN_SHOW_EDIT_STUDENT_MAIN);
         } else {
             response.redirect(Path.Web.LOGIN);
             return null;
