@@ -22,7 +22,7 @@
                 Statistik
             </h1>
             <hr>
-            <div class="content">
+            <td class="content">
 
 
                     <div class="container">
@@ -92,10 +92,25 @@
                     <span class="has-text-weight-bold is-size-4 is-medium"></span>
                     Om det finns någon student som ska matchas manuellt så är det bäst att göra det innan du genomför den automatiska matchningen.
                 </p>
-                <form action="/admin/do-match/" method="post">
+
+                <form
+                        th:if="(${#lists.size(unmatched_students)}== 0)"
+                        onsubmit="return submitForm(this)"
+                        action="/admin/do-match/" method="post">
                     <button type="submit" class="button is-large is-primary">
                         Genomför automatisk matchning
                     </button>
+
+
+                </form>
+                <form
+                        th:if="${#lists.size(unmatched_students)!= 0}"
+
+                        action="/admin/do-match/" method="post">
+                    <button type="submit" class="button is-large is-primary">
+                        Genomför automatisk matchning
+                    </button>
+
 
                 </form>
                 <br>
@@ -160,7 +175,7 @@
                                 </a>
                             </td>
                             <td th:text="|${place.unit.name} (${place.unit.municipality.region.name}, ${place.unit.municipality.name})|"></td>
-                            <td th:if="${place.getHandledare} != null" th:text="${place.getHandledare.name}"></td>
+                            <td th:if="${place.getHandledare} != null"><span th:if="${place.handledare}" th:each="hand : ${place.handledare}">[[${hand.name}]], </span></td>
                             <td th:if="${place.getHandledare} == null">
                                 <p class="icon has-text-danger">
                                     <i class="fa fa-lg fa-times"></i>
@@ -223,6 +238,12 @@
 <footer th:replace="common_fragments/footer :: footer"></footer>
 
 <script th:src="'/js/vue.min.js'" src="../../../../public/js/vue.js"></script>
+<script>
+function submitForm() {
+return confirm('Alla elever som gjort val är redan matchade. Är du säker på att du vill genomföra den automatiska matchningen igen?');
+
+}
+</script>
 <script th:inline="javascript">
     function init() {
         vue();

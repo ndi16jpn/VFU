@@ -55,17 +55,17 @@
         <br>
         <div class="field is-grouped is-grouped-multiline">
             <th:block th:each="muni : ${region_munis.value}">
-            <div class="control">
-                <form action="/admin/handle-regions/delete-muni/" method="post">
-                    <button type="submit" class="button is-warning is-medium"
-                            name="muniToDelete" th:value="${muni}" th:title="|Ta bort ${muni}|">
-                        <span th:text="${muni}">muni</span>
-                        <span class="icon is-small">
+                <div class="control">
+                    <form action="/admin/handle-regions/delete-muni/" method="post">
+                        <button type="submit" class="button is-warning is-medium"
+                                name="muniToDelete" th:value="${muni}" th:title="|Ta bort ${muni}|">
+                            <span th:text="${muni}">muni</span>
+                            <span class="icon is-small">
                             <i class="fa fa-times"></i>
                         </span>
-                    </button>
-                </form>
-            </div>
+                        </button>
+                    </form>
+                </div>
             </th:block>
         </div>
     </div>

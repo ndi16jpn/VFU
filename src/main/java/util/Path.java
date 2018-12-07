@@ -46,7 +46,11 @@ public class Path {
         public static final String ADMIN_SHOW_VFU_SAM = "/admin/show-vfusam/";
         public static final String ADMIN_DELETE_VFU_SAM = "/admin/delete-vfusam/";
 
+        public static final String ADMIN_SHOW_EDIT_STUDENT_MAIN = "/admin/edit/show_edit_student_main/";
+        public static final String ADMIN_EDIT_STUDENT_FIRST_TEXT = "/admin/edit-studentFirstText/";
+
         public static final String STUDENT_HOME = "/student/";
+        public static final String STUDENT_CONFIRM_LETTER = "/logged_in/student/confirm_letter/";
         public static final String STUDENT_APPLY_FIRST = "/student/apply-first/";
         public static final String STUDENT_APPLY_CHOICE = "/student/apply-choice/";
 
@@ -88,11 +92,13 @@ public class Path {
         public static final String ADMIN_MATCH_VERIFY = "logged_in/admin/match/match_verify";
         public static final String ADMIN_ADD_VFU_SAM = "logged_in/admin/add_vfu_sam/add_vfu_sam";
         public static final String ADMIN_SHOW_VFU_SAM = "logged_in/admin/show_vfu_sam/show_vfu_sam";
+        public static final String ADMIN_SHOW_EDIT_STUDENT_MAIN = "logged_in/admin/edit/show_edit_student_main";
 
         public static final String STUDENT_FIRST = "logged_in/student/first/first";
         public static final String STUDENT_CHOICE = "logged_in/student/choice/choice";
         public static final String STUDENT_STATUS = "logged_in/student/status/status";
         public static final String STUDENT_ERROR = "logged_in/student/error";
+
 
         public static final String HANDLEDARE_HOME = "logged_in/handledare/handledare";
         public static final String HANDLEDAER_CRITERIA = "logged_in/handledare/evaluation_criteria/evaluation_criteria";

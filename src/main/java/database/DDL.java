@@ -135,6 +135,20 @@ class DDL {
             + PLACE_REFERENCE_COLUMN + " INTEGER NOT NULL REFERENCES " + PLACE_TABLE + ", "
             + HANDLEDARE_REFERENCE_COLUMN + " TEXT NOT NULL REFERENCES " + HANDLEDARE_TABLE + ", "
             + "PRIMARY KEY ("+ PLACE_REFERENCE_COLUMN + "," + HANDLEDARE_REFERENCE_COLUMN + "));";
+
+    static final String TEXT_CONTENT_STUDENT_FIRST_TABLE = "text_content_student_first";
+    static final String TEXT_CONTENT_STUDENT_FIRST_PARAGRAPH_COLUMN = "paragraph";
+    static final String TEXT_CONTENT_STUDENT_FIRST_CONTENT_COLUMN = "content";
+    static final String TEXT_CONTENT_STUDENT_FIRST_CONTENT_P1_DEFAULT = "\"När du fyllt i dina uppgifter och skrivit ett personligt brev, kommer du att kunna göra 5 val till VFU-platser du önskar göra din VFU på. Du börjar med ditt förstahandsval, sedan ditt andrahandsval osv, alltså i den ordning du önskar platserna. Du gör dina val på den studieort du tillhör.\"";
+    static final String TEXT_CONTENT_STUDENT_FIRST_CONTENT_P2_DEFAULT = "\"Observera! Läs noga igenom platsbeskrivningar, om det finns särskilda krav om t ex ålder.\n" +
+            "                    Läs också noga igenom informationen på den här sidan innan du börjar.\"";
+    static final String TEXT_CONTENT_STUDENT_FIRST_CONTENT_P3_DEFAULT = "\"Om flera studenter har gjort samma förstahandsval, fördelar systemet platserna slumpvis. Samma gäller med valen som följer efter.\"";
+    static final String CREATE_TABLE_TEXT_CONTET_STUDENT_FIRST = "CREATE TABLE IF NOT EXISTS " +
+            TEXT_CONTENT_STUDENT_FIRST_TABLE +
+            "(" + TEXT_CONTENT_STUDENT_FIRST_PARAGRAPH_COLUMN + " INTEGER NOT NULL, " +
+            TEXT_CONTENT_STUDENT_FIRST_CONTENT_COLUMN + " TEXT, " +
+            "PRIMARY KEY (" + TEXT_CONTENT_STUDENT_FIRST_PARAGRAPH_COLUMN + "))";
+
     private String dbUrl;
     private Properties sqLiteConfig;
 
@@ -195,6 +209,26 @@ class DDL {
             statement.executeUpdate(CREATE_TABLE_PLACE);
 
             statement.executeUpdate(CREATE_TABLE_PLACE_HANDLEDARE);
+            statement.executeUpdate(CREATE_TABLE_TEXT_CONTET_STUDENT_FIRST);
+            //tillfällig lösning för att illustrera
+
+            if (!statement.executeQuery("SELECT * FROM " + TEXT_CONTENT_STUDENT_FIRST_TABLE
+                    + " WHERE " + TEXT_CONTENT_STUDENT_FIRST_PARAGRAPH_COLUMN + " = 1").next()) {
+               statement.executeUpdate("INSERT INTO " + TEXT_CONTENT_STUDENT_FIRST_TABLE + " VALUES(1, " +
+                       TEXT_CONTENT_STUDENT_FIRST_CONTENT_P1_DEFAULT + ")");
+            }
+            if (!statement.executeQuery("SELECT * FROM " + TEXT_CONTENT_STUDENT_FIRST_TABLE
+                    + " WHERE " + TEXT_CONTENT_STUDENT_FIRST_PARAGRAPH_COLUMN + " = 2").next()) {
+                statement.executeUpdate("INSERT INTO " + TEXT_CONTENT_STUDENT_FIRST_TABLE + " VALUES(2, " +
+                        TEXT_CONTENT_STUDENT_FIRST_CONTENT_P2_DEFAULT + ")");
+            }
+            if (!statement.executeQuery("SELECT * FROM " + TEXT_CONTENT_STUDENT_FIRST_TABLE
+                    + " WHERE " + TEXT_CONTENT_STUDENT_FIRST_PARAGRAPH_COLUMN + " = 3").next()) {
+                statement.executeUpdate("INSERT INTO " + TEXT_CONTENT_STUDENT_FIRST_TABLE + " VALUES(3, " +
+                        TEXT_CONTENT_STUDENT_FIRST_CONTENT_P3_DEFAULT + ")");
+            }
+
+
             if (!adminUserExists(connection)) {
                 createDefaultAdmin(connection);
                 createDefaultRegion(connection);

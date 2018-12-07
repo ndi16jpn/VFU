@@ -19,7 +19,6 @@ import static spark.Spark.*;
  * Main klass som initierar spark samt skapar default smtp.json config fil om den ej finns
  */
 public class Main {
-    // Sebastian was heree hejehj
     public static void main(String[] args) throws Exception {
         MailSenderProvider.createDefaultConfFileIfNotExists();
         initSpark();
@@ -78,8 +77,11 @@ public class Main {
         post(Path.Web.ADMIN_DELETE_VFU_SAM, AdminController.handleDeleteVfuSamPost);
         post(Path.Web.ADMIN_DELETE_STUDENT_FROM_PLACE, AdminController.handleDeleteStudentFromPlacePost);
 
+        get(Path.Web.ADMIN_SHOW_EDIT_STUDENT_MAIN, AdminController.handleEditStudentFirstPage);
+
         get(Path.Web.STUDENT_HOME, StudentController.serveStudentHomePage);
         post(Path.Web.STUDENT_APPLY_FIRST, StudentController.handleApplyFirst);
+        post(Path.Web.STUDENT_CONFIRM_LETTER,StudentController.handleConfirmLetter);
         post(Path.Web.STUDENT_APPLY_CHOICE, StudentController.handleApplyChoice);
 
         get(Path.Web.HANDLEDARE_HOME, HandledareController.serveHandledareHomePage);

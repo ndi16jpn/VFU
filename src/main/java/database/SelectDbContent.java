@@ -818,4 +818,25 @@ class SelectDbContent implements DatabaseSelector {
         }
         return handledare;
     }
+
+    @Override
+    public String getStudentFirstParagraph(int paragraphNr) throws DatabaseException {
+        try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
+            String sqlRequest = "Select " + TEXT_CONTENT_STUDENT_FIRST_CONTENT_COLUMN
+                    + " FROM " + TEXT_CONTENT_STUDENT_FIRST_TABLE
+                    + " WHERE " + TEXT_CONTENT_STUDENT_FIRST_PARAGRAPH_COLUMN
+                    + " = ?";
+            PreparedStatement statement = connection.prepareStatement(sqlRequest);
+            statement.setInt(1, paragraphNr);
+            ResultSet resultSet = statement.executeQuery();
+            String paragraphString = "DATABASE ERROR";
+            while (resultSet.next()) {
+                paragraphString =  resultSet.getString(1);
+            }
+            return paragraphString;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseException("database error", e);
+        }
+    }
 }

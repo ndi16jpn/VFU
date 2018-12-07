@@ -2,12 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org" class="has-navbar-fixed-top">
 <head th:replace="common_fragments/header :: header">
     <meta charset="utf-8">
-    <link rel="stylesheet" href="../../../../public/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="../../../../public/css/bulma_custom.min.css"/>
+    <link rel="stylesheet" href="../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../public/css/bulma_custom.min.css"/>
 </head>
 <body>
 
-<nav th:replace="logged_in/student/fragments/navbar :: nav"></nav>
+<nav th:replace="logged_in/admin/fragments/navbar :: nav"></nav>
 
 <main>
     <section class="section">
@@ -17,16 +17,15 @@
             </h1>
             <hr>
             <div class="content is-medium">
+                <form class="block" action="/admin/edit-studentFirstText/" method="post">
                 <p>
-
-
-                    När du fyllt i dina uppgifter och skrivit ett personligt brev, kommer du att kunna göra 5 val till
-                    VFU-platser du önskar göra din VFU på. Du börjar med ditt förstahandsval, sedan ditt andrahandsval osv, alltså i den ordning du önskar platserna. Du gör dina val på den studieort du tillhör.
+                    <textarea name="paragraph1" class="textarea is-medium" th:text="${paragraph_1}"></textarea>
                 <p class="has-text-danger">
-                    Observera! Läs noga igenom platsbeskrivningar, om det finns särskilda krav om t ex ålder.
-                    Läs också noga igenom informationen på den här sidan innan du börjar.
+                <button id="submitTextButton" type="submit">Klar</button>
+                [[${paragraph_2}]]
                 </p>
                 </p>
+                </form>
                 <p>
                     Om flera studenter har gjort samma förstahandsval, fördelar systemet platserna slumpvis. Samma gäller med valen som följer efter.
                 </p>
@@ -141,34 +140,8 @@
 </main>
 
 <footer th:replace="common_fragments/footer :: footer"></footer>
-
-<script th:src="'/js/vue.min.js'" src="../../../../public/js/vue.js"></script>
 <script>
-function submitForm() {
-    return confirm('Är du säker på att du är färdig med ditt personliga brev?
-    Du kommer inte ha möjlighet att redigera ditt brev vid ett senare tillfälle.');
-}
-</script>
-<script>
-    function init() {
-        new Vue({
-            el: "#form-vue",
-            data: {
-                regionSelected: "Välj..",
-                personalLetter: ""
-            },
-            computed: {
-                personalLetterLength: function() {
-                    return this.personalLetter.length;
-                },
-                invalidInput: function() {
-                    return this.regionSelected === "Välj.." || this.personalLetterLength < 2;
-                }
-            }
-        });
-    }
-    window.addEventListener("DOMContentLoaded", init);
-</script>
 
+</script>
 </body>
 </html>
