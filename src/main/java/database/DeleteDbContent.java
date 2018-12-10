@@ -278,6 +278,9 @@ class DeleteDbContent implements DatabaseDeleter {
             );
             preparedStatement.setString(1, handledare.getEmail());
             preparedStatement.executeUpdate();
+
+            PreparedStatement removeHandledareStatement = connection.prepareStatement("DELETE FROM " + HANDLEDARE_TABLE + " where " + HANDLEDARE_COLUMN_EMAIL + " = ?");
+            removeHandledareStatement.setString(1, handledare.getEmail());
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DatabaseException("database error", e);
