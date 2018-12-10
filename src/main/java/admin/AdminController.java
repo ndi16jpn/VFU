@@ -6,7 +6,7 @@ import data.StudentData;
 import database.*;
 import email.MailSender;
 import email.MailSenderProvider;
-import email.TestMailSenderProvider;
+import email.PrivateMailSenderProvider;
 import json.JsonHandler;
 import json.JsonHelper;
 import matching.Match;
