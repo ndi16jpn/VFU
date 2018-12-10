@@ -123,8 +123,7 @@
             <h1 class="title">
                 Platser
             </h1>
-
-                <div class="content">
+            <div class="content">
 
                 <ul class="is-size-5">
                     <li> För att lägga till en Handledare till en plats, Klicka på Plats ikonen</li>
@@ -133,12 +132,30 @@
                     <li> Det går <span class="has-text-danger is-size-4">inte</span> att ta bort en enhet som en student har som ett val</li>
 
                 </ul>
+            </div>
+            <hr>
+
+            <button class="button is-primary" th:id="'open-all-handledare-email-window'">
+                Visa Alla Handledares Email-adresser
+            </button>
+            <div class="modal" th:id="'handledare_email'" style="z-index: 5000">
+                <div class="modal-background" th:id="'bg_hand_email'"></div>
+                <div class="modal-card">
+                    <header class="modal-card-head">
+                        <p class="modal-card-title"> Alla Handledares Emailadresser</p>
+                        <button th:id="'close_email'" class="delete" aria-label="close"></button>
+                    </header>
+                    <section class="modal-card-body">
+                        <div th:if ="${all_handledare}">
+                            <span class = "email_span" th:id="'email_span'" th:if ="${all_handledare}" th:each="hand: ${all_handledare}">
+                                [[${hand.email}]],
+                                <br>
+                            </span>
+                        </div>
+                    </section>
                 </div>
 
-            <button class="button is-primary" th:id="'open-all-handledare-window' + ${all_handledare}" >
-                <span>Alla Handledare Email </span>
-            </button>
-
+            </div>
 
             <hr>
 
@@ -151,84 +168,81 @@
                         </span>
                 </p>
             </div>
-
-
-
             <div class="block" id="myBlock">
-            <th:block th:each="unit : ${unit_list}">
+                <th:block th:each="unit : ${unit_list}">
 
-                <article class="message">
-                    <div class="message-header">
-                        <p class="searchTitle">[[${unit.name}]], [[${unit.municipality.name}]]</p>
-                        <form onsubmit="return submitForm(this)" action="/admin/delete-unit/" method="post">
-                            <button type="submit" class="button is-danger " name="unitToDelete" th:value="|${unit.name}@@${unit.municipality.name}|">
-                                <span>Ta bort enhet</span>
-                                <span class="icon is-small">
+                    <article class="message">
+                        <div class="message-header">
+                            <p class="searchTitle">[[${unit.name}]], [[${unit.municipality.name}]]</p>
+                            <form onsubmit="return submitForm(this)" action="/admin/delete-unit/" method="post">
+                                <button type="submit" class="button is-danger " name="unitToDelete" th:value="|${unit.name}@@${unit.municipality.name}|">
+                                    <span>Ta bort enhet</span>
+                                    <span class="icon is-small">
                                  <i class="fa fa-times"></i>
                                 </span>
-                            </button>
-                        </form>
+                                </button>
+                            </form>
 
-                    </div>
+                        </div>
 
+                        <div class="message-body">
+                            <div class="block"  th:each="place : ${place_id}" th:if="${place.unit.id} == ${unit.id} ">
+                                <div class="field has-addons " >
+                                    <p class="control is-expanded"  >
 
+                                        <button class="button is-primary" th:id="'btn' + ${place.id}" name="placeModal" th:value="|${unit.name}@@${unit.municipality.name}|">
 
-                    <div class="message-body">
-                        <div class="block"  th:each="place : ${place_id}" th:if="${place.unit.id} == ${unit.id} ">
-                            <div class="field has-addons " >
-                                <p class="control is-expanded"  >
-
-                                    <button class="button is-primary" th:id="'btn' + ${place.id}" name="placeModal" th:value="|${unit.name}@@${unit.municipality.name}|">
-
-                                        <span>Plats </span>
-                                        <span class="icon is-small">
+                                            <span>Plats </span>
+                                            <span class="icon is-small">
                                          <i class="fa fa-globe"></i>
                                      </span>
-                                        <input type="hidden" name="placeId" th:value="${place.id}">
-                                        <input type="hidden" name="unitNameMuni" th:value="|${unit.name}###${unit.municipality.name}|">
-                                    </button>
+                                            <input type="hidden" name="placeId" th:value="${place.id}">
+                                            <input type="hidden" name="unitNameMuni" th:value="|${unit.name}###${unit.municipality.name}|">
+                                        </button>
 
 
-                                    <span>Student: </span><span class="has-text-weight-bold has-text-danger" style="margin-right:100px;" th:if="${not place.student}" > Ingen student</span>
-                                    <span class="has-text-weight-bold has-text-success" style="margin-right:100px;" th:if="${place.student}" >[[${place.student.studentData.name}]]</span>
+                                        <span>Student: </span><span class="has-text-weight-bold has-text-danger" style="margin-right:100px;" th:if="${not place.student}" > Ingen student</span>
+                                        <span class="has-text-weight-bold has-text-success" style="margin-right:100px;" th:if="${place.student}" >[[${place.student.studentData.name}]]</span>
 
 
-                                    <button class="button is-primary" th:id="'open-add-handledare-window' + ${place.id}" name="placeModal" th:value="|${unit.name}@@${unit.municipality.name}|">
-                                        <span>Lägg till handledare </span>
-                                        <span class="icon is-small">
+                                        <button class="button is-primary" th:id="'open-add-handledare-window' + ${place.id}" name="placeModal" th:value="|${unit.name}@@${unit.municipality.name}|">
+                                            <span>Lägg till handledare </span>
+                                            <span class="icon is-small">
                                          <i class="fa fa-plus"></i>
                                       </span>
-                                    </button>
+                                        </button>
 
-                                    Handledare: <span class="has-text-weight-bold has-text-danger" style="margin-right:10px;" th:if="${not place.handledare}" > Ingen handledare</span>
-                                    <span class="has-text-weight-bold has-text-success" th:if="${place.handledare}" th:each="hand : ${place.handledare}" >[[${hand.name}]], </span>
-                                <form onsubmit="return formDelPlace(this)" style="display:inline-block" action="/admin/delete-one-place/" method="post">
-                                    <input type="hidden" name="unitName" th:value="${unit.name}">
-                                    <input type="hidden" name="regionMunis" th:value="${unit.municipality.name}">
-                                    <input type="hidden" name="placeId" th:value="${place.id}">
+                                        Handledare: <span class="has-text-weight-bold has-text-danger" style="margin-right:10px;" th:if="${not place.handledare}" > Ingen handledare</span>
+                                        <span class="has-text-weight-bold has-text-success" th:if="${place.handledare}" th:each="hand : ${place.handledare}" >[[${hand.name}]], </span>
+                                    <form onsubmit="return formDelPlace(this)" style="display:inline-block" action="/admin/delete-one-place/" method="post">
+                                        <input type="hidden" name="unitName" th:value="${unit.name}">
+                                        <input type="hidden" name="regionMunis" th:value="${unit.municipality.name}">
+                                        <input type="hidden" name="placeId" th:value="${place.id}">
 
-                                    <button type="submit" class="button is-danger">
-                                      <span>Ta bort platsen</span>
-                                     <span class="icon is-small">
+                                        <button type="submit" class="button is-danger">
+                                            <span>Ta bort platsen</span>
+                                            <span class="icon is-small">
                                          <i class="fa fa-times"></i>
                                       </span>
-                                    </button>
-                                </form>
-                                </p>
+                                        </button>
+                                    </form>
+                                    </p>
 
-                                <div class="modal" th:id="'modal' + ${place.id}" style="z-index: 5000">
-                                    <div class="modal-background" th:id="'bg' + ${place.id}"></div>
-                                    <div class="modal-card">
-                                        <header class="modal-card-head">
-                                            <p class="modal-card-title">Platssida för [[${unit.name}]], [[${unit.municipality.name}]]</p>
-                                            <button th:id="'span' + ${place.id}" class="delete" aria-label="close"></button>
-                                        </header>
 
-                                        <section class="modal-card-body">
-                                            <h2 class="title">
-                                                Handledare
-                                            </h2>
-                                            <hr>
+
+                                    <div class="modal" th:id="'modal' + ${place.id}" style="z-index: 5000">
+                                        <div class="modal-background" th:id="'bg' + ${place.id}"></div>
+                                        <div class="modal-card">
+                                            <header class="modal-card-head">
+                                                <p class="modal-card-title">Platssida för [[${unit.name}]], [[${unit.municipality.name}]]</p>
+                                                <button th:id="'span' + ${place.id}" class="delete" aria-label="close"></button>
+                                            </header>
+
+                                            <section class="modal-card-body">
+                                                <h2 class="title">
+                                                    Handledare
+                                                </h2>
+                                                <hr>
 
                                                 <div th:if="${place.handledare}">
                                                     <div th:each="hand : ${place.handledare}" style="margin-bottom: 60px">
@@ -262,95 +276,94 @@
                                                     </div>
 
 
-                                               </div>
+                                                </div>
 
 
-                                            <h2 th:if="${place.student}" class="title">
-                                                Student
-                                            </h2>
-                                            <hr>
+                                                <h2 th:if="${place.student}" class="title">
+                                                    Student
+                                                </h2>
+                                                <hr>
 
-                                            <span th:if="${place.student}">Email: [[${place.student.email}]]</span>
-                                            <br>
-                                            <span th:if="${place.student}">Namn: [[${place.student.studentData.name}]]  </span>
-                                            <br>
-                                            <span th:if="${place.student}">Telefonnummer: [[${place.student.studentData.phoneNumber}]] </span>
-                                            <h2 class="title">
-                                                Information om plats
-                                            </h2>
-                                            <hr>
-                                            <span>[[${place.unit.info}]]</span>
-
-
-                                        </section>
-
-                                        <footer class="modal-card-foot">
-                                            <span></span>
-                                        </footer>
-                                    </div>
-                                </div>
-                                <div class="modal" th:id="'modal2' + ${place.id}" style="z-index: 5000">
-
-                                    <div class="modal-background" th:id="'bg2' + ${place.id}"></div>
-                                    <div class="modal-card">
-                                        <header class="modal-card-head">
-                                            <p class="modal-card-title">Platssida för [[${unit.name}]], [[${unit.municipality.name}]]</p>
-                                            <button th:id="'span2' + ${place.id}" class="delete" aria-label="close"></button>
-                                        </header>
-
-                                        <section class="modal-card-body">
-                                            <h2 class="title">
-                                                Handledare
-                                            </h2>
-                                            <hr>
-                                            <form class="block" action="/admin/add-handledare/" method="post" th:if="true">
-                                                <span>Email: </span> <input class="input" type="email" name="handledareToAdd" placeholder="Handledare Email" required>
-
-                                                <span>Namn: </span> <input class="input"  type="text" name="handledareName" placeholder="Handledare Namn" required>
-
-                                                <span>Telefonnummer: </span> <input class="input"  type="text" name="handledarePhoneNumber" placeholder="Handledare Telefonnummer">
+                                                <span th:if="${place.student}">Email: [[${place.student.email}]]</span>
                                                 <br>
-                                                <input type="hidden" name="placeId" th:value="${place.id}">
-                                                <input type="hidden" name="unitNameMuni" th:value="|${unit.name}###${unit.municipality.name}|">
-                                                <button type="submit" style="margin-top:20px;" th:if="true" class="button is-primary" name="handledareToAdd">
-                                                    <span>Lägg till handledare </span>
-                                                </button>
-                                            </form>
+                                                <span th:if="${place.student}">Namn: [[${place.student.studentData.name}]]  </span>
+                                                <br>
+                                                <span th:if="${place.student}">Telefonnummer: [[${place.student.studentData.phoneNumber}]] </span>
+                                                <h2 class="title">
+                                                    Information om plats
+                                                </h2>
+                                                <hr>
+                                                <span>[[${place.unit.info}]]</span>
 
 
+                                            </section>
 
-
-                                        </section>
-
-                                        <footer class="modal-card-foot">
-                                            <span></span>
-                                        </footer>
+                                            <footer class="modal-card-foot">
+                                                <span></span>
+                                            </footer>
+                                        </div>
                                     </div>
+                                    <div class="modal" th:id="'modal2' + ${place.id}" style="z-index: 5000">
+                                        <div class="modal-background" th:id="'bg2' + ${place.id}"></div>
+                                        <div class="modal-card">
+                                            <header class="modal-card-head">
+                                                <p class="modal-card-title">Platssida för [[${unit.name}]], [[${unit.municipality.name}]]</p>
+                                                <button th:id="'span2' + ${place.id}" class="delete" aria-label="close"></button>
+                                            </header>
+
+                                            <section class="modal-card-body">
+                                                <h2 class="title">
+                                                    Handledare
+                                                </h2>
+                                                <hr>
+                                                <form class="block" action="/admin/add-handledare/" method="post" th:if="true">
+                                                    <span>Email: </span> <input class="input" type="email" name="handledareToAdd" placeholder="Handledare Email" required>
+
+                                                    <span>Namn: </span> <input class="input"  type="text" name="handledareName" placeholder="Handledare Namn" required>
+
+                                                    <span>Telefonnummer: </span> <input class="input"  type="text" name="handledarePhoneNumber" placeholder="Handledare Telefonnummer">
+                                                    <br>
+                                                    <input type="hidden" name="placeId" th:value="${place.id}">
+                                                    <input type="hidden" name="unitNameMuni" th:value="|${unit.name}###${unit.municipality.name}|">
+                                                    <button type="submit" style="margin-top:20px;" th:if="true" class="button is-primary" name="handledareToAdd">
+                                                        <span>Lägg till handledare </span>
+                                                    </button>
+                                                </form>
+
+
+
+
+                                            </section>
+
+                                            <footer class="modal-card-foot">
+                                                <span></span>
+                                            </footer>
+                                        </div>
+                                    </div>
+
                                 </div>
+
 
                             </div>
-
-
-                        </div>
-                        <div class="is-horizontal">
-                         <form style="display:inline-block" action="/admin/add-one-place/" method="post">
-                            <input type="hidden" name="unitName" th:value="${unit.name}">
-                            <input type="hidden" name="regionMunis" th:value="${unit.municipality.name}">
-                            <button type="submit" class="button is-primary" name="addOnePlace">
-                                <span>Lägg till en plats</span>
-                                     <span class="icon is-small">
+                            <div class="is-horizontal">
+                                <form style="display:inline-block" action="/admin/add-one-place/" method="post">
+                                    <input type="hidden" name="unitName" th:value="${unit.name}">
+                                    <input type="hidden" name="regionMunis" th:value="${unit.municipality.name}">
+                                    <button type="submit" class="button is-primary" name="addOnePlace">
+                                        <span>Lägg till en plats</span>
+                                        <span class="icon is-small">
                                          <i class="fa fa-plus"></i>
                                       </span>
-                            </button>
-                         </form>
+                                    </button>
+                                </form>
 
+                            </div>
                         </div>
-                    </div>
 
 
-                </article>
+                    </article>
 
-            </th:block>
+                </th:block>
             </div>
         </div>
     </section>
@@ -363,34 +376,27 @@
 <footer th:replace="common_fragments/footer :: footer"></footer>
 
 <script th:inline="javascript">
-
 var places = [[${place_id}]];
 for(i = 0; i < places.length; i++){
-
     if(!!document.getElementById("editBtn" + places[i].id) ){
     console.log("editBtn" + places[i].id);
     document.getElementById("editBtn" + places[i].id).onclick = (function(i){ return function() {
            var index = i;
            document.getElementById("phoneInput" + places[index].id).innerHTML = "<form class='block' action='/admin/add-handledare/' method='post'><input th:id=''phoneInput' + ${place.id}' type='text' name='phoneNumber' placeholder='Telefonnummer'> </form>";
-
            document.getElementById("editBtn" + places[index].id).innerHTML =  " <a type='submit' th:if='${place.handledare}'  th:id=''editBtn' + ${place.id}'> <span class='icon is-small'> <i class='fa fa-floppy-o'></i></span>";
         };
     })(i);
 }
-
 }
 </script>
 
 <script th:inline="javascript">
-
 var regionsAndMunis = {};
 var regionList = [[${region_list}]];
 var munisForRegion = [[${region_muni}]];
 for (i = 0; i < regionList.length; i++) {
-
        regionsAndMunis[regionList[i]] = munisForRegion[regionList[i]];
 }
-
 ChangeMuniList();
 function ChangeMuniList() {
     var regionList = document.getElementById("allRegions");
@@ -414,12 +420,10 @@ function ChangeMuniList() {
 <script>
 function searchFunction() {
   var input, filter, block, article, td, i;
-
   input = document.getElementById("myInput");
   filter = input.value.toUpperCase();
   block = document.getElementById("myBlock");
   article = block.getElementsByTagName("article");
-
   for (i = 0; i < article.length; i++) {
     td = article[i].getElementsByClassName("searchTitle")[0];
     if (td) {
@@ -435,48 +439,71 @@ function searchFunction() {
 <script th:inline="javascript">
 var places = [[${place_id}]];
 for(i = 0; i < places.length; i++){
-
      var span = document.getElementById("span" + places[i].id);
      var background = document.getElementById("bg" + places[i].id);
      var span2 = document.getElementById("span2" + places[i].id);
      var background2 = document.getElementById("bg2" + places[i].id);
-
      document.getElementById("btn" + places[i].id).onclick = (function(i){ return function() {
            var index = i;
            document.getElementById("modal" + places[index].id).className = "modal is-active";
         };
     })(i);
-
     document.getElementById("open-add-handledare-window" + places[i].id).onclick = (function(i){ return function() {
            var index = i;
            document.getElementById("modal2" + places[index].id).className = "modal is-active";
         };
     })(i);
-
-
     span.onclick = (function(i){ return function() {
       var index = i;
        document.getElementById("modal" + places[index].id).className = "modal";
     };
     })(i);
-
     background.onclick = (function(i){ return function() {
         var index = i;
        document.getElementById("modal" + places[index].id).className = "modal";
     };
     })(i);
-
     span2.onclick = (function(i){ return function() {
       var index = i;
        document.getElementById("modal2" + places[index].id).className = "modal";
     };
     })(i);
-
     background2.onclick = (function(i){ return function() {
         var index = i;
        document.getElementById("modal2" + places[index].id).className = "modal";
     };
     })(i);
+}
+</script>
+
+
+<script th:inline = "javascript">
+    var openEmailButton = document.getElementById("open-all-handledare-email-window");
+    var background = document.getElementById("bg_hand_email");
+    var closebutton = document.getElementById("close_email");
+    var emailSpan = document.querySelectorAll(".email_span");
+    var emailSpanlastIndex = emailSpan.length-1;
+    var emailSpanString = emailSpan[emailSpanlastIndex].innerHTML;
+    var newEmailSpanString = emailSpanString.substring(0, emailSpanString.length-7);
+    var e = [[${all_handledare}]]
+
+    emailSpan[emailSpanlastIndex].innerHTML = e[emailSpanlastIndex].email;
+
+    openEmailButton.onclick = (function(){ return function() {
+
+       document.getElementById("handledare_email").className = "modal is-active";
+    };
+    })();
+
+    background.onclick = (function(){ return function() {
+       document.getElementById("handledare_email").className = "modal";
+    };
+    })();
+
+    closebutton.onclick = (function(){ return function() {
+       document.getElementById("handledare_email").className = "modal";
+    };
+    })();
 </script>
 
 
