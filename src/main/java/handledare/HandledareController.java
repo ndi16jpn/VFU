@@ -25,7 +25,7 @@ public class HandledareController {
             model.put("text_title", "Välkommen handledare");
             Place place = DatabaseHandler.getDatabase().getSelector().getPlaceViaHandledare(request.session().attribute(ATTR_NAME));
 
-            if (place.getStudent() == null){
+                if (place.getStudent() == null){
                 model.put("contact_student_name", "Ingen tilldelad student");
                 model.put("contact_student_email", "Ingen tilldelad student");
                 model.put("contact_student_phone_number", "Ingen tilldelad student");
