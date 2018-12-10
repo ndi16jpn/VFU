@@ -166,7 +166,7 @@
                                         <span class="has-text-weight-bold has-text-success" style="margin-right:100px;" th:if="${place.student}" >[[${place.student.studentData.name}]]</span>
 
                                         Handledare: <span class="has-text-weight-bold has-text-danger" th:if="${not place.handledare}" > Ingen handledare</span>
-                                        <span class="has-text-weight-bold has-text-success" th:if="${place.handledare}" >[[${place.handledare.name}]]</span>
+                                        <span class="has-text-weight-bold has-text-success" th:if="${place.handledare}" th:each="hand : ${place.handledare}" >[[${hand.name}]], </span>
 
                                     <form onsubmit="return formDelPlace(this)" style="display:inline-block" action="/vfu-samordnare/delete-one-place/" method="post">
                                         <input type="hidden" name="unitName" th:value="${unit.name}">
@@ -213,14 +213,14 @@
 
                                                 <div th:if="${place.handledare}">
 
-                                                    <span th:if="${place.handledare}">Email: [[${place.handledare.email}]]</span>
+                                                    <span th:if="${place.handledare}">Email: [[${place.handledare[0].email}]]</span>
                                                     <br>
-                                                    <span th:if="${place.handledare}">Namn: [[${place.handledare.name}]]  </span>
+                                                    <span th:if="${place.handledare}">Namn: [[${place.handledare[0].name}]]  </span>
                                                     <br>
                                                     <form class="block" action="/vfu-samordnare/update-phonenumber/" method="post" th:if="${place.handledare}">
-                                                        <span  th:if="${place.handledare}">Telefonnummer:</span><input th:id="'phoneInput' + ${place.id}" th:if="${place.handledare}" name="phonenumberToUpdate" th:value="${place.handledare.phoneNumber}"> </input>
+                                                        <span  th:if="${place.handledare}">Telefonnummer:</span><input th:id="'phoneInput' + ${place.id}" th:if="${place.handledare}" name="phonenumberToUpdate" th:value="${place.handledare[0].phoneNumber}"> </input>
                                                         <span class="field">
-                                                            <button type="submit" class="is-small" name="handledareToUpdate" th:value="${place.handledare.email}">
+                                                            <button type="submit" class="is-small" name="handledareToUpdate" th:value="${place.handledare[0].email}">
                                                                 <span class="icon is-small">
                                                              <i class="fa fa-floppy-o"></i>
                                                                     </span>
@@ -229,7 +229,7 @@
                                                     </form>
                                                 </div>
                                                 <form onsubmit="return submitHandForm(this)" class="block" action="/vfu-samordnare/delete-handledare/" method="post" th:if="${place.handledare}">
-                                                    <button style="margin-top:20px;" type="submit" th:if="${place.handledare}"  th:value="${place.handledare.email}" class="button is-danger" name="handledareToDelete">
+                                                    <button style="margin-top:20px;" type="submit" th:if="${place.handledare}"  th:value="${place.handledare[0].email}" class="button is-danger" name="handledareToDelete">
                                                         <span>Ta bort Handledare </span>
 
                                                         <span class="icon is-small">

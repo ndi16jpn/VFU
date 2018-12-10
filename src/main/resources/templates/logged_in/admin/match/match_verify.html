@@ -30,7 +30,7 @@
                     <tr th:each="match : ${match_result}">
                         <td th:text="${match.student.studentData.name}"></td>
                         <td th:text="|${match.place.unit.name} (${match.place.unit.municipality.region.name}, ${match.place.unit.municipality.name})|"></td>
-                        <td th:if="${match.place.getHandledare} != null" th:text="${match.place.getHandledare.email}"></td>
+                        <td th:if="${match.place.getHandledare} != null" th:text="${match.place.getHandledare[0].email}"></td>
                         <td th:if="${match.place.getHandledare} == null">
                             <p class="icon has-text-danger">
                                 <i class="fa fa-lg fa-times"></i>

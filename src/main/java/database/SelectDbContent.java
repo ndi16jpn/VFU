@@ -284,7 +284,9 @@ class SelectDbContent implements DatabaseSelector {
     @Override
     public Place getPlaceViaHandledare(String hand) throws DatabaseException{
         try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
-            String sql = "SELECT * FROM " + PLACE_TABLE + " WHERE handledare = ? ";
+            String sql = "SELECT * FROM " + PLACE_TABLE + " WHERE " + PLACE_COLUMN_ID +
+                    " IN (SELECT " + PLACE_REFERENCE_COLUMN +" FROM " + PLACE_HANDLEDARE_TABLE
+                    +" WHERE " + HANDLEDARE_REFERENCE_COLUMN + " = ?) ";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             statement.setString(1, hand);
