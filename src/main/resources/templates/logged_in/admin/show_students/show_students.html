@@ -33,6 +33,32 @@
             </div>
         </div>
     </section>
+
+    <br>
+    <button class="button is-primary" th:id="'open-all-students-email-window'" style="margin-left: 50px">
+        Visa alla studenters Email-adresser
+    </button>
+    <br>
+    <div class="modal" th:id="'student_email'" style="z-index: 5000">
+        <div class="modal-background" th:id="'bg_student_email'"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title"> Alla studenters Email-adresser </p>
+                <button th:id="'close_student_email'" class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <div th:if="${all_students}">
+                    <span class = "email_students_span" th:id="'email_students_span'" th:if="${all_students}" th:each="stud: ${all_students}">
+                        [[${stud.email}]],
+                        <br>
+                    </span>
+                </div>
+            </section>
+        </div>
+    </div>
+
+
+
     <section class="section">
         <div class="container">
             <h1 class="title">
@@ -228,5 +254,36 @@ function submitForm() {
 
     window.addEventListener("DOMContentLoaded", init);
 </script>
+
+<script th:inline = "javascript">
+    var openEmailButton = document.getElementById("open-all-students-email-window");
+    var background = document.getElementById("bg_student_email");
+    var closebutton = document.getElementById("close_student_email");
+    var emailSpan = document.querySelectorAll(".email_students_span");
+    var emailSpanlastIndex = emailSpan.length-1;
+    var emailSpanString = emailSpan[emailSpanlastIndex].innerHTML;
+
+    var e = [[${all_students}]];
+
+    emailSpan[emailSpanlastIndex].innerHTML = e[emailSpanlastIndex].email;
+
+
+    openEmailButton.onclick = (function(){ return function() {
+
+       document.getElementById("student_email").className = "modal is-active";
+    };
+    })();
+
+    background.onclick = (function(){ return function() {
+       document.getElementById("student_email").className = "modal";
+    };
+    })();
+
+    closebutton.onclick = (function(){ return function() {
+       document.getElementById("student_email").className = "modal";
+    };
+    })();
+</script>
+
 </body>
 </html>
