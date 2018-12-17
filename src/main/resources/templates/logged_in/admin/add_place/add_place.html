@@ -154,11 +154,10 @@
                         </div>
                     </section>
                 </div>
-
             </div>
-
             <hr>
 
+            <br>
             <div class="field">
                 <p class="control has-icons-left">
                     <input class="input is-medium" onkeyup="searchFunction()" type="text" placeholder="Sök Platsnamn"
@@ -485,7 +484,7 @@ for(i = 0; i < places.length; i++){
     var emailSpanlastIndex = emailSpan.length-1;
     var emailSpanString = emailSpan[emailSpanlastIndex].innerHTML;
     var newEmailSpanString = emailSpanString.substring(0, emailSpanString.length-7);
-    var e = [[${all_handledare}]]
+    var e = [[${all_handledare}]];
 
     emailSpan[emailSpanlastIndex].innerHTML = e[emailSpanlastIndex].email;
 

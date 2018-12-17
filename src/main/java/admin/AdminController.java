@@ -470,6 +470,7 @@ public class AdminController {
             Map<String, Object> model = new HashMap<>();
             model.put("page_title", "VFU-portal SOCIONOM");
             model.put("home_link", Path.Web.ADMIN_HOME);
+
             model.put(ATTR_ROLE, LoggedInRole.ADMIN.getRoleName());
             model.put(ATTR_NAME, request.session().attribute(ATTR_NAME));
 
@@ -477,6 +478,8 @@ public class AdminController {
             DatabaseSelector dbSelector = DatabaseHandler.getDatabase().getSelector();
             List<StudentData> allStudentData = dbSelector.getAllStudentData();
             List<Student> allStudents = dbSelector.getAllStudents();
+            List<StudentData> allStudentsData = dbSelector.getAllStudentData();
+            model.put("all_students", allStudentsData);
             for (StudentData studentData : allStudentData) {
                 List<Student> studentSearch = allStudents.stream()
                         .filter(s -> s.getEmail().equals(studentData.getEmail()))
@@ -600,6 +603,7 @@ public class AdminController {
             List<String> allRegions = dbSelector.getAllRegionNames();
             List<Place> allPlacesWithoutStudent = dbSelector.getAllPlacesWithoutStudent();
             List<Place> allPlacesWithStudent = dbSelector.getAllPlacesWithStudent();
+
             Map region_students = new HashMap();
             Map region_places = new HashMap();
             for(String region : allRegions) {
@@ -627,6 +631,7 @@ public class AdminController {
             model.put("num_stud_region", allStudents.size());
             model.put("all_students_without_place",  allStudentData.size() - allPlacesWithStudent.size());
             model.put("all_places_without_student", allPlacesWithoutStudent.size());
+            model.put("all_students", allStudents);
 
             List<Student> unmatchedStudents = new ArrayList<>();
             for (Student student : allStudents) {
