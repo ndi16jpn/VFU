@@ -13,6 +13,12 @@ import java.util.Properties;
  */
 class DDL {
 
+
+    static final String MUNI_TABLE = "municipality";
+    static final String MUNI_COLUMN_REGION = "region";
+    static final String MUNI_COLUMN_NAME = "name";
+
+
     static final String ADMIN_TABLE = "admin";
     static final String ADMIN_COLUMN_ADMIN_ID = "admin_id";
     static final String ADMIN_COLUMN_EMAIL = "email";
@@ -41,12 +47,19 @@ class DDL {
     static final String UNIT_COLUMN_ID = "id";
     static final String UNIT_COLUMN_INFO = "info";
     static final String UNIT_COLUMN_NUM_OF_SLOTS = "num_of_slots";
+    static final String UNIT_COLUMN_REGION = "region";
     static final String CREATE_TABLE_UNIT = "CREATE TABLE IF NOT EXISTS " + UNIT_TABLE + "("
-            + UNIT_COLUMN_MUNICIPALITY + " TEXT NOT NULL REFERENCES municipality,"
+            + UNIT_COLUMN_MUNICIPALITY + " TEXT NOT NULL, "
+            + UNIT_COLUMN_REGION + " TEXT NOT NULL, "
             + UNIT_COLUMN_ID + " INTEGER NOT NULL PRIMARY KEY,"
             + UNIT_COLUMN_NAME + " TEXT NOT NULL,"
             + UNIT_COLUMN_INFO + " TEXT,"
-            + UNIT_COLUMN_NUM_OF_SLOTS + " INTEGER NOT NULL);";
+            + UNIT_COLUMN_NUM_OF_SLOTS + " INTEGER NOT NULL, "
+            + "FOREIGN KEY(" + UNIT_COLUMN_MUNICIPALITY + ", "
+            + UNIT_COLUMN_REGION + ")"
+            + " REFERENCES " + MUNI_TABLE + "(" + MUNI_COLUMN_NAME + ", "
+            + MUNI_COLUMN_REGION + ")"
+            + ");";
 
     static final String VFU_SAM_TABLE = "vfu_sam";
     static final String VFU_COLUMN_EMAIL = "email";
@@ -72,12 +85,13 @@ class DDL {
             + HANDLEDARE_COLUMN_HASHED_PASSWORD + " TEXT NOT NULL,"
             + HANDLEDARE_COLUMN_NAME + " TEXT);";
 
-    static final String MUNI_TABLE = "municipality";
-    static final String MUNI_COLUMN_REGION = "region";
-    static final String MUNI_COLUMN_NAME = "name";
+
     static final String CREATE_TABLE_MUNI = "CREATE TABLE IF NOT EXISTS " + MUNI_TABLE + "("
             + MUNI_COLUMN_REGION + " TEXT NOT NULL REFERENCES region,"
-            + MUNI_COLUMN_NAME + " TEXT PRIMARY KEY NOT NULL);";
+            + MUNI_COLUMN_NAME + " TEXT NOT NULL, "
+            + "PRIMARY KEY(" + MUNI_COLUMN_REGION + ", "
+            + MUNI_COLUMN_NAME
+            +"));";
 
     static final String REGION_TABLE = "region";
     static final String REGION_COLUMN_NAME = "name";
