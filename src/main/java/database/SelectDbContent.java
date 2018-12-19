@@ -483,14 +483,22 @@ class SelectDbContent implements DatabaseSelector {
     @Override
     public Municipality getMunicipality(String name) throws DatabaseException {
         try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
-            String sql = "SELECT * FROM " + MUNI_TABLE + " WHERE name = ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
+            //String sqlMuniName = "SELECT * FROM " + MUNI_TABLE + " WHERE name = ?";
+            String sqlMuniRegion = "SELECT * FROM " + REGION_MUNI_TABLE + " WHERE " + REGION_MUNI_COLUMN_REGION +
+                    " = ?";
+            //PreparedStatement nameStatement = connection.prepareStatement(sqlMuniName);
+            PreparedStatement regionStatement = connection.prepareStatement(sqlMuniRegion);
 
-            statement.setString(1, name);
-            ResultSet rs = statement.executeQuery();
+            //nameStatement.setString(1, name);
+            regionStatement.setString(1, name);
+            //ResultSet nameRs = nameStatement.executeQuery();
+            ResultSet regionRs = regionStatement.executeQuery();
 
-            String region = rs.getString(MUNI_COLUMN_REGION);
-            return new Municipality(name, new Region(region));
+            List<Region> regions = new ArrayList<>();
+            while (regionRs.next()){
+                regions.add(new Region(regionRs.getString(MUNI_COLUMN_REGION)));
+            }
+            return new Municipality(name, regions);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DatabaseException("database error", e);
@@ -501,7 +509,8 @@ class SelectDbContent implements DatabaseSelector {
     public List<String> getAllMunicipalitiesForRegion(String regionName) throws DatabaseException {
         try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
             String sql = "SELECT * FROM " + MUNI_TABLE
-                    + " WHERE " + MUNI_COLUMN_REGION + "=?"
+                    + " WHERE " + MUNI_COLUMN_NAME + " IN (SELECT " + REGION_MUNI_COLUMN_MUNI
+                    + " FROM "+ REGION_MUNI_TABLE + " WHERE " + REGION_MUNI_COLUMN_REGION + "=?)"
                     + " ORDER BY " + MUNI_COLUMN_NAME;
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, regionName);
@@ -687,6 +696,38 @@ class SelectDbContent implements DatabaseSelector {
             throw new DatabaseException("database error", e);
         }
     }
+
+    @Override
+    public boolean municipalityExistsInRegion(String muniName, String regionName) throws DatabaseException {
+        try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
+            String sql = "SELECT * FROM " + REGION_MUNI_TABLE + " WHERE " + REGION_MUNI_COLUMN_MUNI
+                    + "= ? AND " + REGION_MUNI_COLUMN_REGION + " = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, muniName);
+            statement.setString(2, regionName);
+            ResultSet rs = statement.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseException("database error", e);
+        }
+    }
+
+    @Override
+    public boolean municipalityHasRegions(String muniName) throws DatabaseException {
+        try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
+            String sql = "SELECT * FROM " + REGION_MUNI_TABLE + " WHERE " + REGION_MUNI_COLUMN_MUNI
+                    + " = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, muniName);
+            ResultSet rs = statement.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseException("database error", e);
+        }
+    }
+
     @Override
     public boolean handledareExistsOnPlace(String handledareEmail) throws DatabaseException {
         try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {

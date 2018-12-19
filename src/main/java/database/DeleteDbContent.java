@@ -180,13 +180,27 @@ class DeleteDbContent implements DatabaseDeleter {
     }
 
     @Override
-    public void deleteMuniContent(String municipality) throws DatabaseException {
+    public void deleteMuniContent(String municipality, String region) throws DatabaseException {
         try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
-            PreparedStatement preparedStatement = connection.prepareStatement(
-                    "DELETE FROM " + MUNI_TABLE + " WHERE " + MUNI_COLUMN_NAME + "= ?"
+            PreparedStatement deleteFromRegionMunipreparedStatement = connection.prepareStatement(
+                    "DELETE FROM " + REGION_MUNI_TABLE + " WHERE " + REGION_MUNI_COLUMN_MUNI + "= ?"
+                            + " AND " + REGION_MUNI_COLUMN_REGION + " = ?"
             );
-            preparedStatement.setString(1, municipality);
-            preparedStatement.executeUpdate();
+            deleteFromRegionMunipreparedStatement.setString(1, municipality);
+            deleteFromRegionMunipreparedStatement.setString(1, region);
+            deleteFromRegionMunipreparedStatement.executeUpdate();
+
+            if(!DatabaseHandler.getDatabase().getSelector().municipalityHasRegions(municipality)) {
+                PreparedStatement preparedStatement = connection.prepareStatement(
+                        "DELETE FROM " + MUNI_TABLE + " WHERE " + MUNI_COLUMN_NAME + "= ?"
+                );
+                preparedStatement.setString(1, municipality);
+                preparedStatement.executeUpdate();
+            }
+
+
+
+
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DatabaseException("database error", e);

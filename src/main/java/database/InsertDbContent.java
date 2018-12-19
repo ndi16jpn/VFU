@@ -230,15 +230,30 @@ class InsertDbContent implements DatabaseInserter {
     @Override
     public void addMunicipality(Municipality municipality) throws DatabaseException {
         try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
-            PreparedStatement preparedStatement = connection.prepareStatement(
+            PreparedStatement muniPreparedStatement = connection.prepareStatement(
                     "INSERT INTO " + MUNI_TABLE
-                            + "(" + MUNI_COLUMN_NAME + ","
-                            + MUNI_COLUMN_REGION + ")"
+                            + "(" + MUNI_COLUMN_NAME + ")"
+                            + "VALUES(?)"
+            );
+            PreparedStatement regionMuniPreparedStatement = connection.prepareStatement(
+                    "INSERT INTO " + REGION_MUNI_TABLE
+                            + "(" + REGION_MUNI_COLUMN_MUNI + ","
+                            + REGION_MUNI_COLUMN_REGION + ")"
                             + "VALUES(?, ?)"
             );
-            preparedStatement.setString(1,municipality.getName());
-            preparedStatement.setString(2,municipality.getRegion().getName());
-            preparedStatement.executeUpdate();
+
+            for (Region region: municipality.getRegions()){
+                regionMuniPreparedStatement.setString(1,municipality.getName());
+                regionMuniPreparedStatement.setString(2,region.getName());
+                regionMuniPreparedStatement.addBatch();
+            }
+
+            if(!DatabaseHandler.getDatabase().getSelector().municipalityExists(municipality.getName())) {
+                muniPreparedStatement.setString(1,municipality.getName());
+                muniPreparedStatement.executeUpdate();
+            }
+            regionMuniPreparedStatement.executeBatch();
+
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DatabaseException("database error", e);

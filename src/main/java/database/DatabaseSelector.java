@@ -173,6 +173,24 @@ public interface DatabaseSelector {
      * @throws DatabaseException
      */
     boolean municipalityExists(String muniName) throws DatabaseException;
+    /**
+     * Checks whether the municipality with the specified name already exists or not
+     * in the specified region
+     * @param muniName
+     * @param regionName
+     * @return
+             * @throws DatabaseException
+     */
+    boolean municipalityExistsInRegion(String muniName, String regionName) throws DatabaseException;
+
+    /**
+     * Checks whether the municipality with the specified name already exists or not
+     * in the specified region
+     * @param muniName
+     * @return
+     * @throws DatabaseException
+     */
+    boolean municipalityHasRegions(String muniName) throws DatabaseException;
 
     /**
      * Checks whether the region with the specified name already exists or not
