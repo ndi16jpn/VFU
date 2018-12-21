@@ -6,6 +6,8 @@ import organisations.Place;
 import roles.Student;
 
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * En klass som hanterar matchningen av studenter och platser
@@ -171,7 +173,10 @@ public class Match {
 
                     List<Student> newStudentList = new ArrayList<>();
                     for (Student student : unmatchedStudentList) {
-                        if(student.getRegion().getName().equals(place.getUnit().getMunicipality().getRegion().getName())&& student.getChoice_1().getId()!=0){
+                        // student.getRegion().getName().equals(place.getUnit().getMunicipality().getRegions().getName())
+                        if( place.getUnit().getMunicipality().getRegions().stream().map(region -> region.getName())
+                                .collect(Collectors.toList()).contains(student.getRegion().getName())
+                                && student.getChoice_1().getId()!=0){
                             newStudentList.add(student);
                         }
                     }

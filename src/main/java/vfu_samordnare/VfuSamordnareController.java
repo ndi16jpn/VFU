@@ -62,7 +62,9 @@ public class VfuSamordnareController {
                 model.put("cantDelete", "Den här platsen har en student");
             }
             List<Place> places = db.getSelector().getAllPlaces();
-            List<Place> filteredPlaces = places.stream().filter(place -> place.getUnit().getMunicipality().getRegion().getName().equals(region)).collect(Collectors.toList());
+
+            List<Place> filteredPlaces = places.stream().filter(place -> place.getUnit().getMunicipality().getRegions().stream()
+                    .map(region1 -> region1.getName()).collect(Collectors.toList()).contains(region)).collect(Collectors.toList());
 
             model.put("filtered_list", filteredPlaces);
             model.put("unit_list", units);

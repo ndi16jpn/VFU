@@ -1,16 +1,18 @@
 package organisations;
 
+import java.util.List;
+
 /**
  * Datahållare för kommun
  */
 public class Municipality {
 
     private String name;
-    private Region region;
+    private List<Region> regions;
 
-    public Municipality(String name, Region region) {
+    public Municipality(String name, List<Region> regions) {
         this.name = name;
-        this.region = region;
+        this.regions = regions;
     }
     public Municipality(String name){
         this.name = name;
@@ -20,7 +22,7 @@ public class Municipality {
         return name;
     }
 
-    public Region getRegion() {
-        return region;
+    public List<Region> getRegions() {
+        return regions;
     }
 }

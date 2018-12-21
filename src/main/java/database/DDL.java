@@ -1,10 +1,12 @@
 package database;
 
+import jdk.nashorn.internal.runtime.regexp.RegExpResult;
 import organisations.Municipality;
 import organisations.Region;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -17,6 +19,9 @@ class DDL {
     static final String MUNI_TABLE = "municipality";
     static final String MUNI_COLUMN_REGION = "region";
     static final String MUNI_COLUMN_NAME = "name";
+    static final String REGION_MUNI_TABLE = "region_muni";
+    static final String REGION_MUNI_COLUMN_REGION = "region";
+    static final String REGION_MUNI_COLUMN_MUNI = "municipality";
 
 
     static final String ADMIN_TABLE = "admin";
@@ -49,16 +54,18 @@ class DDL {
     static final String UNIT_COLUMN_NUM_OF_SLOTS = "num_of_slots";
     static final String UNIT_COLUMN_REGION = "region";
     static final String CREATE_TABLE_UNIT = "CREATE TABLE IF NOT EXISTS " + UNIT_TABLE + "("
-            + UNIT_COLUMN_MUNICIPALITY + " TEXT NOT NULL, "
-            + UNIT_COLUMN_REGION + " TEXT NOT NULL, "
+            + UNIT_COLUMN_MUNICIPALITY + " TEXT NOT NULL REFERENCES " + MUNI_TABLE + ", "
+            //+ UNIT_COLUMN_REGION + " TEXT NOT NULL, "
             + UNIT_COLUMN_ID + " INTEGER NOT NULL PRIMARY KEY,"
             + UNIT_COLUMN_NAME + " TEXT NOT NULL,"
             + UNIT_COLUMN_INFO + " TEXT,"
             + UNIT_COLUMN_NUM_OF_SLOTS + " INTEGER NOT NULL, "
-            + "FOREIGN KEY(" + UNIT_COLUMN_MUNICIPALITY + ", "
-            + UNIT_COLUMN_REGION + ")"
-            + " REFERENCES " + MUNI_TABLE + "(" + MUNI_COLUMN_NAME + ", "
-            + MUNI_COLUMN_REGION + ")"
+            + "FOREIGN KEY(" + UNIT_COLUMN_MUNICIPALITY //+ ", "
+            //+ UNIT_COLUMN_REGION
+             + ")"
+            + " REFERENCES " + MUNI_TABLE + "(" + MUNI_COLUMN_NAME //+ ", "
+            //+ MUNI_COLUMN_REGION
+             + ")"
             + ");";
 
     static final String VFU_SAM_TABLE = "vfu_sam";
@@ -87,9 +94,9 @@ class DDL {
 
 
     static final String CREATE_TABLE_MUNI = "CREATE TABLE IF NOT EXISTS " + MUNI_TABLE + "("
-            + MUNI_COLUMN_REGION + " TEXT NOT NULL REFERENCES region,"
+            //+ MUNI_COLUMN_REGION + " TEXT NOT NULL REFERENCES region,"
             + MUNI_COLUMN_NAME + " TEXT NOT NULL, "
-            + "PRIMARY KEY(" + MUNI_COLUMN_REGION + ", "
+            + "PRIMARY KEY(" //+ MUNI_COLUMN_REGION + ", "
             + MUNI_COLUMN_NAME
             +"));";
 
@@ -162,6 +169,11 @@ class DDL {
             "(" + TEXT_CONTENT_STUDENT_FIRST_PARAGRAPH_COLUMN + " INTEGER NOT NULL, " +
             TEXT_CONTENT_STUDENT_FIRST_CONTENT_COLUMN + " TEXT, " +
             "PRIMARY KEY (" + TEXT_CONTENT_STUDENT_FIRST_PARAGRAPH_COLUMN + "))";
+    static final String CREATE_TABLE_REGION_MUNI = "CREATE TABLE IF NOT EXISTS " + REGION_MUNI_TABLE
+            + " (" + REGION_MUNI_COLUMN_REGION + " TEXT NOT NULL REFERENCES " + REGION_TABLE
+            + ", "
+        + REGION_MUNI_COLUMN_MUNI + " TEXT NOT NULL REFERENCES " + MUNI_TABLE +
+            ")";
 
     private String dbUrl;
     private Properties sqLiteConfig;
@@ -185,22 +197,24 @@ class DDL {
     private  List<Municipality> fillMuniList(){
         List<Municipality> allMunis = new ArrayList<>();
 
-        allMunis.add(new Municipality("Gävle", new Region("Gävle")));
-        allMunis.add(new Municipality("Hofors", new Region("Gävle")));
-        allMunis.add(new Municipality("Sandviken", new Region("Gävle")));
-        allMunis.add(new Municipality("Ockelbo", new Region("Gävle")));
+        List<Region> gavleRegions = new ArrayList<>();
 
-        allMunis.add(new Municipality("Söderhamn", new Region("Bollnäs")));
-        allMunis.add(new Municipality("Bollnäs", new Region("Bollnäs")));
-        allMunis.add(new Municipality("Ovanåker", new Region("Bollnäs")));
+        allMunis.add(new Municipality("Gävle", new ArrayList<Region>(Arrays.asList(new Region("Gävle")))));
+        allMunis.add(new Municipality("Hofors", new ArrayList<Region>(Arrays.asList(new Region("Gävle")))));
+        allMunis.add(new Municipality("Sandviken", new ArrayList<Region>(Arrays.asList(new Region("Gävle")))));
+        allMunis.add(new Municipality("Ockelbo", new ArrayList<Region>(Arrays.asList(new Region("Gävle")))));
 
-        allMunis.add(new Municipality("Hudiksvall", new Region("Hudiksvall")));
-        allMunis.add(new Municipality("Nordanstig", new Region("Hudiksvall")));
-        allMunis.add(new Municipality("Ljusdal", new Region("Hudiksvall")));
+        allMunis.add(new Municipality("Söderhamn", new ArrayList<Region>(Arrays.asList(new Region("Bollnäs")))));
+        allMunis.add(new Municipality("Bollnäs", new ArrayList<Region>(Arrays.asList(new Region("Bollnäs")))));
+        allMunis.add(new Municipality("Ovanåker", new ArrayList<Region>(Arrays.asList(new Region("Bollnäs")))));
 
-        allMunis.add(new Municipality("Södertälje", new Region("Södertälje")));
+        allMunis.add(new Municipality("Hudiksvall", new ArrayList<Region>(Arrays.asList(new Region("Hudiksvall")))));
+        allMunis.add(new Municipality("Nordanstig", new ArrayList<Region>(Arrays.asList(new Region("Hudiksvall")))));
+        allMunis.add(new Municipality("Ljusdal", new ArrayList<Region>(Arrays.asList(new Region("Hudiksvall")))));
 
-        allMunis.add(new Municipality("Norrtälje", new Region("Norrtälje")));
+        allMunis.add(new Municipality("Södertälje", new ArrayList<Region>(Arrays.asList(new Region("Södertälje")))));
+
+        allMunis.add(new Municipality("Norrtälje", new ArrayList<Region>(Arrays.asList(new Region("Norrtälje")))));
 
 
         return allMunis;
@@ -223,6 +237,8 @@ class DDL {
             statement.executeUpdate(CREATE_TABLE_PLACE);
 
             statement.executeUpdate(CREATE_TABLE_PLACE_HANDLEDARE);
+            statement.executeUpdate(CREATE_TABLE_REGION_MUNI);
+
             statement.executeUpdate(CREATE_TABLE_TEXT_CONTET_STUDENT_FIRST);
             //tillfällig lösning för att illustrera
 
@@ -309,13 +325,21 @@ class DDL {
 
         PreparedStatement preparedStatement = connection.prepareStatement(
                 "INSERT INTO " + MUNI_TABLE
-                        + "(" + MUNI_COLUMN_REGION + ","
+                        + "(" //+ MUNI_COLUMN_REGION + ","
                         + MUNI_COLUMN_NAME + ")"
+                        + "VALUES(?)"
+        );
+        PreparedStatement preparedStatementRegionMuni = connection.prepareStatement(
+                "INSERT INTO " + REGION_MUNI_TABLE
+                        + "(" + REGION_MUNI_COLUMN_REGION + ", "
+                        + REGION_MUNI_COLUMN_MUNI + ")"
                         + "VALUES(?, ?)"
         );
-        preparedStatement.setString(1, DEFAULT_MUNI_REGION);
-        preparedStatement.setString(2, DEFAULT_MUNI_NAME);
+        preparedStatementRegionMuni.setString(1, DEFAULT_MUNI_REGION);
+        preparedStatementRegionMuni.setString(2, DEFAULT_MUNI_NAME);
+        preparedStatement.setString(1, DEFAULT_MUNI_NAME);
         preparedStatement.executeUpdate();
+        preparedStatementRegionMuni.executeUpdate();
     }
 
     private void createDefaultRegion(Connection connection) throws SQLException {
@@ -352,16 +376,30 @@ class DDL {
         connection.setAutoCommit(false);
         PreparedStatement preparedStatement = connection.prepareStatement(
                 "INSERT INTO " + MUNI_TABLE
-                        + "(" + MUNI_COLUMN_REGION + ","
+                        + "(" //+ MUNI_COLUMN_REGION + ","
                         + MUNI_COLUMN_NAME + ")"
+                        + "VALUES(?)"
+        );
+        PreparedStatement preparedStatementRegionMuni = connection.prepareStatement(
+                "INSERT INTO " + REGION_MUNI_TABLE
+                        + "(" + REGION_MUNI_COLUMN_REGION + ","
+                        + REGION_MUNI_COLUMN_MUNI + ")"
                         + "VALUES(?, ?)"
         );
         for(Municipality muni : munis){
-            preparedStatement.setString(1, muni.getRegion().getName());
-            preparedStatement.setString(2, muni.getName());
+            preparedStatement.setString(1, muni.getName());
+
+            for(Region region : muni.getRegions()) {
+                preparedStatementRegionMuni.setString(1, region.getName());
+                preparedStatementRegionMuni.setString(2, muni.getName());
+            }
+
+
+            preparedStatementRegionMuni.addBatch();
             preparedStatement.addBatch();
         }
         preparedStatement.executeBatch();
+        preparedStatementRegionMuni.executeBatch();
         connection.commit();
 
     }

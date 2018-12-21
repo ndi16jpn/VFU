@@ -6,7 +6,6 @@ import data.StudentData;
 import database.*;
 import email.MailSender;
 import email.MailSenderProvider;
-import email.PrivateMailSenderProvider;
 import json.JsonHandler;
 import json.JsonHelper;
 import matching.Match;
@@ -615,7 +614,9 @@ public class AdminController {
                     }
                 }
                 for(Place place : allPlaces) {
-                    if(place.getUnit().getMunicipality().getRegion().getName().equals(region)){
+                    if(place.getUnit().getMunicipality().getRegions().stream().map(region1 -> region1.getName())
+                            .collect(Collectors.toList())
+                            .contains(region)){
                         places++;
                     }
                 }
@@ -729,7 +730,7 @@ public class AdminController {
                 Map<String, Object> emailModel = new HashMap<>();
                 emailModel.put("student_name", student.getStudentData().getName());
                 emailModel.put("unit_name",
-                        place.getUnit().getName() + " (" + place.getUnit().getMunicipality().getRegion().getName() + ")"
+                        place.getUnit().getName() + " (" + student.getRegion().getName() + ")"
                 );
                 List<Handledare> handledare = place.getHandledare();
                 boolean handledareExists = handledare != null;
@@ -872,7 +873,8 @@ public class AdminController {
             model.put("muni_existed", true);
         } else {
             model.put("muni_added", true);
-            db.getInserter().addMunicipality(new Municipality(muni, new Region(request.params("regionName"))));
+            db.getInserter().addMunicipality(new Municipality(muni,
+                    new ArrayList<Region>(Arrays.asList(new Region(request.params("regionName"))))));
         }
     }
 
@@ -971,12 +973,14 @@ public class AdminController {
     public static Route handleAddMuniPostAjax = (Request request, Response response) -> {
         if (isAdmin(request)) {
             String muni = request.body();
+
             Database db = DatabaseHandler.getDatabase();
             JsonHelper jsonHelper = JsonHandler.getJsonHelper();
-            if (db.getSelector().municipalityExists(muni)) {
+            if (db.getSelector().municipalityExistsInRegion(muni, request.params("regionName"))) {
                 return jsonHelper.keyBooleanToJson("alreadyExisted", true);
             } else {
-                db.getInserter().addMunicipality(new Municipality(muni, new Region(request.params("regionName"))));
+                db.getInserter().addMunicipality(new Municipality(muni,
+                        new ArrayList<Region>(Arrays.asList(new Region(request.params("regionName"))))));
                 return jsonHelper.keyBooleanToJson("alreadyExisted", false);
             }
         } else {
@@ -1023,10 +1027,12 @@ public class AdminController {
 
     public static Route handleDeleteMuniPostAjax = (Request request, Response response) -> {
         if (isAdmin(request)) {
-            String muniToDelete = request.body();
+            String muniToDelete = request.body().split(",")[0];
+            String region = request.body().split(",")[1];
+
             Database db = DatabaseHandler.getDatabase();
             try {
-                db.getDeleter().deleteMuniContent(muniToDelete);
+                db.getDeleter().deleteMuniContent(muniToDelete,region);
             } catch (DatabaseException e) {
                 response.status(409);
             }
@@ -1101,6 +1107,9 @@ public class AdminController {
     }
 
     private static String getQueryMuniToDelete(Request request) {
+        return request.queryParams("muniToDelete");
+    }
+    private static String getQueryRegionToRemoveMuniFrom(Request request) {
         return request.queryParams("muniToDelete");
     }
     private static String getQueryUnitMunicipality(Request request) {
