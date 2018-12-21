@@ -909,7 +909,7 @@ public class AdminController {
         String muniToDelete = getQueryMuniToDelete(request);
         model.put(MODEL_MUNI, muniToDelete);
         try {
-            db.getDeleter().deleteMuniContent(muniToDelete,"");
+            db.getDeleter().removeMuniFromRegion(muniToDelete,"");
             model.put("muni_deleted", true);
         } catch (DatabaseException e) {
             model.put("muni_foreign_key", true);
@@ -1037,7 +1037,7 @@ public class AdminController {
 
             Database db = DatabaseHandler.getDatabase();
             try {
-                db.getDeleter().deleteMuniContent(muniToDelete,region);
+                db.getDeleter().removeMuniFromRegion(muniToDelete,region);
             } catch (DatabaseException e) {
                 response.status(409);
             }

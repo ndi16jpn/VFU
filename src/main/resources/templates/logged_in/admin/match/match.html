@@ -174,7 +174,7 @@
                                     <span>Manuellt matcha ej matchad student till denna plats</span>
                                 </a>
                             </td>
-                            <td th:text="|${place.unit.name} (${place.unit.municipality.region.name}, ${place.unit.municipality.name})|"></td>
+                            <td th:text="|${place.unit.name} (Regioner: ${place.unit.municipality.getRegionNamesString}, Kommuner: ${place.unit.municipality.name})|"></td>
                             <td th:if="${place.getHandledare} != null"><span th:if="${place.handledare}" th:each="hand : ${place.handledare}">[[${hand.name}]], </span></td>
                             <td th:if="${place.getHandledare} == null">
                                 <p class="icon has-text-danger">

@@ -12,6 +12,7 @@ import roles.Student;
 import roles.VFUSamordnare;
 
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -69,8 +70,8 @@ public class DbContentTest {
     public void getAllMunicipalitiesForRegion() throws Exception {
         Region r1 = new Region("Gävle2");
         databaseInserter.addRegion(r1);
-        databaseInserter.addMunicipality(new Municipality("Söderhamn2", r1));
-        databaseInserter.addMunicipality(new Municipality("Stockholm2", r1));
+        databaseInserter.addMunicipality(new Municipality("Söderhamn2", Arrays.asList(r1)));
+        databaseInserter.addMunicipality(new Municipality("Stockholm2", Arrays.asList(r1)));
 
         List<String> munis1 = databaseSelector.getAllMunicipalitiesForRegion(r1.getName());
         assertEquals(2, munis1.size());
@@ -79,7 +80,7 @@ public class DbContentTest {
 
         Region r2 = new Region("Södertälje2");
         databaseInserter.addRegion(r2);
-        databaseInserter.addMunicipality(new Municipality("Växjö2", r2));
+        databaseInserter.addMunicipality(new Municipality("Växjö2", Arrays.asList(r2)));
 
         List<String> munis2 = databaseSelector.getAllMunicipalitiesForRegion(r2.getName());
         assertEquals(1, munis2.size());
@@ -92,7 +93,7 @@ public class DbContentTest {
 
         databaseInserter.addRegion(new Region("Gävle2"));
         databaseInserter.addMunicipality(
-                new Municipality("Sandviken2", new Region("Gävle2"))
+                new Municipality("Sandviken2", Arrays.asList(new Region("Gävle2")))
         );
 
         assertTrue(databaseSelector.municipalityExists("Sandviken2"));
@@ -103,9 +104,9 @@ public class DbContentTest {
         databaseInserter.addRegion(new Region("Gävle2"));
         assertTrue(databaseSelector.regionExists("Gävle2"));
 
-        databaseInserter.addMunicipality(new Municipality("Söderhamn4", new Region("Gävle2")));
-        databaseInserter.addMunicipality(new Municipality("Söderhamn2", new Region("Gävle2")));
-        databaseInserter.addMunicipality(new Municipality("Söderhamn3", new Region("Gävle2")));
+        databaseInserter.addMunicipality(new Municipality("Söderhamn4", Arrays.asList(new Region("Gävle2"))));
+        databaseInserter.addMunicipality(new Municipality("Söderhamn2", Arrays.asList(new Region("Gävle2"))));
+        databaseInserter.addMunicipality(new Municipality("Söderhamn3", Arrays.asList(new Region("Gävle2"))));
         assertTrue(databaseSelector.municipalityExists("Söderhamn4"));
         assertTrue(databaseSelector.municipalityExists("Söderhamn2"));
         assertTrue(databaseSelector.municipalityExists("Söderhamn3"));
@@ -120,7 +121,7 @@ public class DbContentTest {
     @Test
     public void deleteMuniContent() throws Exception {
         databaseInserter.addRegion(new Region("Gävle2"));
-        databaseInserter.addMunicipality(new Municipality("Sandviken2", new Region("Gävle2")));
+        databaseInserter.addMunicipality(new Municipality("Sandviken2", Arrays.asList(new Region("Gävle2"))));
         assertTrue(databaseSelector.municipalityExists("Sandviken2"));
 
         databaseDeleter.deleteMuniContent("Sandviken2");

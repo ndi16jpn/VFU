@@ -484,7 +484,7 @@ class SelectDbContent implements DatabaseSelector {
     public Municipality getMunicipality(String name) throws DatabaseException {
         try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
             //String sqlMuniName = "SELECT * FROM " + MUNI_TABLE + " WHERE name = ?";
-            String sqlMuniRegion = "SELECT * FROM " + REGION_MUNI_TABLE + " WHERE " + REGION_MUNI_COLUMN_REGION +
+            String sqlMuniRegion = "SELECT * FROM " + REGION_MUNI_TABLE + " WHERE " + REGION_MUNI_COLUMN_MUNI +
                     " = ?";
             //PreparedStatement nameStatement = connection.prepareStatement(sqlMuniName);
             PreparedStatement regionStatement = connection.prepareStatement(sqlMuniRegion);
