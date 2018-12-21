@@ -906,10 +906,11 @@ public class AdminController {
                                                 Request request,
                                                 Database db) throws DatabaseException {
         final String MODEL_MUNI = "muni";
-        String muniToDelete = getQueryMuniToDelete(request);
+        String muniToDelete = getQueryMuniToDelete(request).split(",")[0];
+        String region = getQueryMuniToDelete(request).split(",")[1];
         model.put(MODEL_MUNI, muniToDelete);
         try {
-            db.getDeleter().deleteMuniContent(muniToDelete);
+            db.getDeleter().deleteMuniContent(muniToDelete, region);
             model.put("muni_deleted", true);
         } catch (DatabaseException e) {
             model.put("muni_foreign_key", true);
@@ -1028,7 +1029,7 @@ public class AdminController {
     public static Route handleDeleteMuniPostAjax = (Request request, Response response) -> {
         if (isAdmin(request)) {
             String muniToDelete = request.body().split(",")[0];
-            String region = request.body().split(",")[1];
+            String region = null;
 
             Database db = DatabaseHandler.getDatabase();
             try {
