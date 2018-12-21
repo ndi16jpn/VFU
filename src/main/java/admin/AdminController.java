@@ -909,7 +909,7 @@ public class AdminController {
         String muniToDelete = getQueryMuniToDelete(request);
         model.put(MODEL_MUNI, muniToDelete);
         try {
-            db.getDeleter().deleteMuniContent(muniToDelete);
+            db.getDeleter().deleteMuniContent(muniToDelete,"");
             model.put("muni_deleted", true);
         } catch (DatabaseException e) {
             model.put("muni_foreign_key", true);
@@ -1027,6 +1027,11 @@ public class AdminController {
 
     public static Route handleDeleteMuniPostAjax = (Request request, Response response) -> {
         if (isAdmin(request)) {
+            String strängen = request.queryParams("muniToDelete");
+            String strängen2 = request.body();
+            String s1 = getQueryRegionToRemoveMuniFrom(request);
+            String s2 =getQueryRegion(request);
+
             String muniToDelete = request.body().split(",")[0];
             String region = request.body().split(",")[1];
 

@@ -187,7 +187,7 @@ class DeleteDbContent implements DatabaseDeleter {
                             + " AND " + REGION_MUNI_COLUMN_REGION + " = ?"
             );
             deleteFromRegionMunipreparedStatement.setString(1, municipality);
-            deleteFromRegionMunipreparedStatement.setString(1, region);
+            deleteFromRegionMunipreparedStatement.setString(2, region);
             deleteFromRegionMunipreparedStatement.executeUpdate();
 
             if(!DatabaseHandler.getDatabase().getSelector().municipalityHasRegions(municipality)) {
