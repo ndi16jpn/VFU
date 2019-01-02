@@ -317,20 +317,30 @@ public class AdminController {
                 final String MODEL_NUM_OF_DB_STUDENTS = "db_num_of_students";
                 final String MODEL_NUM_STUDENTS_ADDED = "num_of_students_added";
                 int numOfStudentsInCsv = studentDataList.size();
+                List<String> passwords = new ArrayList<>();
+
+                for (StudentData student: studentDataList) {
+                    String password = RandomGenerator.generateRandomPassword();
+                    passwords.add(password);
+                    student.setHashedPassword(PasswordSecurity.createHash(password.toCharArray()));
+                }
 
                 Database db = DatabaseHandler.getDatabase();
                 List<String> allStudentDataEmails = db.getSelector().getAllStudentDataEmails();
                 studentDataList.removeIf(studentData -> allStudentDataEmails.contains(studentData.getEmail()));
                 db.getInserter().addStudentsViaCSV(studentDataList);
                 MailSender mailSender = MailSenderProvider.getMailSender();
+                int studentIndex = 0;
                 for (StudentData studentData : studentDataList) {
                     Map<String, Object> emailModel = new HashMap<>();
                     emailModel.put("student_name", studentData.getName());
+                    emailModel.put("student_password", passwords.get(studentIndex));
                     mailSender.sendMail(
                             studentData.getEmail(),
                             "VFU Socionom - Högskolan i Gävle",
                             ViewUtil.render(emailModel, Path.Template.EMAIL_STUDENT_ADDED)
                     );
+                    studentIndex++;
                 }
 
                 model.put(MODEL_NUM_OF_CSV_STUDENTS, numOfStudentsInCsv);
@@ -418,9 +428,13 @@ public class AdminController {
                 model.put("student_name", studentName);
                 model.put("student_email", studentEmail);
                 model.put("student_year_birth", studentYearBirth);
+                String password = RandomGenerator.generateRandomPassword();
+                studentData.setHashedPassword(PasswordSecurity.createHash(password.toCharArray()));
                 db.getInserter().addSingleStudent(studentData);
                 Map<String, Object> emailModel = new HashMap<>();
                 emailModel.put("student_name", studentName);
+                emailModel.put("student_password", password);
+
                 // 2018-11-26 Changed to Privatemailsender
                 MailSenderProvider.getMailSender().sendMail(
                         studentEmail,

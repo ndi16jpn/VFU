@@ -188,7 +188,7 @@ public class StudentController {
     };
 
     private static String getStudentEmail(Request request) {
-        return request.session().attribute(ATTR_NAME) + "@student.hig.se";
+        return request.session().attribute(ATTR_NAME);// + "@student.hig.se";
     }
 
     private static Map<String, Object> getInitialStudentModel() {

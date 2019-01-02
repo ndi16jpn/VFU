@@ -1,5 +1,6 @@
 package auth;
 
+import data.StudentData;
 import database.Database;
 import database.DatabaseException;
 import database.DatabaseHandler;
@@ -49,8 +50,17 @@ public class Authenticator {
             e.printStackTrace();
             return false;
         }
+        StudentData existingStudentData;
+        //return authenticateHigLdap(studentId, password);
+        try {
+            Database db = DatabaseHandler.getDatabase();
+            existingStudentData = db.getSelector().getStudentData(studentId);
+            return validatePassword(password.toCharArray(), existingStudentData.getHashedPassword());
+        } catch (InvalidKeySpecException|NoSuchAlgorithmException| DatabaseException e) {
+            e.printStackTrace();
+            return false;
+        }
 
-        return authenticateHigLdap(studentId, password);
     }
 
     public static boolean authenticateVFUSamordnare(String email, String password) {
