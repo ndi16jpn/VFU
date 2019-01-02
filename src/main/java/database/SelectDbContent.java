@@ -484,7 +484,7 @@ class SelectDbContent implements DatabaseSelector {
     public Municipality getMunicipality(String name) throws DatabaseException {
         try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
             //String sqlMuniName = "SELECT * FROM " + MUNI_TABLE + " WHERE name = ?";
-            String sqlMuniRegion = "SELECT * FROM " + REGION_MUNI_TABLE + " WHERE " + REGION_MUNI_COLUMN_REGION +
+            String sqlMuniRegion = "SELECT * FROM " + REGION_MUNI_TABLE + " WHERE " + REGION_MUNI_COLUMN_MUNI +
                     " = ?";
             //PreparedStatement nameStatement = connection.prepareStatement(sqlMuniName);
             PreparedStatement regionStatement = connection.prepareStatement(sqlMuniRegion);
@@ -563,7 +563,9 @@ class SelectDbContent implements DatabaseSelector {
                     + UNIT_TABLE + "." + UNIT_COLUMN_NAME + " AS unitName,"
                     + MUNI_TABLE + "." + MUNI_COLUMN_NAME + " AS muniName"
                     + " FROM " + UNIT_TABLE + "," + MUNI_TABLE
-                    + " WHERE " + MUNI_TABLE + "." + MUNI_COLUMN_REGION + "=? AND "
+                    + " WHERE " + UNIT_TABLE + "." + UNIT_COLUMN_MUNICIPALITY + " IN (SELECT "
+                    + REGION_MUNI_COLUMN_MUNI + " FROM " + REGION_MUNI_TABLE
+                    + " WHERE " + REGION_MUNI_COLUMN_REGION + "= ?) AND " //+ MUNI_TABLE + "." + MUNI_COLUMN_REGION + "=? AND "
                     + UNIT_TABLE + "." + UNIT_COLUMN_MUNICIPALITY + "=" + MUNI_TABLE + "." + MUNI_COLUMN_NAME;
 
             PreparedStatement statement = connection.prepareStatement(sql);

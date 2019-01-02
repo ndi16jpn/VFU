@@ -25,4 +25,19 @@ public class Municipality {
     public List<Region> getRegions() {
         return regions;
     }
+    public String getRegionNamesString() {
+        if (regions == null) {
+            return "";
+        }
+        String regionNames = "";
+        for (Region region: regions) {
+            if (regions.indexOf(region) != regions.size() - 1) {
+                regionNames += region.getName() + ", ";
+            } else {
+                regionNames += region.getName();
+            }
+
+        }
+        return regionNames;
+    }
 }

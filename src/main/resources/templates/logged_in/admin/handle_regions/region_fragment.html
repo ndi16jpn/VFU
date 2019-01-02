@@ -58,7 +58,7 @@
                 <div class="control">
                     <form action="/admin/handle-regions/delete-muni/" method="post">
                         <button type="submit" class="button is-warning is-medium"
-                                name="muniToDelete" th:value="${muni, region_munis.key}" th:title="|Ta bort ${muni}|">
+                                name="muniToDelete" th:value="${muni}" th:title="|Ta bort ${muni}|">
                             <span th:text="${muni}">muni</span>
                             <span class="icon is-small">
                             <i class="fa fa-times"></i>
@@ -116,7 +116,7 @@
         <br>
         <div class="field is-grouped is-grouped-multiline">
             <div class="control" v-for="muni in regionMuni.value">
-                <a @click="deleteMuni(muni)" class="button is-warning is-medium"
+                <a @click="deleteMuni(muni + ',' + regionMuni.key)" class="button is-warning is-medium"
                    name="muniToDelete" :title="'Ta bort ' + muni" :class="{'is-loading': isAjaxWaitingDelMuni}">
                     <span v-text="muni"></span>
                     <span class="icon is-small">

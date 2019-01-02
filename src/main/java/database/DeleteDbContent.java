@@ -180,14 +180,14 @@ class DeleteDbContent implements DatabaseDeleter {
     }
 
     @Override
-    public void deleteMuniContent(String municipality, String region) throws DatabaseException {
+    public void removeMuniFromRegion(String municipality, String region) throws DatabaseException {
         try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
             PreparedStatement deleteFromRegionMunipreparedStatement = connection.prepareStatement(
                     "DELETE FROM " + REGION_MUNI_TABLE + " WHERE " + REGION_MUNI_COLUMN_MUNI + "= ?"
                             + " AND " + REGION_MUNI_COLUMN_REGION + " = ?"
             );
             deleteFromRegionMunipreparedStatement.setString(1, municipality);
-            deleteFromRegionMunipreparedStatement.setString(1, region);
+            deleteFromRegionMunipreparedStatement.setString(2, region);
             deleteFromRegionMunipreparedStatement.executeUpdate();
 
             if(!DatabaseHandler.getDatabase().getSelector().municipalityHasRegions(municipality)) {
@@ -200,6 +200,28 @@ class DeleteDbContent implements DatabaseDeleter {
 
 
 
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseException("database error", e);
+        }
+    }
+
+    @Override
+    public void deleteMuniContent(String municipality) throws DatabaseException {
+        try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
+            PreparedStatement deleteFromRegionMunipreparedStatement = connection.prepareStatement(
+                    "DELETE FROM " + REGION_MUNI_TABLE + " WHERE " + REGION_MUNI_COLUMN_MUNI + "= ?"
+            );
+            deleteFromRegionMunipreparedStatement.setString(1, municipality);
+
+            deleteFromRegionMunipreparedStatement.executeUpdate();
+
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "DELETE FROM " + MUNI_TABLE + " WHERE " + MUNI_COLUMN_NAME + "= ?"
+            );
+            preparedStatement.setString(1, municipality);
+            preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();

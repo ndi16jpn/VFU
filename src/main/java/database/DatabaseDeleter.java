@@ -83,7 +83,14 @@ public interface DatabaseDeleter {
      * @param region
      * @throws DatabaseException
      */
-    void deleteMuniContent(String municipality, String region) throws DatabaseException;
+    void removeMuniFromRegion(String municipality, String region) throws DatabaseException;
+
+     /* Deletes content from the municipality with specified name
+     * @param municipality
+
+     * @throws DatabaseException
+     */
+    void deleteMuniContent(String municipality) throws DatabaseException;
 
     /**
      * Deletes content of specified Unit
