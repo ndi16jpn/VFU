@@ -155,6 +155,11 @@
                     </section>
                 </div>
             </div>
+
+            <button class="button is-primary" th:id="'send-email-to-handledare'">
+                Skicka mail till alla handledare
+            </button>
+
             <hr>
 
             <br>
@@ -503,6 +508,16 @@ for(i = 0; i < places.length; i++){
        document.getElementById("handledare_email").className = "modal";
     };
     })();
+</script>
+
+<script th:inline="javascript">
+    var sendEmailButton = document.getElemetdById("send-email-to-handledare");
+    sendEmailButton.onclick = (function(){ return function(){
+
+    };
+    })();
+
+
 </script>
 
 
