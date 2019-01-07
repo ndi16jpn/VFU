@@ -381,4 +381,17 @@ class DeleteDbContent implements DatabaseDeleter {
         }
     }
 
+    @Override
+    public void deleteAllHandledareRegistrationEmails() throws DatabaseException {
+        try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "DELETE FROM " + MAIL_HANDLEDARE_REGISTRATION_MAIL_TABLE
+            );
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseException("database error", e);
+        }
+    }
+
 }

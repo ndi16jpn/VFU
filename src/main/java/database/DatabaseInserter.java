@@ -164,4 +164,11 @@ public interface DatabaseInserter {
      */
     void setVfuSamordnarePassword(String email, String hashedPassword) throws DatabaseException;
 
+    /**
+     * Saves a handledare registration mail to be sent at a later date
+     * @param smtpMail
+     * @throws DatabaseException
+     */
+    void saveHandledareRegistrationMail(String smtpMail) throws DatabaseException;
+
 }
