@@ -1082,6 +1082,10 @@ public class AdminController {
         }
     };
 
+    public void sendEmailToHandledare(){
+
+    }
+
     private static String getQueryVerifyCsvButtonClicked(Request request) {
         return request.queryParams("button_clicked");
     }
