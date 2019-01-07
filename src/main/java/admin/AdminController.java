@@ -1180,7 +1180,7 @@ public class AdminController {
     }
 
     private static String getQueryDeleteOption(Request request) {
+
         return request.queryParams("deleteOption");
     }
-
 }

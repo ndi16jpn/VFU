@@ -160,6 +160,10 @@ public class VfuSamordnareController {
         }
     };
 
+    public void sendEmailToHandledare(){
+
+    }
+
     public static Route handleVfuSamordnareDeleteUnitPost = (Request request, Response response) -> {
         if (isVfuSamordnare(request)) {
 
