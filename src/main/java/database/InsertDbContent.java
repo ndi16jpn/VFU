@@ -36,14 +36,17 @@ class InsertDbContent implements DatabaseInserter {
                             + "(" + STUDENT_DATA_COLUMN_NAME + ","
                             + STUDENT_DATA_COLUMN_EMAIL + ","
                             + STUDENT_DATA_COLUMN_DOB + ","
-                            + STUDENT_DATA_COLUMN_PHONENUMBER +")"
-                            + "VALUES(?, ?, ?,?)"
+                            + STUDENT_DATA_COLUMN_PHONENUMBER +","
+                            + STUDENT_DATA_COLUMN_HASHEDPASSWORD +
+                            ")"
+                            + "VALUES(?, ?, ?, ?, ?)"
             );
             for(StudentData student : studentData) {
                 preparedStatement.setString(1, student.getName());
                 preparedStatement.setString(2, student.getEmail());
                 preparedStatement.setString(3, student.getDob());
                 preparedStatement.setString(4, student.getPhoneNumber());
+                preparedStatement.setString(5, student.getHashedPassword());
                 preparedStatement.addBatch();
             }
             preparedStatement.executeBatch();
@@ -62,13 +65,15 @@ class InsertDbContent implements DatabaseInserter {
                             + "(" + STUDENT_DATA_COLUMN_NAME + ","
                             + STUDENT_DATA_COLUMN_EMAIL + ","
                             + STUDENT_DATA_COLUMN_DOB + ","
-                            + STUDENT_DATA_COLUMN_PHONENUMBER +")"
-                            + "VALUES(?, ?, ?,?)"
+                            + STUDENT_DATA_COLUMN_PHONENUMBER + ","
+                            + STUDENT_DATA_COLUMN_HASHEDPASSWORD + ")"
+                            + "VALUES(?, ?, ?, ?, ?)"
             );
             preparedStatement.setString(1, student.getName());
             preparedStatement.setString(2, student.getEmail());
             preparedStatement.setString(3, student.getDob());
             preparedStatement.setString(4, student.getPhoneNumber());
+            preparedStatement.setString(5, student.getHashedPassword());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

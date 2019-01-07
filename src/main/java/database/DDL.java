@@ -40,11 +40,14 @@ class DDL {
     static final String STUDENT_DATA_COLUMN_NAME = "name";
     static final String STUDENT_DATA_COLUMN_DOB = "dob";
     static final String STUDENT_DATA_COLUMN_PHONENUMBER = "phone_number";
+    static final String STUDENT_DATA_COLUMN_HASHEDPASSWORD = "hashed_password";
     static final String CREATE_TABLE_STUDENT_DATA = "CREATE TABLE IF NOT EXISTS " + STUDENT_DATA_TABLE + "("
             + STUDENT_DATA_COLUMN_EMAIL + " TEXT PRIMARY KEY NOT NULL,"
             + STUDENT_DATA_COLUMN_NAME + " TEXT NOT NULL,"
             + STUDENT_DATA_COLUMN_DOB + " TEXT NOT NULL,"
-            + STUDENT_DATA_COLUMN_PHONENUMBER + " TEXT NOT NULL);";
+            + STUDENT_DATA_COLUMN_PHONENUMBER + " TEXT NOT NULL,"
+            + STUDENT_DATA_COLUMN_HASHEDPASSWORD + " TEXT NOT NULL"
+            + ");";
 
     static final String UNIT_TABLE = "unit";
     static final String UNIT_COLUMN_MUNICIPALITY = "municipality";

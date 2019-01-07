@@ -123,7 +123,10 @@ class SelectDbContent implements DatabaseSelector {
             String name = rs.getString(STUDENT_DATA_COLUMN_NAME);
             String phoneNumber = rs.getString(STUDENT_DATA_COLUMN_PHONENUMBER);
             String dob = rs.getString(STUDENT_DATA_COLUMN_DOB);
-            return new StudentData(email, name, dob, phoneNumber);
+            String hashedPassword = rs.getString(STUDENT_DATA_COLUMN_HASHEDPASSWORD);
+            StudentData studentData = new StudentData(email, name, dob, phoneNumber);
+            studentData.setHashedPassword(hashedPassword);
+            return studentData;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DatabaseException("database error", e);
@@ -471,7 +474,7 @@ class SelectDbContent implements DatabaseSelector {
             String sql = "SELECT * FROM " + STUDENT_DATA_TABLE + " WHERE email = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
 
-            statement.setString(1, studentID + "@student.hig.se");
+            statement.setString(1, studentID); //+ "@student.hig.se");
             ResultSet rs = statement.executeQuery();
             return rs.next();
         } catch (SQLException e) {
