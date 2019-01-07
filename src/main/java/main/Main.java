@@ -63,6 +63,8 @@ public class Main {
         post(Path.Web.ADMIN_DELETE_HANDLEDARE_SINGLE, AdminController.handleAdminDeleteHandledarePost);
         post(Path.Web.ADMIN_HANDLE_ADD_SINGLE_PLACE, AdminController.handleAddSinglePlacePost);
         post(Path.Web.ADMIN_HANDLE_DELETE_SINGLE_PLACE, AdminController.handleDeleteSinglePlacePost);
+        post(Path.Web.ADMIN_SEND_EMAILS, AdminController.handleSendEmailToHandledarePost);
+
 
         get(Path.Web.ADMIN_SHOW_STUDENTS, AdminController.serveAdminShowStudentsPage);
         post(Path.Web.ADMIN_DELETE_STUDENT, AdminController.handleDeleteStudentPost);

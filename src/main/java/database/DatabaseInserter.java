@@ -166,9 +166,10 @@ public interface DatabaseInserter {
 
     /**
      * Saves a handledare registration mail to be sent at a later date
+     * @param emailAddress
      * @param smtpMail
      * @throws DatabaseException
      */
-    void saveHandledareRegistrationMail(String smtpMail) throws DatabaseException;
+    void saveHandledareRegistrationMail(String emailAddress, String smtpMail) throws DatabaseException;
 
 }

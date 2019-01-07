@@ -470,7 +470,7 @@ class InsertDbContent implements DatabaseInserter {
     }
 
     @Override
-    public void saveHandledareRegistrationMail(String smtpMail) throws DatabaseException {
+    public void saveHandledareRegistrationMail(String emailAddress, String smtpMail) throws DatabaseException {
         try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
             PreparedStatement preparedStatement = connection.prepareStatement(
                     "INSERT INTO " + MAIL_HANDLEDARE_REGISTRATION_MAIL_TABLE + "(" + MAIL_HANDLEDARE_REGISTRATION_MAIL_COLUMN_EMAIL +")"
