@@ -45,6 +45,7 @@ public class Path {
         public static final String ADMIN_ADD_VFU_SAM = "/admin/add-vfusam/";
         public static final String ADMIN_SHOW_VFU_SAM = "/admin/show-vfusam/";
         public static final String ADMIN_DELETE_VFU_SAM = "/admin/delete-vfusam/";
+        public static final String ADMIN_SEND_EMAILS = "/admin/send_handledare_reg_mail/";
 
         public static final String ADMIN_SHOW_EDIT_STUDENT_MAIN = "/admin/edit/show_edit_student_main/";
         public static final String ADMIN_EDIT_STUDENT_FIRST_TEXT = "/admin/edit-studentFirstText/";
@@ -93,6 +94,7 @@ public class Path {
         public static final String ADMIN_ADD_VFU_SAM = "logged_in/admin/add_vfu_sam/add_vfu_sam";
         public static final String ADMIN_SHOW_VFU_SAM = "logged_in/admin/show_vfu_sam/show_vfu_sam";
         public static final String ADMIN_SHOW_EDIT_STUDENT_MAIN = "logged_in/admin/edit/show_edit_student_main";
+        public static final String ADMIN_SEND_EMAILS = "logged_in/admin/send_handledare_reg_mail";
 
         public static final String STUDENT_FIRST = "logged_in/student/first/first";
         public static final String STUDENT_CHOICE = "logged_in/student/choice/choice";

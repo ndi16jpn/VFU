@@ -301,4 +301,10 @@ public interface DatabaseSelector {
      * @throws DatabaseException
      */
     String getStudentFirstParagraph(int paragraphNr) throws DatabaseException;
+
+    /**
+     * Get handledare registration mails
+     * @throws DatabaseException
+     */
+    List<String> getAllHandledareRegistrationMail() throws DatabaseException;
 }

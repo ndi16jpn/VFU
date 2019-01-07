@@ -296,6 +296,20 @@ public class AdminController {
         }
     };
 
+    public static Route handleSendEmailToHandledarePost = (Request request, Response response) -> {
+        if (isAdmin(request)) {
+
+            String handledareToDelete = getQueryHandledareToDelete(request);
+
+
+            return serveAdminAddPlacePage.handle(request, response);
+
+        } else {
+            response.redirect(Path.Web.LOGIN);
+            return null;
+        }
+    };
+
     public static Route handleUploadCsvResultPost = (Request request, Response response) -> {
         if (isAdmin(request)) {
             List<StudentData> studentDataList = request.session().attribute(ATTR_STUDENT_DATA_LIST);

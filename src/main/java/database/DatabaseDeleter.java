@@ -169,5 +169,11 @@ public interface DatabaseDeleter {
      */
     void deleteLinkMailHandledareContent(String regLink) throws DatabaseException;
 
+    /**
+     * Deletes  the related content to the registration link provided
+     * @throws DatabaseException
+     */
+    void deleteAllHandledareRegistrationEmails() throws DatabaseException;
+
 
 }

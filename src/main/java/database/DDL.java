@@ -1,6 +1,5 @@
 package database;
 
-import jdk.nashorn.internal.runtime.regexp.RegExpResult;
 import organisations.Municipality;
 import organisations.Region;
 
@@ -107,6 +106,13 @@ class DDL {
     static final String REGION_COLUMN_NAME = "name";
     static final String CREATE_TABLE_REGION = "CREATE TABLE IF NOT EXISTS " + REGION_TABLE + "("
             + REGION_COLUMN_NAME + " TEXT PRIMARY KEY NOT NULL);";
+
+    static final String MAIL_HANDLEDARE_REGISTRATION_MAIL_TABLE = "handledare_registratio_email";
+    static final String MAIL_HANDLEDARE_REGISTRATION_MAIL_COLUMN_ID = "hendledareEmail";
+    static final String MAIL_HANDLEDARE_REGISTRATION_MAIL_COLUMN_EMAIL = "smtpEmail";
+    static final String CREATE_TABLE_HANDLEDARE_REGISTRATION_MAIL_TABLE = "CREATE TABLE IF NOT EXISTS " + MAIL_HANDLEDARE_REGISTRATION_MAIL_TABLE
+            + "(" + MAIL_HANDLEDARE_REGISTRATION_MAIL_COLUMN_ID + " TEXT NOT NULL, " + MAIL_HANDLEDARE_REGISTRATION_MAIL_COLUMN_EMAIL
+            + " TEXT NOT NULL, PRIMARY KEY(" + MAIL_HANDLEDARE_REGISTRATION_MAIL_COLUMN_ID + "));";
 
     static final String LINK_MAIL_VFU_TABLE = "link_mail_vfu";
     static final String LINK_MAIL_VFU_COLUMN_EMAIL = "email";
@@ -241,9 +247,11 @@ class DDL {
 
             statement.executeUpdate(CREATE_TABLE_PLACE_HANDLEDARE);
             statement.executeUpdate(CREATE_TABLE_REGION_MUNI);
+            statement.executeUpdate(CREATE_TABLE_HANDLEDARE_REGISTRATION_MAIL_TABLE);
 
             statement.executeUpdate(CREATE_TABLE_TEXT_CONTET_STUDENT_FIRST);
             //tillfällig lösning för att illustrera
+
 
             if (!statement.executeQuery("SELECT * FROM " + TEXT_CONTENT_STUDENT_FIRST_TABLE
                     + " WHERE " + TEXT_CONTENT_STUDENT_FIRST_PARAGRAPH_COLUMN + " = 1").next()) {

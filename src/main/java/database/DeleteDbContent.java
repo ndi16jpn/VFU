@@ -294,10 +294,15 @@ class DeleteDbContent implements DatabaseDeleter {
             PreparedStatement preparedStatementHandledareTable = connection.prepareStatement(
                     "DELETE FROM " + HANDLEDARE_TABLE + " WHERE "+ HANDLEDARE_COLUMN_EMAIL +"= ?"
             );
+            PreparedStatement preparedStatementHandledareRegistrationEmailTable = connection.prepareStatement(
+                    "DELETE FROM " + MAIL_HANDLEDARE_REGISTRATION_MAIL_COLUMN_EMAIL + " WHERE "+ MAIL_HANDLEDARE_REGISTRATION_MAIL_COLUMN_ID +"= ?"
+            );
             preparedStatementReferenceTable.setString(1, handledare.getEmail());
             preparedStatementHandledareTable.setString(1, handledare.getEmail());
+            preparedStatementHandledareRegistrationEmailTable.setString(1, handledare.getEmail());
             preparedStatementReferenceTable.executeUpdate();
             preparedStatementHandledareTable.executeUpdate();
+            preparedStatementHandledareRegistrationEmailTable.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DatabaseException("database error", e);
@@ -374,6 +379,19 @@ class DeleteDbContent implements DatabaseDeleter {
                     "DELETE FROM " + LINK_MAIL_HANDLEDARE_TABLE + " WHERE reg_link= ?"
             );
             preparedStatement.setString(1, regLink);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseException("database error", e);
+        }
+    }
+
+    @Override
+    public void deleteAllHandledareRegistrationEmails() throws DatabaseException {
+        try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "DELETE FROM " + MAIL_HANDLEDARE_REGISTRATION_MAIL_TABLE
+            );
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
