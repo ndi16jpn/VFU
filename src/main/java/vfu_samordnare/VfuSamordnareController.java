@@ -1,11 +1,15 @@
 package vfu_samordnare;
 
+import auth.RandomGenerator;
 import database.Database;
 import database.DatabaseHandler;
+import email.MailSender;
+import email.MailSenderProvider;
 import organisations.Place;
 import organisations.Unit;
 import roles.Handledare;
 import roles.LoggedInRole;
+import security.PasswordSecurity;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -124,13 +128,27 @@ public class VfuSamordnareController {
             //TODO: Möjligtvis javasqript för att disablea knappen lägg till handledare, istället för if/else
             //TODO: Reg-mail innan handledare skapas?
             //Default password Handledare = Vfusocionom1
+
+            String password = RandomGenerator.generateRandomPassword();
+            MailSender sender = MailSenderProvider.getMailSender();
+
+
             if(handledareName == null && handledarePhoneNumber == null){
-                handledare = new Handledare(handledareEmail,"1000:abe61a950f20c9f85c486ffd7d58daa4c8a4e0b9e15afd5a:fe1d7f49edbd6ab39559e7270f2f76d9b5bb612f839b66b6");
+                //handledare = new Handledare(handledareEmail,"1000:abe61a950f20c9f85c486ffd7d58daa4c8a4e0b9e15afd5a:fe1d7f49edbd6ab39559e7270f2f76d9b5bb612f839b66b6");
+                handledare = new Handledare(handledareEmail, PasswordSecurity.createHash(password.toCharArray()));
+                sender.sendMail(handledareEmail, "Lösenord till Vfusocionm", "Hej " + handledareName + "<br>" + "Ditt lösenord till "
+                        + "<a href='vfusocionom.hig.se'>" + "Vfusocionom.hig.se " + "</a>" + "<br>" +"Lösenord: " + password);
             }else if(handledarePhoneNumber == null){
-                handledare = new Handledare(handledareEmail,handledareName,"1000:abe61a950f20c9f85c486ffd7d58daa4c8a4e0b9e15afd5a:fe1d7f49edbd6ab39559e7270f2f76d9b5bb612f839b66b6");
+                //handledare = new Handledare(handledareEmail,handledareName,"1000:abe61a950f20c9f85c486ffd7d58daa4c8a4e0b9e15afd5a:fe1d7f49edbd6ab39559e7270f2f76d9b5bb612f839b66b6");
+                handledare = new Handledare(handledareEmail,handledareName,PasswordSecurity.createHash(password.toCharArray()));
+                sender.sendMail(handledareEmail, "Lösenord till Vfusocionm", "Hej " + handledareName + "<br>" + "Ditt lösenord till "
+                        + "<a href='vfusocionom.hig.se'>" + "Vfusocionom.hig.se" + "</a>" + "<br>" +"Lösenord: " + password);
             }
             else{
-                handledare = new Handledare(handledareName,handledareEmail,handledarePhoneNumber,"1000:abe61a950f20c9f85c486ffd7d58daa4c8a4e0b9e15afd5a:fe1d7f49edbd6ab39559e7270f2f76d9b5bb612f839b66b6");
+                //handledare = new Handledare(handledareName,handledareEmail,handledarePhoneNumber,"1000:abe61a950f20c9f85c486ffd7d58daa4c8a4e0b9e15afd5a:fe1d7f49edbd6ab39559e7270f2f76d9b5bb612f839b66b6");
+                handledare = new Handledare(handledareName,handledareEmail,handledarePhoneNumber,PasswordSecurity.createHash(password.toCharArray()));
+                sender.sendMail(handledareEmail, "Lösenord till Vfusocionm", "Hej " + handledareName + "<br>" + "Ditt lösenord till "
+                        + "<a href='vfusocionom.hig.se'>" + "Vfusocionom.hig.se " + "</a>" + "<br>" +"Lösenord: " + password);
             }
 
             db.getInserter().addHandledare(handledare);

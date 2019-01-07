@@ -534,11 +534,24 @@ class SelectDbContent implements DatabaseSelector {
     @Override
     public List<Unit> getAllUnitFromRegion(String region) throws DatabaseException {
         try (Connection connection = DriverManager.getConnection(dbUrl)) {
-            String sql = "SELECT * " + " FROM " + UNIT_TABLE + "," + MUNI_TABLE
-                    + " WHERE  municipality.region = ? and unit.municipality = municipality.name and unit.name != 'no_choice'";
+            /**String sql = "SELECT * " + " FROM " + UNIT_TABLE + "," + MUNI_TABLE + ", " + REGION_MUNI_TABLE
+                    //+ " WHERE  municipality.region " +
+                    + " WHERE municipality.name IN (SELECT " + REGION_MUNI_COLUMN_MUNI + " FROM " + REGION_MUNI_TABLE
+                    + " WHERE " + REGION_MUNI_COLUMN_REGION + " = ?)"
+                    + "= ? and unit.municipality = municipality.name and unit.name != 'no_choice'";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, region);
-
+            String a = "municipality.name IN (SELECT " + REGION_MUNI_COLUMN_MUNI + " FROM " + REGION_MUNI_TABLE
+                    + " WHERE " + REGION_MUNI_COLUMN_REGION + " = ?)";
+             */
+            String sql = "SELECT * FROM "
+                    + UNIT_TABLE
+                    + " WHERE " + UNIT_COLUMN_MUNICIPALITY + " IN (SELECT "
+                    + REGION_MUNI_COLUMN_MUNI + " FROM " + REGION_MUNI_TABLE
+                    + " WHERE " + REGION_MUNI_COLUMN_REGION + " = ?)"
+                    + " AND " + UNIT_COLUMN_NAME + " != 'no_choice'";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, region);
             ResultSet rs = statement.executeQuery();
             List<Unit> allUnits = new ArrayList<>();
             while (rs.next()) {
