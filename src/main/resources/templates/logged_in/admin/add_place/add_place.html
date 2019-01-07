@@ -148,7 +148,7 @@
                     <section class="modal-card-body">
                         <div th:if ="${all_handledare}">
                             <span class = "email_span" th:id="'email_span'" th:if ="${all_handledare}" th:each="hand: ${all_handledare}">
-                                [[${hand.email}]],
+                                [[${hand.email}]];
                                 <br>
                             </span>
                         </div>
