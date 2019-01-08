@@ -81,6 +81,8 @@ public class Main {
         post(Path.Web.ADMIN_DELETE_STUDENT_FROM_PLACE, AdminController.handleDeleteStudentFromPlacePost);
 
         get(Path.Web.ADMIN_SHOW_EDIT_STUDENT_MAIN, AdminController.handleEditStudentFirstPage);
+        get(Path.Web.ADMIN_SHOW_EDIT_HANDLEDARE_MAIN, AdminController.handleEditHandledareFirstPage);
+        get(Path.Web.ADMIN_SHOW_EDIT_VFU_SAMORDNARE_MAIN, AdminController.handleEditVFUsamordnareFirstPage);
 
         get(Path.Web.STUDENT_HOME, StudentController.serveStudentHomePage);
         post(Path.Web.STUDENT_APPLY_FIRST, StudentController.handleApplyFirst);

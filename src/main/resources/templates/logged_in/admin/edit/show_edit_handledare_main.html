@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="has-navbar-fixed-top">
+<head th:replace="common_fragments/header :: header">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<nav th:replace="logged_in/handledare/fragments/navbar :: nav"></nav>
+
+<main>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Välkommen Handledare
+            </h1>
+            <hr>
+            <div class="content is-medium">
+                <p class="has-text-weight-bold"> Kontaktuppgifter: Student</p>
+                <div class="content is-small">
+                    <ul class ="is-size-5">
+                        <li>Namn: [[${contact_student_name}]]</li>
+                        <li>Email: [[${contact_student_email}]]</li>
+                        <li>Telefonnummer: [[${contact_student_phone_number}]]</li>
+
+
+                    </ul>
+                </div>
+            </div>
+            <div class="content is-medium ">
+                <p class="has-text-weight-bold">Kontaktuppgifter: Erika</p>
+                <div class="content is-small">
+                    <ul class ="is-size-5">
+                        <li>Namn: Erika Ehn</li>
+                        <li>Email: erika.ehn@hig.se</li>
+                        <li>Telefonnummer: 648247</li>
+
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Filer
+            </h1>
+            <hr>
+            <div class="content is-medium">
+                Här kan du se filer som Erika lägger upp.<br>
+                TODO: Se upplagda filer från Erika
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="common_fragments/footer :: footer"></footer>
+
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="has-navbar-fixed-top">
+<head th:replace="common_fragments/header :: header">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<nav th:replace="logged_in/vfu_samordnare/fragments/navbar :: nav"></nav>
+
+<main>
+    <section class="section">
+        <div class="container">
+            <h1 th:text="${text_title}" class="title">
+                text_title
+            </h1>
+            <hr>
+            <div th:text="${text_content}" class="content is-medium">
+                text_content
+            </div>
+            <p class="content is-medium">
+                Här uppdateras information om de VFU-platser som kan erbjudas till socionomstudenter deras kommande praktikperiod. Uppgifter och uppdateringar behöver vara inlagda senast 15 mars varje år.
+                Vid brist på information, räcker det att lägga in uppgifter om områden/verksamheter.
+                Observera! Om det krävs exempelvis minimiålder för vissa verksamheter, skriv in det.
+            </p>
+            <p class="content is-medium">
+                Senast uppdatering med exakt placering, samt namn på handledare behöver finnas inlagt 15 maj varje år, eftersom studenten får besked om plats senast 1 juni.
+            <p class="content is-medium">
+                När studenterna valt sina 5 önskemål slumpas platserna utifrån de valen.
+            </p>
+            <p class="content is-medium">
+                För att se vilken student som har vilken plats när matchningen är gjord så kan du gå till Lägg Till -> Lägg till en plats och på alla enheter så kan du se vilken student som har vilken plats.
+            </p>
+            <p class="content is-medium">
+                Vill du också se kontaktuppgifter till studenten så kan du klicka på platsknappen med den studenten du vill se.
+            </p>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="common_fragments/footer :: footer"></footer>
+
+</body>
+</html>
