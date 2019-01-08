@@ -32,7 +32,6 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.sql.ResultSet;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -212,7 +211,7 @@ public class AdminController {
             }
             Unit unit = new Unit(db.getSelector().getMunicipality(unitMunicipality), unitName ,Integer.valueOf(unitNumberOfSlots),unitInfo);
             long unitId = db.getInserter().addUnit(unit);
-            db.getInserter().addPlace(new Place(db.getSelector().getUnit(db.getSelector().getMunicipality(unitMunicipality),unitName)));
+            db.getInserter().addPlace(new Place(db.getSelector().getUnit(db.getSelector().getMunicipality(unitMunicipality),unitName), false));
             return serveAdminAddPlacePage.handle(request, response);
         } else {
             response.redirect(Path.Web.LOGIN);
@@ -393,7 +392,7 @@ public class AdminController {
             Database db = DatabaseHandler.getDatabase();
             Unit unit = db.getSelector().getUnit(db.getSelector().getMunicipality(unitMunicipality),unitName);
             db.getInserter().addOneNumberOfSlotsUnit(unit);
-            db.getInserter().addSinglePlace(new Place(unit));
+            db.getInserter().addSinglePlace(new Place(unit, false));
             return serveAdminAddPlacePage.handle(request,response);
         } else {
             response.redirect(Path.Web.LOGIN);
@@ -639,13 +638,13 @@ public class AdminController {
             model.put(ATTR_ROLE, LoggedInRole.ADMIN.getRoleName());
             model.put(ATTR_NAME, request.session().attribute(ATTR_NAME));
 
-            DatabaseSelector dbSelector = DatabaseHandler.getDatabase().getSelector();
-            List<Place> allPlaces = dbSelector.getAllPlaces();
-            List<StudentData> allStudentData = dbSelector.getAllStudentData();
-            List<Student> allStudents = dbSelector.getAllStudents();
-            List<String> allRegions = dbSelector.getAllRegionNames();
-            List<Place> allPlacesWithoutStudent = dbSelector.getAllPlacesWithoutStudent();
-            List<Place> allPlacesWithStudent = dbSelector.getAllPlacesWithStudent();
+            Database db = DatabaseHandler.getDatabase();
+            List<Place> allPlaces = db.getSelector().getAllPlaces();
+            List<StudentData> allStudentData = db.getSelector().getAllStudentData();
+            List<Student> allStudents = db.getSelector().getAllStudents();
+            List<String> allRegions = db.getSelector().getAllRegionNames();
+            List<Place> allPlacesWithoutStudent = db.getSelector().getAllPlacesWithoutStudent();
+            List<Place> allPlacesWithStudent = db.getSelector().getAllPlacesWithStudent();
 
             Map region_students = new HashMap();
             Map region_places = new HashMap();
@@ -1112,8 +1111,25 @@ public class AdminController {
         }
     };
 
+    public static Route handleChangePlaceReservedStatus= (Request request, Response response)-> {
+        if (isAdmin(request)) {
+
+
+            Database db = DatabaseHandler.getDatabase();
+            db.getInserter().changeReservedStatusForPlace(getQueryChangeReservedStatusOnPlace(request));
+            return serveAdminMatchPage.handle(request,response);
+        } else {
+            response.redirect(Path.Web.LOGIN);
+            return null;
+        }
+    };
+
     private static String getQueryVerifyCsvButtonClicked(Request request) {
         return request.queryParams("button_clicked");
+    }
+    private static int getQueryChangeReservedStatusOnPlace(Request request) {
+        int placeID = Integer.parseInt(request.queryParams("reserved_status"));
+        return placeID;
     }
 
     private static String getQueryStudentName(Request request) {

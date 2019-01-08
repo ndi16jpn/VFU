@@ -54,9 +54,9 @@ class SelectDbContent implements DatabaseSelector {
                 int placeId = rs.getInt(PLACE_COLUMN_ID);
                 List<Handledare> handledare = getHandledareForPlace(placeId);
                 if(handledare.isEmpty()){
-                    places.add(new Place( placeId, getUnit(rs.getInt(PLACE_COLUMN_UNIT))));
+                    places.add(new Place( placeId, getUnit(rs.getInt(PLACE_COLUMN_UNIT)), rs.getBoolean(PLACE_COLUMN_RESERVED)));
                 }else{
-                    places.add(new Place( placeId, handledare, getUnit(rs.getInt(PLACE_COLUMN_UNIT))));
+                    places.add(new Place( placeId, handledare, getUnit(rs.getInt(PLACE_COLUMN_UNIT)), rs.getBoolean(PLACE_COLUMN_RESERVED)));
                 }
             }
             return places;
@@ -77,9 +77,9 @@ class SelectDbContent implements DatabaseSelector {
                 int placeId = rs.getInt(PLACE_COLUMN_ID);
                 List<Handledare> handledare = getHandledareForPlace(placeId);
                 if(handledare.isEmpty()){
-                    places.add(new Place( placeId,getStudent(rs.getString(PLACE_COLUMN_STUDENT)), getUnit(rs.getInt(PLACE_COLUMN_UNIT))));
+                    places.add(new Place( placeId,getStudent(rs.getString(PLACE_COLUMN_STUDENT)), getUnit(rs.getInt(PLACE_COLUMN_UNIT)), rs.getBoolean(PLACE_COLUMN_RESERVED)));
                 }else{
-                    places.add(new Place(placeId,getUnit(rs.getInt(PLACE_COLUMN_UNIT)),getStudent(rs.getString(PLACE_COLUMN_STUDENT)), handledare));
+                    places.add(new Place(placeId,getUnit(rs.getInt(PLACE_COLUMN_UNIT)),getStudent(rs.getString(PLACE_COLUMN_STUDENT)), handledare, rs.getBoolean(PLACE_COLUMN_RESERVED)));
                 }
             }
             return places;
@@ -303,7 +303,7 @@ class SelectDbContent implements DatabaseSelector {
             int unit = rs.getInt(PLACE_COLUMN_UNIT);
 
             //Place place = new Place(id,getHandledare(hand),getUnit(unit));
-            Place place = new Place(id,getHandledareForPlace(id),getUnit(unit));
+            Place place = new Place(id,getHandledareForPlace(id),getUnit(unit), rs.getBoolean(PLACE_COLUMN_RESERVED));
 
             if(student == null){
                 return place;
@@ -339,15 +339,16 @@ class SelectDbContent implements DatabaseSelector {
 
             String unit = placeRs.getString(PLACE_COLUMN_UNIT);
             String student = placeRs.getString(PLACE_COLUMN_STUDENT);
+            boolean reserved = placeRs.getBoolean(PLACE_COLUMN_RESERVED);
             if (handledare.isEmpty() && student == null) {
-                return new Place(id, getUnit(Integer.valueOf(unit)));
+                return new Place(id, getUnit(Integer.valueOf(unit)), reserved);
             }else if(handledare.isEmpty()){
-                return new Place(id, getStudent(student), getUnit(Integer.valueOf(unit)));
+                return new Place(id, getStudent(student), getUnit(Integer.valueOf(unit)), reserved);
             }else if(!handledare.isEmpty() && student == null){
-                return new Place(id, handledare, getUnit(Integer.valueOf(unit)));
+                return new Place(id, handledare, getUnit(Integer.valueOf(unit)), reserved);
             }
             else {
-                return new Place(id,handledare, getStudent(student), getUnit(Integer.valueOf(unit)));
+                return new Place(id,handledare, getStudent(student), getUnit(Integer.valueOf(unit)), reserved);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -645,13 +646,14 @@ class SelectDbContent implements DatabaseSelector {
             while (rs.next()) {
                 String student = rs.getString(PLACE_COLUMN_STUDENT);
                 int placeId = rs.getInt(PLACE_COLUMN_ID);
+                boolean reserved = rs.getBoolean(PLACE_COLUMN_RESERVED);
                 List<Handledare> handledare = getHandledareForPlace(placeId);
                 if(student == null) {
                     int id = rs.getInt(PLACE_COLUMN_ID);
-                    allPlaces.add(new Place(id, unit));
+                    allPlaces.add(new Place(id, unit, reserved));
                 }else if(handledare.isEmpty()){
                     int id = rs.getInt(PLACE_COLUMN_ID);
-                    allPlaces.add(new Place(id, getStudent(student), unit));
+                    allPlaces.add(new Place(id, getStudent(student), unit, reserved));
 
                 }
 
@@ -790,8 +792,8 @@ class SelectDbContent implements DatabaseSelector {
             int id = rs.getInt(PLACE_COLUMN_ID);
             //String hand = rs.getString(PLACE_COLUMN_HANDLEDARE);
             int unit = rs.getInt(PLACE_COLUMN_UNIT);
-
-            Place place = new Place(id,getStudent(studentEmail),getUnit(unit));
+            boolean reserved = rs.getBoolean(PLACE_COLUMN_RESERVED);
+            Place place = new Place(id,getStudent(studentEmail),getUnit(unit), reserved);
             List<Handledare> handledare = getHandledareForPlace(id);
 
             if(handledare.isEmpty()){
@@ -840,14 +842,15 @@ class SelectDbContent implements DatabaseSelector {
                 int id = rs.getInt(PLACE_COLUMN_ID);
                 int unit = rs.getInt(PLACE_COLUMN_UNIT);
                 String student = rs.getString(PLACE_COLUMN_STUDENT);
+                boolean reserved = rs.getBoolean(PLACE_COLUMN_RESERVED);
                 //String handledare = rs.getString(PLACE_COLUMN_HANDLEDARE);
                 List<Handledare> handledare = getHandledareForPlace(id);
                 if(handledare.isEmpty() && student == null){
-                    places.add(new Place(id,getUnit(unit),null, null));
+                    places.add(new Place(id,getUnit(unit),null, null, reserved));
                 }else if(handledare.isEmpty()){
-                    places.add(new Place(id, getStudent(student), getUnit(unit)));
+                    places.add(new Place(id, getStudent(student), getUnit(unit), reserved));
                 }else{
-                    places.add(new Place(id, getUnit(unit),getStudent(student),getHandledareForPlace(id)));
+                    places.add(new Place(id, getUnit(unit),getStudent(student),getHandledareForPlace(id), reserved));
                 }
 
             }

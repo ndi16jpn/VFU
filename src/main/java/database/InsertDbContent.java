@@ -486,4 +486,21 @@ class InsertDbContent implements DatabaseInserter {
         }
     }
 
+    @Override
+    public void changeReservedStatusForPlace(int placeId) throws DatabaseException {
+        try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "UPDATE " + PLACE_TABLE + " SET " + PLACE_COLUMN_RESERVED + " = NOT "
+                            + PLACE_COLUMN_RESERVED + " WHERE " + PLACE_COLUMN_ID + " = ?"
+
+            );
+            preparedStatement.setInt(1, placeId);
+            preparedStatement.executeUpdate();
+            int a = 2;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseException("database error", e);
+        }
+    }
+
 }
