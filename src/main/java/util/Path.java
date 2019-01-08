@@ -48,6 +48,8 @@ public class Path {
         public static final String ADMIN_SEND_EMAILS = "/admin/send_handledare_reg_mail/";
 
         public static final String ADMIN_SHOW_EDIT_STUDENT_MAIN = "/admin/edit/show_edit_student_main/";
+        public static final String ADMIN_SHOW_EDIT_HANDLEDARE_MAIN = "/admin/edit/show_edit_handledare_main/";
+        public static final String ADMIN_SHOW_EDIT_VFU_SAMORDNARE_MAIN = "/admin/edit/show_edit_VFU_samordnare_main/";
         public static final String ADMIN_EDIT_STUDENT_FIRST_TEXT = "/admin/edit-studentFirstText/";
 
         public static final String STUDENT_HOME = "/student/";
@@ -94,6 +96,7 @@ public class Path {
         public static final String ADMIN_ADD_VFU_SAM = "logged_in/admin/add_vfu_sam/add_vfu_sam";
         public static final String ADMIN_SHOW_VFU_SAM = "logged_in/admin/show_vfu_sam/show_vfu_sam";
         public static final String ADMIN_SHOW_EDIT_STUDENT_MAIN = "logged_in/admin/edit/show_edit_student_main";
+        public static final String ADMIN_SHOW_EDIT_VFU_SAMORDNARE_MAIN = "logged_in/admin/edit/show_edit_VFU_samordnare_main";
         public static final String ADMIN_SEND_EMAILS = "logged_in/admin/send_handledare_reg_mail";
 
         public static final String STUDENT_FIRST = "logged_in/student/first/first";
@@ -117,6 +120,7 @@ public class Path {
         public static final String EMAIL_REG_VFU_SAMORDNARE  = "email/vfu_reg";
         public static final String EMAIL_STUDENT_ADDED  = "email/student_added";
         public static final String EMAIL_STUDENT_MATCHED  = "email/student_matched";
+
 
     }
 
