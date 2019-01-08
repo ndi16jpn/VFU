@@ -31,6 +31,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.sql.ResultSet;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -233,20 +234,20 @@ public class AdminController {
             }
 
             String password = RandomGenerator.generateRandomPassword();
-            MailSender sender = MailSenderProvider.getMailSender();
+            //MailSender sender = MailSenderProvider.getMailSender();
             if(handledareName == null && handledarePhoneNumber == null){
                handledare = new Handledare(handledareEmail, PasswordSecurity.createHash(password.toCharArray()));
-               sender.sendMail(handledareEmail, "Lösenord till Vfusocionm", "Hej " + handledareName + "<br>" + "Ditt lösenord till "
-               + "<a href='vfusocionom.hig.se'>" + "Vfusocionom.hig.se " + "</a>" + "<br>" +"Lösenord: " + password);
+               //sender.sendMail(handledareEmail, "Lösenord till Vfusocionm", "Hej " + handledareName + "<br>" + "Ditt lösenord till "
+               //+ "<a href='vfusocionom.hig.se'>" + "Vfusocionom.hig.se " + "</a>" + "<br>" +"Lösenord: " + password);
             }else if(handledarePhoneNumber == null){
                 handledare = new Handledare(handledareEmail,handledareName,PasswordSecurity.createHash(password.toCharArray()));
-                sender.sendMail(handledareEmail, "Lösenord till Vfusocionm", "Hej " + handledareName + "<br>" + "Ditt lösenord till "
-                        + "<a href='vfusocionom.hig.se'>" + "Vfusocionom.hig.se" + "</a>" + "<br>" +"Lösenord: " + password);
+                //sender.sendMail(handledareEmail, "Lösenord till Vfusocionm", "Hej " + handledareName + "<br>" + "Ditt lösenord till "
+                  //      + "<a href='vfusocionom.hig.se'>" + "Vfusocionom.hig.se" + "</a>" + "<br>" +"Lösenord: " + password);
             }
             else{
                 handledare = new Handledare(handledareName,handledareEmail,handledarePhoneNumber,PasswordSecurity.createHash(password.toCharArray()));
-                sender.sendMail(handledareEmail, "Lösenord till Vfusocionm", "Hej " + handledareName + "<br>" + "Ditt lösenord till "
-                        + "<a href='vfusocionom.hig.se'>" + "Vfusocionom.hig.se " + "</a>" + "<br>" +"Lösenord: " + password);
+                //sender.sendMail(handledareEmail, "Lösenord till Vfusocionm", "Hej " + handledareName + "<br>" + "Ditt lösenord till "
+                  //      + "<a href='vfusocionom.hig.se'>" + "Vfusocionom.hig.se " + "</a>" + "<br>" +"Lösenord: " + password);
             }
 
             db.getInserter().addHandledare(handledare);
@@ -297,10 +298,15 @@ public class AdminController {
     };
 
     public static Route handleSendEmailToHandledarePost = (Request request, Response response) -> {
+        MailSender sender = MailSenderProvider.getMailSender();
+        Database db = DatabaseHandler.getDatabase();
+        List<Handledare> handledare = db.getSelector().getAllHandledare();
+        ResultSet allMail = db.getSelector().getAllHandledareRegistrationMail();
+
         if (isAdmin(request)) {
+        while(allMail.next()){
 
-            String handledareToDelete = getQueryHandledareToDelete(request);
-
+        }
 
             return serveAdminAddPlacePage.handle(request, response);
 

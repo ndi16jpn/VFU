@@ -902,7 +902,7 @@ class SelectDbContent implements DatabaseSelector {
     }
 
     @Override
-    public List<String> getAllHandledareRegistrationMail() throws DatabaseException {
+    public ResultSet getAllHandledareRegistrationMail() throws DatabaseException {
         try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
             String sqlRequest = "Select " + MAIL_HANDLEDARE_REGISTRATION_MAIL_COLUMN_EMAIL
                     + " FROM " + MAIL_HANDLEDARE_REGISTRATION_MAIL_TABLE;
@@ -914,7 +914,7 @@ class SelectDbContent implements DatabaseSelector {
             while (resultSet.next()) {
                 mails.add(resultSet.getString(1));
             }
-            return mails;
+            return resultSet;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DatabaseException("database error", e);
