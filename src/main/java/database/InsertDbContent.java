@@ -473,11 +473,12 @@ class InsertDbContent implements DatabaseInserter {
     public void saveHandledareRegistrationMail(String emailAddress, String smtpMail) throws DatabaseException {
         try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "INSERT INTO " + MAIL_HANDLEDARE_REGISTRATION_MAIL_TABLE + "(" + MAIL_HANDLEDARE_REGISTRATION_MAIL_COLUMN_EMAIL +")"
-                            + " VALUES (?)"
+                    "INSERT INTO " + MAIL_HANDLEDARE_REGISTRATION_MAIL_TABLE + "(" + MAIL_HANDLEDARE_REGISTRATION_MAIL_COLUMN_ID+", "+ MAIL_HANDLEDARE_REGISTRATION_MAIL_COLUMN_EMAIL +")"
+                            + " VALUES (?, ?)"
 
             );
-            preparedStatement.setString(1, smtpMail);
+            preparedStatement.setString(1, emailAddress);
+            preparedStatement.setString(2, smtpMail);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
