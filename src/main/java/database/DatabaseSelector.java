@@ -1,6 +1,7 @@
 package database;
 
 import data.StudentData;
+import javafx.util.Pair;
 import organisations.Municipality;
 import organisations.Place;
 import organisations.Region;
@@ -307,5 +308,5 @@ public interface DatabaseSelector {
      * Get handledare registration mails
      * @throws DatabaseException
      */
-    ResultSet getAllHandledareRegistrationMail() throws DatabaseException;
+    List<Pair<String, String>> getAllHandledareRegistrationMail() throws DatabaseException;
 }

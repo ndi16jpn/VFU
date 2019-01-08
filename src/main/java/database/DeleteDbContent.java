@@ -295,7 +295,7 @@ class DeleteDbContent implements DatabaseDeleter {
                     "DELETE FROM " + HANDLEDARE_TABLE + " WHERE "+ HANDLEDARE_COLUMN_EMAIL +"= ?"
             );
             PreparedStatement preparedStatementHandledareRegistrationEmailTable = connection.prepareStatement(
-                    "DELETE FROM " + MAIL_HANDLEDARE_REGISTRATION_MAIL_COLUMN_EMAIL + " WHERE "+ MAIL_HANDLEDARE_REGISTRATION_MAIL_COLUMN_ID +"= ?"
+                    "DELETE FROM " + MAIL_HANDLEDARE_REGISTRATION_MAIL_TABLE + " WHERE "+ MAIL_HANDLEDARE_REGISTRATION_MAIL_COLUMN_ID +"= ?"
             );
             preparedStatementReferenceTable.setString(1, handledare.getEmail());
             preparedStatementHandledareTable.setString(1, handledare.getEmail());

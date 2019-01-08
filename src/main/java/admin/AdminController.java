@@ -6,6 +6,7 @@ import data.StudentData;
 import database.*;
 import email.MailSender;
 import email.MailSenderProvider;
+import javafx.util.Pair;
 import json.JsonHandler;
 import json.JsonHelper;
 import matching.Match;
@@ -234,20 +235,26 @@ public class AdminController {
             }
 
             String password = RandomGenerator.generateRandomPassword();
-            //MailSender sender = MailSenderProvider.getMailSender();
+            MailSender sender = MailSenderProvider.getMailSender();
             if(handledareName == null && handledarePhoneNumber == null){
                handledare = new Handledare(handledareEmail, PasswordSecurity.createHash(password.toCharArray()));
                //sender.sendMail(handledareEmail, "Lösenord till Vfusocionm", "Hej " + handledareName + "<br>" + "Ditt lösenord till "
                //+ "<a href='vfusocionom.hig.se'>" + "Vfusocionom.hig.se " + "</a>" + "<br>" +"Lösenord: " + password);
+               db.getInserter().saveHandledareRegistrationMail(handledareEmail,"Hej " + handledareName + "<br>" + "Ditt lösenord till "
+                       + "<a href='vfusocionom.hig.se'>" + "Vfusocionom.hig.se " + "</a>" + "<br>" +"Lösenord: " + password );
             }else if(handledarePhoneNumber == null){
                 handledare = new Handledare(handledareEmail,handledareName,PasswordSecurity.createHash(password.toCharArray()));
                 //sender.sendMail(handledareEmail, "Lösenord till Vfusocionm", "Hej " + handledareName + "<br>" + "Ditt lösenord till "
-                  //      + "<a href='vfusocionom.hig.se'>" + "Vfusocionom.hig.se" + "</a>" + "<br>" +"Lösenord: " + password);
+                //        + "<a href='vfusocionom.hig.se'>" + "Vfusocionom.hig.se" + "</a>" + "<br>" +"Lösenord: " + password);
+                db.getInserter().saveHandledareRegistrationMail(handledareEmail,"Hej " + handledareName + "<br>" + "Ditt lösenord till "
+                                + "<a href='vfusocionom.hig.se'>" + "Vfusocionom.hig.se" + "</a>" + "<br>" +"Lösenord: " + password);
             }
             else{
                 handledare = new Handledare(handledareName,handledareEmail,handledarePhoneNumber,PasswordSecurity.createHash(password.toCharArray()));
                 //sender.sendMail(handledareEmail, "Lösenord till Vfusocionm", "Hej " + handledareName + "<br>" + "Ditt lösenord till "
-                  //      + "<a href='vfusocionom.hig.se'>" + "Vfusocionom.hig.se " + "</a>" + "<br>" +"Lösenord: " + password);
+                //        + "<a href='vfusocionom.hig.se'>" + "Vfusocionom.hig.se " + "</a>" + "<br>" +"Lösenord: " + password);
+                db.getInserter().saveHandledareRegistrationMail(handledareEmail, "Hej " + handledareName + "<br>" + "Ditt lösenord till "
+                        + "<a href='vfusocionom.hig.se'>" + "Vfusocionom.hig.se " + "</a>" + "<br>" +"Lösenord: " + password);
             }
 
             db.getInserter().addHandledare(handledare);
@@ -298,16 +305,19 @@ public class AdminController {
     };
 
     public static Route handleSendEmailToHandledarePost = (Request request, Response response) -> {
-        MailSender sender = MailSenderProvider.getMailSender();
-        Database db = DatabaseHandler.getDatabase();
-        List<Handledare> handledare = db.getSelector().getAllHandledare();
-        ResultSet allMail = db.getSelector().getAllHandledareRegistrationMail();
-
         if (isAdmin(request)) {
-        while(allMail.next()){
 
-        }
+            Database db = DatabaseHandler.getDatabase();
 
+            List<Pair<String, String>> mails = db.getSelector().getAllHandledareRegistrationMail();
+
+            MailSender sender = MailSenderProvider.getMailSender();
+
+            for (Pair<String, String> mail: mails) {
+                sender.sendMail(mail.getKey(),"Lösenord till Vfusocionm",mail.getValue());
+            }
+
+            db.getDeleter().deleteAllHandledareRegistrationEmails();
             return serveAdminAddPlacePage.handle(request, response);
 
         } else {
@@ -1101,10 +1111,6 @@ public class AdminController {
             return null;
         }
     };
-
-    public void sendEmailToHandledare(){
-
-    }
 
     private static String getQueryVerifyCsvButtonClicked(Request request) {
         return request.queryParams("button_clicked");

@@ -1,6 +1,7 @@
 package database;
 
 import data.StudentData;
+import javafx.util.Pair;
 import organisations.Municipality;
 import organisations.Place;
 import organisations.Region;
@@ -902,19 +903,19 @@ class SelectDbContent implements DatabaseSelector {
     }
 
     @Override
-    public ResultSet getAllHandledareRegistrationMail() throws DatabaseException {
+    public List<Pair<String, String>> getAllHandledareRegistrationMail() throws DatabaseException {
         try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
-            String sqlRequest = "Select " + MAIL_HANDLEDARE_REGISTRATION_MAIL_COLUMN_EMAIL
-                    + " FROM " + MAIL_HANDLEDARE_REGISTRATION_MAIL_TABLE;
+            String sqlRequest = "Select * FROM " + MAIL_HANDLEDARE_REGISTRATION_MAIL_TABLE;
 
             PreparedStatement statement = connection.prepareStatement(sqlRequest);
             ResultSet resultSet = statement.executeQuery();
-            List<String> mails = new ArrayList<>();
-
+            List<Pair<String, String>> mails = new ArrayList<>();
             while (resultSet.next()) {
-                mails.add(resultSet.getString(1));
+                mails.add(new Pair<String, String>(resultSet.getString(1), resultSet.getString(2)));
             }
-            return resultSet;
+
+
+            return mails;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DatabaseException("database error", e);
