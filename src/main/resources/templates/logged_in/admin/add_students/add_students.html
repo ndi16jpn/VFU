@@ -66,20 +66,10 @@
                 <form action="/admin/add-students/upload-csv/" method="post" enctype="multipart/form-data">
                     <div class="file has-name block">
                         <label class="file-label">
-                            <input id="fileInput" class="file-input" type="file" accept=".csv" name="students_csv">
-                            <span class="file-cta">
-                                <span class="file-icon">
-                                    <i class="fa fa-upload"></i>
-                                </span>
-                                <span class="file-label">
-                                    Välj fil från ladok
-                                </span>
-                            </span>
-                            <span id="fileName" class="file-name">
-                                *.csv
-                            </span>
+                            <input id="fileInput" class="file-label" type="file" accept=".csv" name="students_csv" multiple onchange="showname()">
                         </label>
                     </div>
+                    <br>
                     <button id="submitButton" type="submit" class="button is-primary is-large">Ladda upp</button>
                 </form>
             </div>
@@ -205,6 +195,7 @@
         var fileInput = document.getElementById("fileInput");
         fileInput.addEventListener("change", function() {
             document.getElementById("fileName").innerHTML = fileInput.files.item(0).name;
+            alert('Selected file: ' + name.files.item(0).name);
             document.getElementById("submitButton").disabled = false;
         });
         document.getElementById("submitButton").disabled = true;
@@ -279,6 +270,12 @@
     }
 
     window.addEventListener("DOMContentLoaded", init);
+</script>
+<script th:inline="javascript">
+    function showname () {
+      var name = document.getElementById('fileInput');
+      alert('Vald fil är: ' + name.files.item(0).name);
+    };
 </script>
 </body>
 </html>
