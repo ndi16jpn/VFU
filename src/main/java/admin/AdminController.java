@@ -1109,7 +1109,38 @@ public class AdminController {
         } else {
             response.redirect(Path.Web.LOGIN);
             return null;
+        }
+    };
 
+    public static Route handleEditVFUsamordnareFirstPage = (Request request, Response response)-> {
+        if (isAdmin(request)) {
+            Database db = DatabaseHandler.getDatabase();
+            Map<String, Object> model = new HashMap<>();
+
+            model.put("page_title", "VFU-portal SOCIONOM");
+            model.put("home_link", Path.Web.ADMIN_SHOW_EDIT_VFU_SAMORDNARE_MAIN);
+            model.put(ATTR_ROLE, LoggedInRole.ADMIN.getRoleName());
+            model.put(ATTR_NAME, request.session().attribute(ATTR_NAME));
+            return render(model, Path.Template.ADMIN_SHOW_EDIT_VFU_SAMORDNARE_MAIN);
+        } else {
+            response.redirect(Path.Web.LOGIN);
+            return null;
+        }
+    };
+
+    public static Route handleEditHandledareFirstPage = (Request request, Response response)-> {
+        if (isAdmin(request)) {
+            Database db = DatabaseHandler.getDatabase();
+            Map<String, Object> model = new HashMap<>();
+
+            model.put("page_title", "VFU-portal SOCIONOM");
+            model.put("home_link", Path.Web.ADMIN_SHOW_EDIT_HANDLEDARE_MAIN);
+            model.put(ATTR_ROLE, LoggedInRole.ADMIN.getRoleName());
+            model.put(ATTR_NAME, request.session().attribute(ATTR_NAME));
+            return render(model, Path.Template.ADMIN_SHOW_EDIT_HANDLEDARE_MAIN);
+        } else {
+            response.redirect(Path.Web.LOGIN);
+            return null;
         }
     };
 

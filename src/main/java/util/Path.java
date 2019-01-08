@@ -98,6 +98,7 @@ public class Path {
         public static final String ADMIN_SHOW_VFU_SAM = "logged_in/admin/show_vfu_sam/show_vfu_sam";
         public static final String ADMIN_SHOW_EDIT_STUDENT_MAIN = "logged_in/admin/edit/show_edit_student_main";
         public static final String ADMIN_SHOW_EDIT_VFU_SAMORDNARE_MAIN = "logged_in/admin/edit/show_edit_VFU_samordnare_main";
+        public static final String ADMIN_SHOW_EDIT_HANDLEDARE_MAIN = "logged_in/admin/edit/show_edit_handledare_main";
         public static final String ADMIN_SEND_EMAILS = "logged_in/admin/send_handledare_reg_mail";
 
         public static final String STUDENT_FIRST = "logged_in/student/first/first";
