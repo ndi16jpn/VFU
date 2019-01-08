@@ -172,4 +172,10 @@ public interface DatabaseInserter {
      */
     void saveHandledareRegistrationMail(String emailAddress, String smtpMail) throws DatabaseException;
 
+    /**
+     * Change reserved status for place
+     * @throws DatabaseException
+     */
+    void changeReservedStatusForPlace(int placeId) throws DatabaseException;
+
 }

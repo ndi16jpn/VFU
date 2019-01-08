@@ -64,6 +64,7 @@ public class Main {
         post(Path.Web.ADMIN_HANDLE_ADD_SINGLE_PLACE, AdminController.handleAddSinglePlacePost);
         post(Path.Web.ADMIN_HANDLE_DELETE_SINGLE_PLACE, AdminController.handleDeleteSinglePlacePost);
         post(Path.Web.ADMIN_SEND_EMAILS, AdminController.handleSendEmailToHandledarePost);
+        post(Path.Web.ADMIN_CHANGE_PLACE_RESERVED_STATUS, AdminController.handleChangePlaceReservedStatus);
 
 
         get(Path.Web.ADMIN_SHOW_STUDENTS, AdminController.serveAdminShowStudentsPage);

@@ -152,11 +152,14 @@ class DDL {
     static final String PLACE_COLUMN_STUDENT = "student";
     static final String PLACE_COLUMN_HANDLEDARE = "handledare";
     static final String PLACE_COLUMN_UNIT = "unit";
+    static final String PLACE_COLUMN_RESERVED = "reserved";
     static final String CREATE_TABLE_PLACE = "CREATE TABLE IF NOT EXISTS " + PLACE_TABLE + "("
             + PLACE_COLUMN_ID + " INTEGER PRIMARY KEY NOT NULL,"
             + PLACE_COLUMN_STUDENT + " TEXT REFERENCES student, "
             + PLACE_COLUMN_HANDLEDARE + " TEXT REFERENCES handledare,"
-            + PLACE_COLUMN_UNIT + " TEXT NOT NULL REFERENCES unit);";
+            + PLACE_COLUMN_UNIT + " TEXT NOT NULL REFERENCES unit, "
+            + PLACE_COLUMN_RESERVED + " BOOLEAN DEFAULT FALSE"
+            + ");";
 
     static final String PLACE_HANDLEDARE_TABLE = "place_handledare";
     static final String PLACE_REFERENCE_COLUMN = "place_id";

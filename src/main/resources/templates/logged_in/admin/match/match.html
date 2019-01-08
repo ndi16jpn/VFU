@@ -144,6 +144,7 @@
                     <table id="table" class="table is-bordered is-narrow is-hoverable">
                         <thead>
                         <tr>
+                            <th>Matcha plats</th>
                             <th>Student</th>
                             <th>Enhet</th>
                             <th>Handledare</th>
@@ -151,8 +152,24 @@
                         </thead>
                         <tbody>
                         <tr th:each="place : ${all_places}">
+                            <div class="column is-narrow">
+                                <td>
+                                    <form action="/admin/change-place-reserved-status/" method="post">
+                                        <button name="reserved_status" th:value = "${place.id}" class="icon" th:if="${not place.reserved}">
+                                            <i class="fa fa-lg fa-check-square-o"></i>
+                                        </button>
+                                        <button name="reserved_status" th:value = "${place.id}" class="icon" th:if="${place.reserved}">
+                                            <i class="fa fa-lg fa-square-o"></i>
+                                        </button>
+                                    </form>
+
+                                </td>
+
+                            </div>
                             <td th:if="${place.getStudent} != null">
+
                                 <div class="columns is-mobile">
+
                                     <div class="column">
                                         <span th:text="${place.getStudent.studentData.name}"></span>
                                     </div>
@@ -185,6 +202,7 @@
                         </tbody>
                         <tfoot>
                         <tr>
+                            <th>Matcha plats</th>
                             <th>Student</th>
                             <th>Enhet</th>
                             <th>Handledare</th>

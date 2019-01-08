@@ -101,7 +101,7 @@ public class VfuSamordnareController {
             Unit unit = new Unit(db.getSelector().getMunicipality(unitMunicipality), unitName ,Integer.valueOf(unitNumberOfSlots),unitInfo);
 
             db.getInserter().addUnit(unit);
-            db.getInserter().addPlace(new Place(db.getSelector().getUnit(db.getSelector().getMunicipality(unitMunicipality),unitName)));
+            db.getInserter().addPlace(new Place(db.getSelector().getUnit(db.getSelector().getMunicipality(unitMunicipality),unitName), false));
             return serveVfuSamordnareAddPlacePage.handle(request, response);
         } else {
             response.redirect(Path.Web.LOGIN);
@@ -221,7 +221,7 @@ public class VfuSamordnareController {
             Database db = DatabaseHandler.getDatabase();
             Unit unit = db.getSelector().getUnit(db.getSelector().getMunicipality(unitMunicipality),unitName);
             db.getInserter().addOneNumberOfSlotsUnit(unit);
-            db.getInserter().addSinglePlace(new Place(unit));
+            db.getInserter().addSinglePlace(new Place(unit, false));
             return serveVfuSamordnareAddPlacePage.handle(request,response);
         } else {
             response.redirect(Path.Web.LOGIN);

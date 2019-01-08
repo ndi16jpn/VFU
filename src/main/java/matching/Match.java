@@ -27,7 +27,7 @@ public class Match {
 
         List<Place> unMatchedPlaces = new ArrayList<>();
         for(Place p: placeList){
-            if (p.getStudent()==null){
+            if (p.getStudent()==null && !p.getReserved()){
                 unMatchedPlaces.add(p);
             }
         }
@@ -47,7 +47,7 @@ public class Match {
          List<Student> unMatchedStudentList= new ArrayList<>(studentList);
          for(Place place: placeList){
              for(int i=0;i<unMatchedStudentList.size();i++) {
-                 if (place.getStudent().getEmail().equals(unMatchedStudentList.get(i).getEmail())){
+                 if (!place.getReserved() && place.getStudent().getEmail().equals(unMatchedStudentList.get(i).getEmail())){
                      unMatchedStudentList.remove(i);
                  }
              }
@@ -76,6 +76,9 @@ public class Match {
         List<MatchStudentPlace>matchList = new ArrayList<>();
         List<Place> unmatchedPlaceList = unMatchedPlaces(placeList);
         List<Student> unmatchedStudentList = getUnmatchedStudents(studentList);
+
+
+
         if(unmatchedStudentList.size()>0){
             for(Place place: unmatchedPlaceList){
                 if(place.getStudent()==null) {
