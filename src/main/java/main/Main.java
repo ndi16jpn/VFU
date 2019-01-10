@@ -79,6 +79,7 @@ public class Main {
         get(Path.Web.ADMIN_SHOW_VFU_SAM, AdminController.serveAdminShowVfuSamPage);
         post(Path.Web.ADMIN_DELETE_VFU_SAM, AdminController.handleDeleteVfuSamPost);
         post(Path.Web.ADMIN_DELETE_STUDENT_FROM_PLACE, AdminController.handleDeleteStudentFromPlacePost);
+        post(Path.Web.ADMIN_REMOVE_STUDENT_FROM_PLACE, AdminController.handleRemoveStudentFromPlace);
 
         get(Path.Web.ADMIN_SHOW_EDIT_STUDENT_MAIN, AdminController.handleEditStudentFirstPage);
         get(Path.Web.ADMIN_SHOW_EDIT_HANDLEDARE_MAIN, AdminController.handleEditHandledareFirstPage);

@@ -273,9 +273,8 @@
                                                                 <span>Ta bort Handledare: [[${hand.name}]] </span>
 
                                                                 <span class="icon is-small">
-                                                 <i class="fa fa-times"></i>
-
-                                            </span>
+                                                                    <i class="fa fa-times"></i>
+                                                                </span>
 
                                                             </button>
                                                         </form>
@@ -296,6 +295,17 @@
                                                 <span th:if="${place.student}">Namn: [[${place.student.studentData.name}]]  </span>
                                                 <br>
                                                 <span th:if="${place.student}">Telefonnummer: [[${place.student.studentData.phoneNumber}]] </span>
+                                                <br>
+                                                <form onsubmit="return submitHandForm(this)" class="block" action="/admin/remove-student-from-place/" method="post" th:if="${place.student}">
+                                                    <button style="margin-top:0px;" type="submit" th:if="${place.student}"  th:value="${place.student.email}" class="button is-danger" name="studentToRemove">
+                                                        <span>Ta bort student: [[${place.student.studentData.name}]] </span>
+
+                                                            <span class="icon is-small">
+                                                                <i class="fa fa-times"></i>
+                                                            </span>
+
+                                                    </button>
+                                                </form>
                                                 <h2 class="title">
                                                     Information om plats
                                                 </h2>

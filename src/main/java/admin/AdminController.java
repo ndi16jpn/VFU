@@ -879,6 +879,17 @@ public class AdminController {
             return null;
         }
     };
+    public static Route handleRemoveStudentFromPlace = (Request request, Response response) ->
+    {
+        if(isAdmin(request)) {
+            String student = getStudentToRemoveFromPlace(request);
+            DatabaseHandler.getDatabase().getDeleter().deleteStudentFromPlace(student);
+            return serveAdminAddPlacePage.handle(request, response);
+        } else {
+            response.redirect(Path.Web.LOGIN);
+            return null;
+        }
+    };
 
     private static boolean isAddRegionNonAjax(Request request) {
         Object attrAddRegion = request.attribute(ATTR_ADD_REGION);
@@ -1261,5 +1272,9 @@ public class AdminController {
     private static String getQueryDeleteOption(Request request) {
 
         return request.queryParams("deleteOption");
+    }
+    private static String getStudentToRemoveFromPlace(Request request) {
+        String studentEmail = request.queryParams("studentToRemove");
+        return  studentEmail;
     }
 }
