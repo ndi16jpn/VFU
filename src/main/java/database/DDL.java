@@ -169,18 +169,106 @@ class DDL {
             + HANDLEDARE_REFERENCE_COLUMN + " TEXT NOT NULL REFERENCES " + HANDLEDARE_TABLE + ", "
             + "PRIMARY KEY ("+ PLACE_REFERENCE_COLUMN + "," + HANDLEDARE_REFERENCE_COLUMN + "));";
 
-    static final String TEXT_CONTENT_STUDENT_FIRST_TABLE = "text_content_student_first";
-    static final String TEXT_CONTENT_STUDENT_FIRST_PARAGRAPH_COLUMN = "paragraph";
-    static final String TEXT_CONTENT_STUDENT_FIRST_CONTENT_COLUMN = "content";
-    static final String TEXT_CONTENT_STUDENT_FIRST_CONTENT_P1_DEFAULT = "\"När du fyllt i dina uppgifter och skrivit ett personligt brev, kommer du att kunna göra 5 val till VFU-platser du önskar göra din VFU på. Du börjar med ditt förstahandsval, sedan ditt andrahandsval osv, alltså i den ordning du önskar platserna. Du gör dina val på den studieort du tillhör.\"";
-    static final String TEXT_CONTENT_STUDENT_FIRST_CONTENT_P2_DEFAULT = "\"Observera! Läs noga igenom platsbeskrivningar, om det finns särskilda krav om t ex ålder.\n" +
-            "                    Läs också noga igenom informationen på den här sidan innan du börjar.\"";
-    static final String TEXT_CONTENT_STUDENT_FIRST_CONTENT_P3_DEFAULT = "\"Om flera studenter har gjort samma förstahandsval, fördelar systemet platserna slumpvis. Samma gäller med valen som följer efter.\"";
-    static final String CREATE_TABLE_TEXT_CONTET_STUDENT_FIRST = "CREATE TABLE IF NOT EXISTS " +
-            TEXT_CONTENT_STUDENT_FIRST_TABLE +
-            "(" + TEXT_CONTENT_STUDENT_FIRST_PARAGRAPH_COLUMN + " INTEGER NOT NULL, " +
-            TEXT_CONTENT_STUDENT_FIRST_CONTENT_COLUMN + " TEXT, " +
-            "PRIMARY KEY (" + TEXT_CONTENT_STUDENT_FIRST_PARAGRAPH_COLUMN + "))";
+    static final String TEXT_CONTENT_TABLE = "text_content_in_user_pages";
+    static final String TEXT_CONTENT_COLUMN_USER = "user";
+    static final String TEXT_CONTENT_COLUMN_HTML_CONTENT = "html_content";
+    static final String TEXT_CONTENT_USER_STUDENT_FIRST = "student";
+    static final String TEXT_CONTENT_USER_STUDENT_STATUS = "student_status";
+    static final String TEXT_CONTENT_USER_SAMORDNARE = "samordnare";
+    static final String TEXT_CONTENT_USER_HANDLEDARE = "handledare";
+
+    static final String TEXT_CONTENT_HANDLEDARE_DEFAULT_HTML =
+            "<div class=\"content is-medium\">\n" +
+                    "                <p class=\"has-text-weight-bold\">Kontaktuppgifter: Erika</p>\n" +
+                    "                <div class=\"content is-small\">\n" +
+                    "                    <ul class =\"is-size-5\">\n" +
+                    "                        <li>Namn: Erika Ehn</li>\n" +
+                    "                        <li>Email: erika.ehn@hig.se</li>\n" +
+                    "                        <li>Telefonnummer: 648247</li>\n" +
+                    "                    </ul>\n" +
+                    "                </div>\n" +
+                    "            </div>";
+    static final String TEXT_CONTENT_STUDENT_DEFAULT_HTML =
+            "<h1 class=\"title\">\n" +
+                    "                    Hej blivande socionom!\n" +
+                    "                </h1>\n" +
+                    "                <hr>\n" +
+                    "                <p>\n" +
+                    "\n" +
+                    "\n" +
+                    "                    När du fyllt i dina uppgifter och skrivit ett personligt brev, kommer du att kunna göra 5 val till\n" +
+                    "                    VFU-platser du önskar göra din VFU på. Du börjar med ditt förstahandsval, sedan ditt andrahandsval osv, alltså i den ordning du önskar platserna. Du gör dina val på den studieort du tillhör.\n" +
+                    "                <p class=\"has-text-danger\">\n" +
+                    "                    Observera! Läs noga igenom platsbeskrivningar, om det finns särskilda krav om t ex ålder.\n" +
+                    "                    Läs också noga igenom informationen på den här sidan innan du börjar.\n" +
+                    "                </p>\n" +
+                    "                </p>\n" +
+                    "                <p>\n" +
+                    "                    Om flera studenter har gjort samma förstahandsval, fördelar systemet platserna slumpvis. Samma gäller med valen som följer efter.\n" +
+                    "                </p>\n" +
+                    "                <p>\n" +
+                    "                <p class=\"has-text-danger\">\n" +
+                    "                    Tid när systemet är öppet för studenter att göra sina val är 1-10 mars varje år.\n" +
+                    "                </p>\n" +
+                    "\n" +
+                    "                Alla kommuner erbjuder olika VFU-platser från år till år, och de vet inte alltid exakta verksamheter under fördelningsprocessen. Av den anledningen är platserna oftast beskrivna endast som områden. Som student har du alltså främst möjlighet att välja område/förvaltning.\n" +
+                    "                De lokala VFU-samordnarna på våra studieorter meddelar verksamheter i ett senare skede, eftersom de behöver ta hänsyn till om det finns handledare som kan ta emot, samt hur läget är i de olika verksamheterna aktuellt år.\n" +
+                    "                I ditt personliga brev kan du beskriva om det är någon verksamhet du är särskilt intresserad av, och också om det av någon anledning finns verksamheter du inte kan/vill vara på av personliga skäl.\n" +
+                    "                </p>\n" +
+                    "                <p >\n" +
+                    "                    HiG förbinder sig att erbjuda en (1) praktikplats till varje student. Platserna tilldelas i kommuner med omnejd som ingår i den studieort man tillhör, med pendlingsavstånd. Om en student av särskilda skäl* vill göra VFU på annan ort, tas kontakt med VFU-samordnare på HiG innan 1 mars.\n" +
+                    "                    eraehn@hig.se\n" +
+                    "                </p>\n" +
+                    "\n" +
+                    "\n" +
+                    "                Besked om VFU-plats ges till studenter då fördelningsprocessen är gjord, och varje student får ett mail när det är klart.\n" +
+                    "                <p class=\"has-text-danger\">\n" +
+                    "                    HiG reserverar sig för ev. ändringar av plats om verksamheter meddelar förhinder att ta emot student.\n" +
+                    "                </p>\n" +
+                    "                <p>\n" +
+                    "                    *särskilda skäl kan vara funktionsvariation, sjukdom, familjesituation etc.\n" +
+                    "                </p>\n" +
+                    "                <p>\n" +
+                    "                    Det personliga brevet kan komma att skickas till de lokala VFU-samordnarna och/eller verksamhetschef, om de önskar det, inför sin matchning av platser. Det är olika rutiner inom olika förvaltningar hur de vill göra den interna fördelningen.\n" +
+                    "                </p>\n" +
+                    "\n" +
+                    "                <p class=\"has-text-danger has-text-weight-bold\">\n" +
+                    "                    Om du väljer att gå vidare så godkänner du att följande uppgifter lagras i systemets databas:\n" +
+                    "                <ul>\n" +
+                    "                    <li>Namn</li>\n" +
+                    "                    <li>Student id</li>\n" +
+                    "                    <li>Telefonnummer</li>\n" +
+                    "                    <li>Mailadress</li>\n" +
+                    "                    <li>Födelseår</li>\n" +
+                    "                </ul>\n" +
+                    "                </p>\n" +
+                    "                <p>\n" +
+                    "                    När du fyllt i dina uppgifter och skrivit ett personligt brev, kommer du att kunna göra 5 val till\n" +
+                    "                    VFU-platser du önskar göra din praktik på.\n" +
+                    "                </p>";
+    private static final String TEXT_CONTENT_USER_SAMORDNARE_DEFAULT_HTML =
+            "<p class=\"content is-medium\">\n" +
+                    "            Här uppdateras information om de VFU-platser som kan erbjudas till socionomstudenter deras kommande praktikperiod. Uppgifter och uppdateringar behöver vara inlagda senast 15 mars varje år.\n" +
+                    "            Vid brist på information, räcker det att lägga in uppgifter om områden/verksamheter.\n" +
+                    "            Observera! Om det krävs exempelvis minimiålder för vissa verksamheter, skriv in det.\n" +
+                    "            </p>\n" +
+                    "            <p class=\"content is-medium\">\n" +
+                    "            Senast uppdatering med exakt placering, samt namn på handledare behöver finnas inlagt 15 maj varje år, eftersom studenten får besked om plats senast 1 juni.\n" +
+                    "            <p class=\"content is-medium\">\n" +
+                    "            När studenterna valt sina 5 önskemål slumpas platserna utifrån de valen.\n" +
+                    "            </p>\n" +
+                    "            <p class=\"content is-medium\">\n" +
+                    "                För att se vilken student som har vilken plats när matchningen är gjord så kan du gå till Lägg Till -> Lägg till en plats och på alla enheter så kan du se vilken student som har vilken plats.\n" +
+                    "            </p>\n" +
+                    "            <p class=\"content is-medium\">\n" +
+                    "                Vill du också se kontaktuppgifter till studenten så kan du klicka på platsknappen med den studenten du vill se.\n" +
+                    "            </p>";
+    static final String TEXT_CONTENT_USER_STUDENT_STATUS_DEFAULT_HTML = "";
+    static final String CREATE_TABLE_TEXT_CONTENT_TABLE = "CREATE TABLE IF NOT EXISTS " +
+            TEXT_CONTENT_TABLE +
+            "(" + TEXT_CONTENT_COLUMN_USER + " TEXT NOT NULL, " +
+            TEXT_CONTENT_COLUMN_HTML_CONTENT + " TEXT, " +
+            "PRIMARY KEY (" + TEXT_CONTENT_COLUMN_USER + "))";
     static final String CREATE_TABLE_REGION_MUNI = "CREATE TABLE IF NOT EXISTS " + REGION_MUNI_TABLE
             + " (" + REGION_MUNI_COLUMN_REGION + " TEXT NOT NULL REFERENCES " + REGION_TABLE
             + ", "
@@ -252,24 +340,29 @@ class DDL {
             statement.executeUpdate(CREATE_TABLE_REGION_MUNI);
             statement.executeUpdate(CREATE_TABLE_HANDLEDARE_REGISTRATION_MAIL_TABLE);
 
-            statement.executeUpdate(CREATE_TABLE_TEXT_CONTET_STUDENT_FIRST);
+            statement.executeUpdate(CREATE_TABLE_TEXT_CONTENT_TABLE);
             //tillfällig lösning för att illustrera
 
 
-            if (!statement.executeQuery("SELECT * FROM " + TEXT_CONTENT_STUDENT_FIRST_TABLE
-                    + " WHERE " + TEXT_CONTENT_STUDENT_FIRST_PARAGRAPH_COLUMN + " = 1").next()) {
-               statement.executeUpdate("INSERT INTO " + TEXT_CONTENT_STUDENT_FIRST_TABLE + " VALUES(1, " +
-                       TEXT_CONTENT_STUDENT_FIRST_CONTENT_P1_DEFAULT + ")");
+            if (!statement.executeQuery("SELECT * FROM " + TEXT_CONTENT_TABLE
+                    + " WHERE " + TEXT_CONTENT_COLUMN_USER + " = '" + TEXT_CONTENT_USER_STUDENT_FIRST + "'").next()) {
+               statement.executeUpdate("INSERT INTO " + TEXT_CONTENT_TABLE + " VALUES('student', '" +
+                       TEXT_CONTENT_STUDENT_DEFAULT_HTML + "')");
             }
-            if (!statement.executeQuery("SELECT * FROM " + TEXT_CONTENT_STUDENT_FIRST_TABLE
-                    + " WHERE " + TEXT_CONTENT_STUDENT_FIRST_PARAGRAPH_COLUMN + " = 2").next()) {
-                statement.executeUpdate("INSERT INTO " + TEXT_CONTENT_STUDENT_FIRST_TABLE + " VALUES(2, " +
-                        TEXT_CONTENT_STUDENT_FIRST_CONTENT_P2_DEFAULT + ")");
+            if (!statement.executeQuery("SELECT * FROM " + TEXT_CONTENT_TABLE
+                    + " WHERE " + TEXT_CONTENT_COLUMN_USER + " = '" + TEXT_CONTENT_USER_SAMORDNARE + "'").next()) {
+                statement.executeUpdate("INSERT INTO " + TEXT_CONTENT_TABLE + " VALUES('samordnare', '" +
+                        TEXT_CONTENT_USER_SAMORDNARE_DEFAULT_HTML + "')");
             }
-            if (!statement.executeQuery("SELECT * FROM " + TEXT_CONTENT_STUDENT_FIRST_TABLE
-                    + " WHERE " + TEXT_CONTENT_STUDENT_FIRST_PARAGRAPH_COLUMN + " = 3").next()) {
-                statement.executeUpdate("INSERT INTO " + TEXT_CONTENT_STUDENT_FIRST_TABLE + " VALUES(3, " +
-                        TEXT_CONTENT_STUDENT_FIRST_CONTENT_P3_DEFAULT + ")");
+            if (!statement.executeQuery("SELECT * FROM " + TEXT_CONTENT_TABLE
+                    + " WHERE " + TEXT_CONTENT_COLUMN_USER + " = '"+ TEXT_CONTENT_USER_HANDLEDARE +"'").next()) {
+                statement.executeUpdate("INSERT INTO " + TEXT_CONTENT_TABLE + " VALUES('handledare', '" +
+                        TEXT_CONTENT_HANDLEDARE_DEFAULT_HTML + "')");
+            }
+            if (!statement.executeQuery("SELECT * FROM " + TEXT_CONTENT_TABLE
+                    + " WHERE " + TEXT_CONTENT_COLUMN_USER + " = '"+ TEXT_CONTENT_USER_STUDENT_STATUS +"'").next()) {
+                statement.executeUpdate("INSERT INTO " + TEXT_CONTENT_TABLE + " VALUES('student_status', '" +
+                        TEXT_CONTENT_USER_STUDENT_STATUS_DEFAULT_HTML + "')");
             }
 
 

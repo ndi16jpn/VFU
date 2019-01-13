@@ -50,9 +50,16 @@ public class Path {
         public static final String ADMIN_REMOVE_STUDENT_FROM_PLACE = "/admin/remove-student-from-place/";
 
         public static final String ADMIN_SHOW_EDIT_STUDENT_MAIN = "/admin/edit/show_edit_student_main/";
+        public static final String ADMIN_SHOW_EDIT_STUDENT_STATUS = "/admin/edit/show_edit_student_status/";
         public static final String ADMIN_SHOW_EDIT_HANDLEDARE_MAIN = "/admin/edit/show_edit_handledare_main/";
         public static final String ADMIN_SHOW_EDIT_VFU_SAMORDNARE_MAIN = "/admin/edit/show_edit_VFU_samordnare_main/";
         public static final String ADMIN_EDIT_STUDENT_FIRST_TEXT = "/admin/edit-studentFirstText/";
+        public static final String ADMIN_EDIT_STUDENT_FIRST_HTML = "/admin/edit-student-first-HTML/";
+        public static final String ADMIN_EDIT_STUDENT_STATUS_HTML = "/admin/edit-student-status-HTML/";
+        public static final String ADMIN_EDIT_SAMORDNARE_HTML = "/admin/edit-samordnare-HTML/";
+        public static final String ADMIN_EDIT_HANDLEDARE_HTML = "/admin/edit-handledare-first-HTML/";
+        public static final String ADMIN_UPLOAD_HANDLEDARE_FILE = "/admin/edit-handledare/upload-handledare-file/";
+
 
         public static final String STUDENT_HOME = "/student/";
         public static final String STUDENT_CONFIRM_LETTER = "/logged_in/student/confirm_letter/";
@@ -100,6 +107,7 @@ public class Path {
         public static final String ADMIN_SHOW_EDIT_STUDENT_MAIN = "logged_in/admin/edit/show_edit_student_main";
         public static final String ADMIN_SHOW_EDIT_VFU_SAMORDNARE_MAIN = "logged_in/admin/edit/show_edit_VFU_samordnare_main";
         public static final String ADMIN_SHOW_EDIT_HANDLEDARE_MAIN = "logged_in/admin/edit/show_edit_handledare_main";
+        public static final String ADMIN_SHOW_EDIT_STUDENT_STATUS = "logged_in/admin/edit/show_edit_student_status_page";
         public static final String ADMIN_SEND_EMAILS = "logged_in/admin/send_handledare_reg_mail";
 
         public static final String STUDENT_FIRST = "logged_in/student/first/first";
@@ -125,6 +133,9 @@ public class Path {
         public static final String EMAIL_STUDENT_MATCHED  = "email/student_matched";
 
 
+    }
+    public static class Directories {
+        public static final String FILE_DIRECTORY = "files";
     }
 
 }

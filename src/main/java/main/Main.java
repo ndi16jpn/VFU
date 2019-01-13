@@ -65,6 +65,7 @@ public class Main {
         post(Path.Web.ADMIN_HANDLE_DELETE_SINGLE_PLACE, AdminController.handleDeleteSinglePlacePost);
         post(Path.Web.ADMIN_SEND_EMAILS, AdminController.handleSendEmailToHandledarePost);
         post(Path.Web.ADMIN_CHANGE_PLACE_RESERVED_STATUS, AdminController.handleChangePlaceReservedStatus);
+        post(Path.Web.ADMIN_UPLOAD_HANDLEDARE_FILE, AdminController.handleUploadHandledareFilePost);
 
 
         get(Path.Web.ADMIN_SHOW_STUDENTS, AdminController.serveAdminShowStudentsPage);
@@ -80,10 +81,15 @@ public class Main {
         post(Path.Web.ADMIN_DELETE_VFU_SAM, AdminController.handleDeleteVfuSamPost);
         post(Path.Web.ADMIN_DELETE_STUDENT_FROM_PLACE, AdminController.handleDeleteStudentFromPlacePost);
         post(Path.Web.ADMIN_REMOVE_STUDENT_FROM_PLACE, AdminController.handleRemoveStudentFromPlace);
+        post(Path.Web.ADMIN_EDIT_STUDENT_FIRST_HTML, AdminController.handleEditStudentFirstPage);
+        post(Path.Web.ADMIN_EDIT_STUDENT_STATUS_HTML, AdminController.handleEditStudentStatusPage);
+        post(Path.Web.ADMIN_EDIT_HANDLEDARE_HTML, AdminController.handleEditHandledarePage);
+        post(Path.Web.ADMIN_EDIT_SAMORDNARE_HTML, AdminController.handleEditSamordnarePage);
 
-        get(Path.Web.ADMIN_SHOW_EDIT_STUDENT_MAIN, AdminController.handleEditStudentFirstPage);
-        get(Path.Web.ADMIN_SHOW_EDIT_HANDLEDARE_MAIN, AdminController.handleEditHandledareFirstPage);
-        get(Path.Web.ADMIN_SHOW_EDIT_VFU_SAMORDNARE_MAIN, AdminController.handleEditVFUsamordnareFirstPage);
+        get(Path.Web.ADMIN_SHOW_EDIT_STUDENT_MAIN, AdminController.serveAdminEditStudentFirstPage);
+        get(Path.Web.ADMIN_SHOW_EDIT_HANDLEDARE_MAIN, AdminController.serveEditHandledareFirstPage);
+        get(Path.Web.ADMIN_SHOW_EDIT_VFU_SAMORDNARE_MAIN, AdminController.serveEditVFUsamordnareFirstPage);
+        get(Path.Web.ADMIN_SHOW_EDIT_STUDENT_STATUS, AdminController.serveAdminEditStudentStatusPage);
 
         get(Path.Web.STUDENT_HOME, StudentController.serveStudentHomePage);
         post(Path.Web.STUDENT_APPLY_FIRST, StudentController.handleApplyFirst);

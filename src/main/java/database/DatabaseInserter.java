@@ -178,4 +178,32 @@ public interface DatabaseInserter {
      */
     void changeReservedStatusForPlace(int placeId) throws DatabaseException;
 
+    /**
+     * @param htmlContent
+     * Edit Student first page
+     * @throws DatabaseException
+     */
+    void setStudentFirstPageHtml(String htmlContent) throws DatabaseException;
+
+    /**
+     * @param htmlContent
+     * Edit Student status page
+     * @throws DatabaseException
+     */
+    void setStudentStatusPageHtml(String htmlContent) throws DatabaseException;
+
+    /**
+     * @param htmlContent
+     * Edit handledare first page
+     * @throws DatabaseException
+     */
+    void setHandledarePageHtml(String htmlContent) throws DatabaseException;
+
+    /**
+     * @param htmlContent
+     * Edit samordnare first page
+     * @throws DatabaseException
+     */
+    void setSamordnarePageHtml(String htmlContent) throws DatabaseException;
+
 }

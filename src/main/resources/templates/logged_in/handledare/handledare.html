@@ -28,17 +28,8 @@
                     </ul>
                 </div>
             </div>
-            <div class="content is-medium ">
-                <p class="has-text-weight-bold">Kontaktuppgifter: Erika</p>
-                <div class="content is-small">
-                    <ul class ="is-size-5">
-                        <li>Namn: Erika Ehn</li>
-                        <li>Email: erika.ehn@hig.se</li>
-                        <li>Telefonnummer: 648247</li>
+            <div th:id="dynamic_html">
 
-
-                    </ul>
-                </div>
             </div>
         </div>
     </section>
@@ -57,6 +48,10 @@
 </main>
 
 <footer th:replace="common_fragments/footer :: footer"></footer>
+<script th:inline="javascript">
+    document.getElementById("dynamic_html").innerHTML = [[${html_content}]];
+
+</script>
 
 </body>
 </html>

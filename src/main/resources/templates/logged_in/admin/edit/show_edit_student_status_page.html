@@ -7,14 +7,16 @@
 </head>
 <body>
 
-<nav th:replace="logged_in/student/fragments/navbar :: nav"></nav>
+<nav th:replace="logged_in/admin/fragments/navbar :: nav"></nav>
 
 <main>
     <section class="section">
         <div class="container">
-            <div th:id="dynamic_html">
+            <form action="/admin/edit-student-status-HTML/" method="post">
+                <textarea onkeyup="adjustHeight(this)" class="textarea is-medium" th:text="${html_content}" th:id="textArea" name="htmlContent"></textarea>
 
-            </div>
+                <button th:id="submitTextButton" type="submit">Klar</button>
+            </form>
             <h1 class="title">
                 Matchning status
             </h1>
@@ -95,9 +97,6 @@
 </main>
 
 <footer th:replace="common_fragments/footer :: footer"></footer>
-<script th:inline="javascript">
-    document.getElementById("dynamic_html").innerHTML = [[${html_content}]];
 
-</script>
 </body>
 </html>

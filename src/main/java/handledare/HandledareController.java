@@ -1,5 +1,6 @@
 package handledare;
 
+import database.Database;
 import database.DatabaseHandler;
 import organisations.Place;
 import roles.LoggedInRole;
@@ -24,6 +25,7 @@ public class HandledareController {
             model.put("page_title", "VFU-portal SOCIONOM");
             model.put("text_title", "Välkommen handledare");
             Place place = DatabaseHandler.getDatabase().getSelector().getPlaceViaHandledare(request.session().attribute(ATTR_NAME));
+            model.put("html_content", DatabaseHandler.getDatabase().getSelector().getHandledarePageHtml());
 
                 if (place.getStudent() == null){
                 model.put("contact_student_name", "Ingen tilldelad student");
