@@ -38,6 +38,7 @@ public class VfuSamordnareController {
             model.put("home_link", Path.Web.VFU_SAMORDNARE_HOME);
             model.put(ATTR_ROLE, LoggedInRole.VFU_SAMORDNARE.getRoleName());
             model.put(ATTR_NAME, request.session().attribute(ATTR_NAME));
+            model.put("html_content", DatabaseHandler.getDatabase().getSelector().getVFUSamordePageHTML());
             return render(model, Path.Template.VFU_SAMORDNARE_HOME);
         } else {
             response.redirect(Path.Web.LOGIN);

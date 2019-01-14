@@ -496,7 +496,70 @@ class InsertDbContent implements DatabaseInserter {
             );
             preparedStatement.setInt(1, placeId);
             preparedStatement.executeUpdate();
-            int a = 2;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseException("database error", e);
+        }
+    }
+
+    @Override
+    public void setStudentFirstPageHtml(String htmlContent) throws DatabaseException {
+        try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "UPDATE " + TEXT_CONTENT_TABLE + " SET " + TEXT_CONTENT_COLUMN_HTML_CONTENT + " =?"
+                            + " WHERE " + TEXT_CONTENT_COLUMN_USER + " = '" + TEXT_CONTENT_USER_STUDENT_FIRST + "'"
+
+            );
+            preparedStatement.setString(1,htmlContent);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseException("database error", e);
+        }
+    }
+
+    @Override
+    public void setStudentStatusPageHtml(String htmlContent) throws DatabaseException {
+        try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "UPDATE " + TEXT_CONTENT_TABLE + " SET " + TEXT_CONTENT_COLUMN_HTML_CONTENT + " =?"
+                            + " WHERE " + TEXT_CONTENT_COLUMN_USER + " = '" + TEXT_CONTENT_USER_STUDENT_STATUS + "'"
+
+            );
+            preparedStatement.setString(1,htmlContent);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseException("database error", e);
+        }
+    }
+
+    @Override
+    public void setHandledarePageHtml(String htmlContent) throws DatabaseException {
+        try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "UPDATE " + TEXT_CONTENT_TABLE + " SET " + TEXT_CONTENT_COLUMN_HTML_CONTENT + " =?"
+                            + " WHERE " + TEXT_CONTENT_COLUMN_USER + " = '" + TEXT_CONTENT_USER_HANDLEDARE + "'"
+
+            );
+            preparedStatement.setString(1,htmlContent);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseException("database error", e);
+        }
+    }
+
+    @Override
+    public void setSamordnarePageHtml(String htmlContent) throws DatabaseException {
+        try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "UPDATE " + TEXT_CONTENT_TABLE + " SET " + TEXT_CONTENT_COLUMN_HTML_CONTENT + " =?"
+                            + " WHERE " + TEXT_CONTENT_COLUMN_USER + " = '" + TEXT_CONTENT_USER_SAMORDNARE + "'"
+
+            );
+            preparedStatement.setString(1,htmlContent);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DatabaseException("database error", e);

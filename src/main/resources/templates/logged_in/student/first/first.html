@@ -12,64 +12,14 @@
 <main>
     <section class="section">
         <div class="container">
-            <h1 class="title">
-                Hej blivande socionom!
-            </h1>
-            <hr>
+
+
             <div class="content is-medium">
-                <p>
 
+                <div th:id="dynamic_html">
 
-                    När du fyllt i dina uppgifter och skrivit ett personligt brev, kommer du att kunna göra 5 val till
-                    VFU-platser du önskar göra din VFU på. Du börjar med ditt förstahandsval, sedan ditt andrahandsval osv, alltså i den ordning du önskar platserna. Du gör dina val på den studieort du tillhör.
-                <p class="has-text-danger">
-                    Observera! Läs noga igenom platsbeskrivningar, om det finns särskilda krav om t ex ålder.
-                    Läs också noga igenom informationen på den här sidan innan du börjar.
-                </p>
-                </p>
-                <p>
-                    Om flera studenter har gjort samma förstahandsval, fördelar systemet platserna slumpvis. Samma gäller med valen som följer efter.
-                </p>
-                <p>
-                <p class="has-text-danger">
-                    Tid när systemet är öppet för studenter att göra sina val är 1-10 mars varje år.
-                </p>
+                </div>
 
-                Alla kommuner erbjuder olika VFU-platser från år till år, och de vet inte alltid exakta verksamheter under fördelningsprocessen. Av den anledningen är platserna oftast beskrivna endast som områden. Som student har du alltså främst möjlighet att välja område/förvaltning.
-                De lokala VFU-samordnarna på våra studieorter meddelar verksamheter i ett senare skede, eftersom de behöver ta hänsyn till om det finns handledare som kan ta emot, samt hur läget är i de olika verksamheterna aktuellt år.
-                I ditt personliga brev kan du beskriva om det är någon verksamhet du är särskilt intresserad av, och också om det av någon anledning finns verksamheter du inte kan/vill vara på av personliga skäl.
-                </p>
-                <p >
-                    HiG förbinder sig att erbjuda en (1) praktikplats till varje student. Platserna tilldelas i kommuner med omnejd som ingår i den studieort man tillhör, med pendlingsavstånd. Om en student av särskilda skäl* vill göra VFU på annan ort, tas kontakt med VFU-samordnare på HiG innan 1 mars.
-                    eraehn@hig.se
-                </p>
-
-
-                Besked om VFU-plats ges till studenter då fördelningsprocessen är gjord, och varje student får ett mail när det är klart.
-                <p class="has-text-danger">
-                    HiG reserverar sig för ev. ändringar av plats om verksamheter meddelar förhinder att ta emot student.
-                </p>
-                <p>
-                    *särskilda skäl kan vara funktionsvariation, sjukdom, familjesituation etc.
-                </p>
-                <p>
-                    Det personliga brevet kan komma att skickas till de lokala VFU-samordnarna och/eller verksamhetschef, om de önskar det, inför sin matchning av platser. Det är olika rutiner inom olika förvaltningar hur de vill göra den interna fördelningen.
-                </p>
-
-                <p class="has-text-danger has-text-weight-bold">
-                    Om du väljer att gå vidare så godkänner du att följande uppgifter lagras i systemets databas:
-                <ul>
-                    <li>Namn</li>
-                    <li>Student id</li>
-                    <li>Telefonnummer</li>
-                    <li>Mailadress</li>
-                    <li>Födelseår</li>
-                </ul>
-                </p>
-                <p>
-                    När du fyllt i dina uppgifter och skrivit ett personligt brev, kommer du att kunna göra 5 val till
-                    VFU-platser du önskar göra din praktik på.
-                </p>
                 <br>
                 <div class="field">
                     <label class="label">Namn</label>
@@ -143,6 +93,10 @@
 <footer th:replace="common_fragments/footer :: footer"></footer>
 
 <script th:src="'/js/vue.min.js'" src="../../../../public/js/vue.js"></script>
+<script th:inline="javascript">
+    document.getElementById("dynamic_html").innerHTML = [[${html_content}]];
+
+</script>
 <script>
 function submitForm() {
     return confirm('Är du säker på att du är färdig med ditt personliga brev?

@@ -6,8 +6,14 @@
     <link rel="stylesheet" href="../../../public/css/bulma_custom.min.css"/>
 </head>
 <body>
-
-<nav th:replace="logged_in/handledare/fragments/navbar :: nav"></nav>
+<style>
+    textarea {
+        min-height: 60px;
+        overflow-y: auto;
+        word-wrap:break-word
+    }
+</style>
+<nav th:replace="logged_in/admin/fragments/navbar :: nav"></nav>
 
 <main>
     <section class="section">
@@ -28,18 +34,11 @@
                     </ul>
                 </div>
             </div>
-            <div class="content is-medium ">
-                <p class="has-text-weight-bold">Kontaktuppgifter: Erika</p>
-                <div class="content is-small">
-                    <ul class ="is-size-5">
-                        <li>Namn: Erika Ehn</li>
-                        <li>Email: erika.ehn@hig.se</li>
-                        <li>Telefonnummer: 648247</li>
+            <form action="/admin/edit-handledare-first-HTML/" method="post">
+                <textarea onkeyup="adjustHeight(this)" class="textarea is-medium" th:text="${html_content}" th:id="textArea" name="htmlContent"></textarea>
 
-
-                    </ul>
-                </div>
-            </div>
+                <button th:id="submitTextButton" type="submit">Klar</button>
+            </form>
         </div>
     </section>
     <section class="section">
@@ -50,6 +49,15 @@
             <hr>
             <div class="content is-medium">
                 Här kan du se filer som Erika lägger upp.<br>
+                <form action="/admin/edit-handledare/upload-handledare-file/" method="post" enctype="multipart/form-data">
+                    <div class="file has-name block">
+                        <label class="file-label">
+                            <input id="fileInput" class="file-label" type="file" name="handledare_file" multiple onchange="showname()">
+                        </label>
+                    </div>
+                    <br>
+                    <button id="submitButton" type="submit" class="button is-primary is-large">Ladda upp</button>
+                </form>
                 TODO: Se upplagda filer från Erika
             </div>
         </div>
@@ -57,6 +65,33 @@
 </main>
 
 <footer th:replace="common_fragments/footer :: footer"></footer>
+
+<script th:inline="javascript">
+    function showname () {
+      var name = document.getElementById('fileInput');
+      alert('Vald fil är: ' + name.files.item(0).name);
+    };
+</script>
+<script>
+
+    var fileInput = document.getElementById("fileInput");
+        fileInput.addEventListener("change", function() {
+            document.getElementById("fileName").innerHTML = fileInput.files.item(0).name;
+            alert('Selected file: ' + name.files.item(0).name);
+            document.getElementById("submitButton").disabled = false;
+        });
+</script>
+<script>
+    function adjustHeight(el){
+        el.style.height = (el.scrollHeight > el.clientHeight) ? (el.scrollHeight)+"px" : "60px";
+    }
+
+</script>
+
+<script>
+    var textarea = document.getElementById("textArea");
+    adjustHeight(textarea);
+</script>
 
 </body>
 </html>

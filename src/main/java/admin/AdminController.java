@@ -28,9 +28,9 @@ import util.Path;
 import util.ViewUtil;
 
 import javax.servlet.MultipartConfigElement;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.Part;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -160,6 +160,45 @@ public class AdminController {
         }
     };
 
+    public static Route handleUploadHandledareFilePost = (Request request, Response response) -> {
+        if (isAdmin(request)) {
+            request.attribute("org.eclipse.jetty.multipartConfig",
+                    new MultipartConfigElement(System.getProperty("java.io.tmpdir")));
+
+            try {
+                Part part = request.raw().getPart("handledare_file");
+                part.getInputStream();
+                String filename = extractFileName(part);
+                String uploadPath = new File(".").getCanonicalPath() + File.separator + Path.Directories.FILE_DIRECTORY;
+                File fileUploadDirectory = new File(uploadPath);
+                if (!fileUploadDirectory.exists()) {
+                    fileUploadDirectory.mkdirs();
+                }
+                FileOutputStream outputStream = new FileOutputStream(uploadPath + File.separator + filename);
+
+                InputStream filecontent = part.getInputStream();
+
+                int read = 0;
+                final byte[] bytes = new byte[1024];
+
+                while ((read = filecontent.read(bytes)) != -1) {
+                    outputStream.write(bytes, 0, read);
+                }
+                outputStream.close();
+                filecontent.close();
+                part.write(uploadPath + File.separator + filename);
+
+            } catch (Exception e) {
+
+            }
+
+
+            return "";
+        } else {
+            response.redirect(Path.Web.LOGIN);
+            return null;
+        }
+    };
     public static Route handleAdminDeleteUnitPost = (Request request, Response response) -> {
         if (isAdmin(request)) {
             Map<String, Object> model = new HashMap<>();
@@ -879,6 +918,17 @@ public class AdminController {
             return null;
         }
     };
+    public static Route handleRemoveStudentFromPlace = (Request request, Response response) ->
+    {
+        if(isAdmin(request)) {
+            String student = getStudentToRemoveFromPlace(request);
+            DatabaseHandler.getDatabase().getDeleter().deleteStudentFromPlace(student);
+            return serveAdminAddPlacePage.handle(request, response);
+        } else {
+            response.redirect(Path.Web.LOGIN);
+            return null;
+        }
+    };
 
     private static boolean isAddRegionNonAjax(Request request) {
         Object attrAddRegion = request.attribute(ATTR_ADD_REGION);
@@ -1092,15 +1142,12 @@ public class AdminController {
         }
     };
 
-    public static Route handleEditStudentFirstPage = (Request request, Response response)-> {
+    public static Route serveAdminEditStudentFirstPage = (Request request, Response response)-> {
         if (isAdmin(request)) {
             Database db = DatabaseHandler.getDatabase();
             Map<String, Object> model = new HashMap<>();
 
-            model.put("paragraph_1",db.getSelector().getStudentFirstParagraph(1));
-            model.put("paragraph_2",db.getSelector().getStudentFirstParagraph(2));
-            model.put("paragraph_3",db.getSelector().getStudentFirstParagraph(3));
-
+            model.put("html_content", db.getSelector().getStudentFirstPageHtml());
             model.put("page_title", "VFU-portal SOCIONOM");
             model.put("home_link", Path.Web.ADMIN_SHOW_EDIT_STUDENT_MAIN);
             model.put(ATTR_ROLE, LoggedInRole.ADMIN.getRoleName());
@@ -1112,11 +1159,28 @@ public class AdminController {
         }
     };
 
-    public static Route handleEditVFUsamordnareFirstPage = (Request request, Response response)-> {
+    public static Route serveAdminEditStudentStatusPage = (Request request, Response response)-> {
         if (isAdmin(request)) {
             Database db = DatabaseHandler.getDatabase();
             Map<String, Object> model = new HashMap<>();
 
+            model.put("html_content", db.getSelector().getStudentStatusPageHtml());
+            model.put("page_title", "VFU-portal SOCIONOM");
+            model.put("home_link", Path.Web.ADMIN_SHOW_EDIT_STUDENT_STATUS);
+            model.put(ATTR_ROLE, LoggedInRole.ADMIN.getRoleName());
+            model.put(ATTR_NAME, request.session().attribute(ATTR_NAME));
+            return render(model, Path.Template.ADMIN_SHOW_EDIT_STUDENT_STATUS);
+        } else {
+            response.redirect(Path.Web.LOGIN);
+            return null;
+        }
+    };
+
+    public static Route serveEditVFUsamordnareFirstPage = (Request request, Response response)-> {
+        if (isAdmin(request)) {
+            Database db = DatabaseHandler.getDatabase();
+            Map<String, Object> model = new HashMap<>();
+            model.put("html_content", db.getSelector().getVFUSamordePageHTML());
             model.put("page_title", "VFU-portal SOCIONOM");
             model.put("home_link", Path.Web.ADMIN_SHOW_EDIT_VFU_SAMORDNARE_MAIN);
             model.put(ATTR_ROLE, LoggedInRole.ADMIN.getRoleName());
@@ -1128,11 +1192,12 @@ public class AdminController {
         }
     };
 
-    public static Route handleEditHandledareFirstPage = (Request request, Response response)-> {
+    public static Route serveEditHandledareFirstPage = (Request request, Response response)-> {
         if (isAdmin(request)) {
             Database db = DatabaseHandler.getDatabase();
             Map<String, Object> model = new HashMap<>();
 
+            model.put("html_content", db.getSelector().getHandledarePageHtml());
             model.put("page_title", "VFU-portal SOCIONOM");
             model.put("home_link", Path.Web.ADMIN_SHOW_EDIT_HANDLEDARE_MAIN);
             model.put(ATTR_ROLE, LoggedInRole.ADMIN.getRoleName());
@@ -1157,6 +1222,50 @@ public class AdminController {
         }
     };
 
+    public static Route handleEditStudentFirstPage= (Request request, Response response)-> {
+        if (isAdmin(request)) {
+            Database db = DatabaseHandler.getDatabase();
+            db.getInserter().setStudentFirstPageHtml(getQueryHtmlFromTextArea(request));
+            return serveAdminEditStudentFirstPage.handle(request,response);
+        } else {
+            response.redirect(Path.Web.LOGIN);
+            return null;
+        }
+    };
+    public static Route handleEditStudentStatusPage = (Request request, Response response)-> {
+        if (isAdmin(request)) {
+            Database db = DatabaseHandler.getDatabase();
+            db.getInserter().setStudentStatusPageHtml(getQueryHtmlFromTextArea(request));
+            return serveAdminEditStudentStatusPage.handle(request,response);
+        } else {
+            response.redirect(Path.Web.LOGIN);
+            return null;
+        }
+    };
+    public static Route handleEditHandledarePage= (Request request, Response response)-> {
+        if (isAdmin(request)) {
+            Database db = DatabaseHandler.getDatabase();
+            String a = getQueryHtmlFromTextArea(request);
+            db.getInserter().setHandledarePageHtml(getQueryHtmlFromTextArea(request));
+            return serveEditHandledareFirstPage.handle(request, response);
+        } else {
+            response.redirect(Path.Web.LOGIN);
+            return null;
+        }
+    };
+    public static Route handleEditSamordnarePage= (Request request, Response response)-> {
+        if (isAdmin(request)) {
+            Database db = DatabaseHandler.getDatabase();
+            db.getInserter().setSamordnarePageHtml(getQueryHtmlFromTextArea(request));
+            return serveEditVFUsamordnareFirstPage.handle(request, response);
+        } else {
+            response.redirect(Path.Web.LOGIN);
+            return null;
+        }
+    };
+    private static String getQueryHtmlFromTextArea(Request request) {
+        return request.queryParams("htmlContent");
+    }
     private static String getQueryVerifyCsvButtonClicked(Request request) {
         return request.queryParams("button_clicked");
     }
@@ -1262,4 +1371,22 @@ public class AdminController {
 
         return request.queryParams("deleteOption");
     }
+    private static String getStudentToRemoveFromPlace(Request request) {
+        String studentEmail = request.queryParams("studentToRemove");
+        return  studentEmail;
+    }
+    /***** Helper Method #1 - This Method Is Used To Read The File Names
+     * From javacodegeeks.com*****/
+    private static String extractFileName(Part part) {
+        String fileName = "",
+        contentDisposition = part.getHeader("content-disposition");
+        String[] items = contentDisposition.split(";");
+        for (String item : items) {
+            if (item.trim().startsWith("filename")) {
+                fileName = item.substring(item.indexOf("=") + 2, item.length() - 1);
+            }
+        }
+        return fileName;
+    }
+
 }

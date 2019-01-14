@@ -887,9 +887,9 @@ class SelectDbContent implements DatabaseSelector {
     @Override
     public String getStudentFirstParagraph(int paragraphNr) throws DatabaseException {
         try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
-            String sqlRequest = "Select " + TEXT_CONTENT_STUDENT_FIRST_CONTENT_COLUMN
-                    + " FROM " + TEXT_CONTENT_STUDENT_FIRST_TABLE
-                    + " WHERE " + TEXT_CONTENT_STUDENT_FIRST_PARAGRAPH_COLUMN
+            String sqlRequest = "Select " + TEXT_CONTENT_COLUMN_USER
+                    + " FROM " + TEXT_CONTENT_TABLE
+                    + " WHERE " + TEXT_CONTENT_COLUMN_HTML_CONTENT
                     + " = ?";
             PreparedStatement statement = connection.prepareStatement(sqlRequest);
             statement.setInt(1, paragraphNr);
@@ -919,6 +919,82 @@ class SelectDbContent implements DatabaseSelector {
 
 
             return mails;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseException("database error", e);
+        }
+    }
+
+    @Override
+    public String getStudentFirstPageHtml() throws DatabaseException {
+        try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
+            String sqlRequest = "Select " + TEXT_CONTENT_COLUMN_HTML_CONTENT
+                    + " FROM " + TEXT_CONTENT_TABLE + " WHERE " + TEXT_CONTENT_COLUMN_USER + " = '" + TEXT_CONTENT_USER_STUDENT_FIRST + "'";
+
+            PreparedStatement statement = connection.prepareStatement(sqlRequest);
+            ResultSet resultSet = statement.executeQuery();
+            String html = "";
+            while (resultSet.next()) {
+                html = resultSet.getString(TEXT_CONTENT_COLUMN_HTML_CONTENT);
+            }
+            return html;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseException("database error", e);
+        }
+    }
+
+    @Override
+    public String getStudentStatusPageHtml() throws DatabaseException {
+        try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
+            String sqlRequest = "Select " + TEXT_CONTENT_COLUMN_HTML_CONTENT
+                    + " FROM " + TEXT_CONTENT_TABLE + " WHERE " + TEXT_CONTENT_COLUMN_USER + " = '" + TEXT_CONTENT_USER_STUDENT_STATUS + "'";
+
+            PreparedStatement statement = connection.prepareStatement(sqlRequest);
+            ResultSet resultSet = statement.executeQuery();
+            String html = "";
+            while (resultSet.next()) {
+                html = resultSet.getString(TEXT_CONTENT_COLUMN_HTML_CONTENT);
+            }
+            return html;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseException("database error", e);
+        }
+    }
+
+    @Override
+    public String getHandledarePageHtml() throws DatabaseException {
+        try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
+            String sqlRequest = "Select " + TEXT_CONTENT_COLUMN_HTML_CONTENT
+                    + " FROM " + TEXT_CONTENT_TABLE  + " WHERE " + TEXT_CONTENT_COLUMN_USER + " = '" + TEXT_CONTENT_USER_HANDLEDARE + "'";
+
+            PreparedStatement statement = connection.prepareStatement(sqlRequest);
+            ResultSet resultSet = statement.executeQuery();
+            String html = "";
+            while (resultSet.next()) {
+                html = resultSet.getString(TEXT_CONTENT_COLUMN_HTML_CONTENT);
+            }
+            return html;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseException("database error", e);
+        }
+    }
+
+    @Override
+    public String getVFUSamordePageHTML() throws DatabaseException {
+        try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
+            String sqlRequest = "Select " + TEXT_CONTENT_COLUMN_HTML_CONTENT
+                    + " FROM " + TEXT_CONTENT_TABLE + " WHERE " + TEXT_CONTENT_COLUMN_USER + " = '" + TEXT_CONTENT_USER_SAMORDNARE + "'";
+
+            PreparedStatement statement = connection.prepareStatement(sqlRequest);
+            ResultSet resultSet = statement.executeQuery();
+            String html = null;
+            while (resultSet.next()) {
+                html = resultSet.getString(TEXT_CONTENT_COLUMN_HTML_CONTENT);
+            }
+            return html;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DatabaseException("database error", e);

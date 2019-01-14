@@ -260,7 +260,7 @@
                                                         <form class="block" action="/admin/update-phonenumber/" method="post" th:if="${place.handledare}">
                                                             <span  th:if="${place.handledare}">Telefonnummer:</span><input th:id="'phoneInput' + ${place.id}" th:if="${place.handledare}" name="phonenumberToUpdate" th:value="${hand.phoneNumber}" style="border-style: 7px solid red"> </input>
                                                             <span class="field" style="margin-bottom: 5px; border-style: 7px solid blue" >
-                                                            <button type="submit" class="is-small" name="handledareToUpdate" th:value="${hand.email}" >
+                                                            <button type="submit" class="is-small" name="handledareToUpdate" th:value="${hand.email}">
                                                                 <span class="icon is-small" style="border-style: 7px solid black">
                                                              <i class="fa fa-floppy-o"></i>
                                                                     </span>
@@ -273,9 +273,8 @@
                                                                 <span>Ta bort Handledare: [[${hand.name}]] </span>
 
                                                                 <span class="icon is-small">
-                                                 <i class="fa fa-times"></i>
-
-                                            </span>
+                                                                    <i class="fa fa-times"></i>
+                                                                </span>
 
                                                             </button>
                                                         </form>
@@ -296,6 +295,17 @@
                                                 <span th:if="${place.student}">Namn: [[${place.student.studentData.name}]]  </span>
                                                 <br>
                                                 <span th:if="${place.student}">Telefonnummer: [[${place.student.studentData.phoneNumber}]] </span>
+                                                <br>
+                                                <form onsubmit="return submitHandForm(this)" class="block" action="/admin/remove-student-from-place/" method="post" th:if="${place.student}">
+                                                    <button style="margin-top:0px;" type="submit" th:if="${place.student}"  th:value="${place.student.email}" class="button is-danger" name="studentToRemove">
+                                                        <span>Ta bort student: [[${place.student.studentData.name}]] </span>
+
+                                                            <span class="icon is-small">
+                                                                <i class="fa fa-times"></i>
+                                                            </span>
+
+                                                    </button>
+                                                </form>
                                                 <h2 class="title">
                                                     Information om plats
                                                 </h2>

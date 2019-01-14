@@ -4,7 +4,6 @@ import data.StudentData;
 import database.Database;
 import database.DatabaseException;
 import database.DatabaseHandler;
-import organisations.Municipality;
 import organisations.Region;
 import organisations.Unit;
 import roles.LoggedInRole;
@@ -53,6 +52,7 @@ public class StudentController {
         StudentData studentData = db.getSelector().getStudentData(email);
         model.put(ATTR_NAME, studentData.getName());
         putStudentDataFirstPageModel(model, studentData, db);
+        model.put("html_content", db.getSelector().getStudentFirstPageHtml());
         return render(model, Path.Template.STUDENT_FIRST);
     }
 
@@ -87,6 +87,7 @@ public class StudentController {
         model.put("stud_choice3", student.getChoice_3().getName());
         model.put("stud_choice4", student.getChoice_4().getName());
         model.put("stud_choice5", student.getChoice_5().getName());
+        model.put("html_content", DatabaseHandler.getDatabase().getSelector().getStudentStatusPageHtml());
         return render(model, Path.Template.STUDENT_STATUS);
     }
 
@@ -125,24 +126,28 @@ public class StudentController {
                 // personligt brev fältet tillåter max 10 000 tecken men användaren skulle själv kunna ändra
                 // det i html koden, därför behövs denna kontroll
                 model.put("error_msg", "För stort form data");
+                model.put("html_content", db.getSelector().getStudentFirstPageHtml());
                 return render(model, Path.Template.STUDENT_FIRST);
             }
 
             if (region == null) {
                 model.put("error", true);
                 model.put("error_msg", "Måste välja studieort");
+                model.put("html_content", db.getSelector().getStudentFirstPageHtml());
                 return render(model, Path.Template.STUDENT_FIRST);
             }
 
             if (personalLetter == null || personalLetter.length() < 2) {
                 model.put("error", true);
                 model.put("error_msg", "Måste skriva personligt brev");
+                model.put("html_content", db.getSelector().getStudentFirstPageHtml());
                 return render(model, Path.Template.STUDENT_FIRST);
             }
 
             if (personalLetter.length() > 10_000) {
                 model.put("error", true);
                 model.put("error_msg", "Personligt brev max längd 10 000 tecken");
+                model.put("html_content", db.getSelector().getStudentFirstPageHtml());
                 return render(model, Path.Template.STUDENT_FIRST);
             }
 

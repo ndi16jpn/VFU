@@ -309,4 +309,29 @@ public interface DatabaseSelector {
      * @throws DatabaseException
      */
     List<Pair<String, String>> getAllHandledareRegistrationMail() throws DatabaseException;
+
+    /**
+     * Get html for student's first page
+     * @throws DatabaseException
+     */
+    String getStudentFirstPageHtml() throws DatabaseException;
+
+    /**
+     * Get html for student matching status page. This is the
+     * first page for students that have made choices.
+     * @throws DatabaseException
+     */
+    String getStudentStatusPageHtml() throws DatabaseException;
+
+    /**
+     * Get html for handledare's first page
+     * @throws DatabaseException
+     */
+    String getHandledarePageHtml() throws DatabaseException;
+
+    /**
+     * Get html for VFU samordnare's first page
+     * @throws DatabaseException
+     */
+    String getVFUSamordePageHTML() throws DatabaseException;
 }

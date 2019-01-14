@@ -6,8 +6,14 @@
     <link rel="stylesheet" href="../../../public/css/bulma_custom.min.css"/>
 </head>
 <body>
-
-<nav th:replace="logged_in/vfu_samordnare/fragments/navbar :: nav"></nav>
+<style>
+    textarea {
+        min-height: 60px;
+        overflow-y: auto;
+        word-wrap:break-word
+    }
+</style>
+<nav th:replace="logged_in/admin/fragments/navbar :: nav"></nav>
 
 <main>
     <section class="section">
@@ -16,9 +22,11 @@
                 text_title
             </h1>
             <hr>
-            <div th:text="${text_content}" class="content is-medium">
-                text_content
-            </div>
+            <form action="/admin/edit-samordnare-HTML/" method="post">
+                <textarea onkeyup="adjustHeight(this)" class="textarea is-medium" th:text="${html_content}" th:id="textArea" name="htmlContent"></textarea>
+
+                <button th:id="submitTextButton" type="submit">Klar</button>
+            </form>
             <p class="content is-medium">
                 Här uppdateras information om de VFU-platser som kan erbjudas till socionomstudenter deras kommande praktikperiod. Uppgifter och uppdateringar behöver vara inlagda senast 15 mars varje år.
                 Vid brist på information, räcker det att lägga in uppgifter om områden/verksamheter.
@@ -40,6 +48,20 @@
 </main>
 
 <footer th:replace="common_fragments/footer :: footer"></footer>
+
+<script>
+    function adjustHeight(el){
+        el.style.height = (el.scrollHeight > el.clientHeight) ? (el.scrollHeight)+"px" : "60px";
+    }
+    function buttonClicked (btn) {
+        btn.innerHTML = "HEJ";
+    }
+</script>
+
+<script>
+    var textarea = document.getElementById("textArea");
+    adjustHeight(textarea);
+</script>
 
 </body>
 </html>
