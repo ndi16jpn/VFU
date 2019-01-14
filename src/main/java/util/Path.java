@@ -59,7 +59,8 @@ public class Path {
         public static final String ADMIN_EDIT_SAMORDNARE_HTML = "/admin/edit-samordnare-HTML/";
         public static final String ADMIN_EDIT_HANDLEDARE_HTML = "/admin/edit-handledare-first-HTML/";
         public static final String ADMIN_UPLOAD_HANDLEDARE_FILE = "/admin/edit-handledare/upload-handledare-file/";
-
+        public static final String ADMIN_DELETE_HANDLEDARE_FILE = "/admin/edit-handledare/delete-handledare-file/";
+        public static final String ADMIN_DOWNLOAD_FILE_LINK = "/admin/download-handledare-file/";
 
         public static final String STUDENT_HOME = "/student/";
         public static final String STUDENT_CONFIRM_LETTER = "/logged_in/student/confirm_letter/";
@@ -68,6 +69,7 @@ public class Path {
 
         public static final String HANDLEDARE_HOME = "/handledare/";
         public static final String HANDLEDARE_CRITERIA = "/handledare/evaluation-criteria/";
+        public static final String HANDLEDARE_DOWNLOAD_FILE_LINK = "/handledare/download-file/";
 
         public static final String VFU_SAMORDNARE_HOME = "/vfu-samordnare/";
         public static final String VFU_SAMORDNARE_UPDATE_PHONENUMBER = "/vfu-samordnare/update-phonenumber/";

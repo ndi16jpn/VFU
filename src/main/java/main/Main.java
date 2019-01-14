@@ -66,6 +66,8 @@ public class Main {
         post(Path.Web.ADMIN_SEND_EMAILS, AdminController.handleSendEmailToHandledarePost);
         post(Path.Web.ADMIN_CHANGE_PLACE_RESERVED_STATUS, AdminController.handleChangePlaceReservedStatus);
         post(Path.Web.ADMIN_UPLOAD_HANDLEDARE_FILE, AdminController.handleUploadHandledareFilePost);
+        post(Path.Web.ADMIN_DELETE_HANDLEDARE_FILE, AdminController.handleDeleteHandledareFilePost);
+        post(Path.Web.ADMIN_DOWNLOAD_FILE_LINK, AdminController.handleAdminDownloadHandledareFile);
 
 
         get(Path.Web.ADMIN_SHOW_STUDENTS, AdminController.serveAdminShowStudentsPage);
