@@ -12,6 +12,15 @@
         overflow-y: auto;
         word-wrap:break-word
     }
+    #aButton {
+     background:none!important;
+     color:inherit;
+     border:none;
+     padding:0!important;
+     font: inherit;
+     /*border is optional*/
+     cursor: pointer;
+}
 </style>
 <nav th:replace="logged_in/admin/fragments/navbar :: nav"></nav>
 
@@ -58,14 +67,30 @@
                     <br>
                     <button id="submitButton" type="submit" class="button is-primary is-large">Ladda upp</button>
                 </form>
-                TODO: Se upplagda filer från Erika
+                <div th:each="file : ${files}">
+                    <form action="/admin/download-handledare-file/" method="post" style="display: inline;">
+                        <button id="aButton" name="fileToDownload" type="submit" th:value="${file}">[[${file}]]</button>
+                    </form>
+                    <form onsubmit="return submitHandForm(this)" class="block" action="/admin/edit-handledare/delete-handledare-file/" method="post" th:if="${file}" style="display: inline;">
+                        <button style="margin-top:0px;" type="submit" th:if="${file}"  th:value="${file}" class="button is-danger" name="fileToRemove">
+                            <span class="icon is-small">
+                                <i class="fa fa-times"></i>
+                            </span>
+                        </button>
+                    </form>
+
+                </div>
             </div>
         </div>
     </section>
 </main>
 
 <footer th:replace="common_fragments/footer :: footer"></footer>
-
+<script>
+function submitHandForm() {
+    return confirm('Är du säker på att du vill ta bort filen?');
+}
+</script>
 <script th:inline="javascript">
     function showname () {
       var name = document.getElementById('fileInput');

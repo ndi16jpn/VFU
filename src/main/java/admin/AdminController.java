@@ -29,6 +29,7 @@ import util.ViewUtil;
 
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -160,45 +161,7 @@ public class AdminController {
         }
     };
 
-    public static Route handleUploadHandledareFilePost = (Request request, Response response) -> {
-        if (isAdmin(request)) {
-            request.attribute("org.eclipse.jetty.multipartConfig",
-                    new MultipartConfigElement(System.getProperty("java.io.tmpdir")));
 
-            try {
-                Part part = request.raw().getPart("handledare_file");
-                part.getInputStream();
-                String filename = extractFileName(part);
-                String uploadPath = new File(".").getCanonicalPath() + File.separator + Path.Directories.FILE_DIRECTORY;
-                File fileUploadDirectory = new File(uploadPath);
-                if (!fileUploadDirectory.exists()) {
-                    fileUploadDirectory.mkdirs();
-                }
-                FileOutputStream outputStream = new FileOutputStream(uploadPath + File.separator + filename);
-
-                InputStream filecontent = part.getInputStream();
-
-                int read = 0;
-                final byte[] bytes = new byte[1024];
-
-                while ((read = filecontent.read(bytes)) != -1) {
-                    outputStream.write(bytes, 0, read);
-                }
-                outputStream.close();
-                filecontent.close();
-                part.write(uploadPath + File.separator + filename);
-
-            } catch (Exception e) {
-
-            }
-
-
-            return "";
-        } else {
-            response.redirect(Path.Web.LOGIN);
-            return null;
-        }
-    };
     public static Route handleAdminDeleteUnitPost = (Request request, Response response) -> {
         if (isAdmin(request)) {
             Map<String, Object> model = new HashMap<>();
@@ -1196,7 +1159,19 @@ public class AdminController {
         if (isAdmin(request)) {
             Database db = DatabaseHandler.getDatabase();
             Map<String, Object> model = new HashMap<>();
+            String uploadPath = new File(".").getCanonicalPath() + File.separator + Path.Directories.FILE_DIRECTORY;
 
+            File fileUploadDirectory = new File(uploadPath);
+            if (!fileUploadDirectory.exists()) {
+                fileUploadDirectory.mkdirs();
+            }
+            File[] allFiles = fileUploadDirectory.listFiles();
+            List<String> filenames = new ArrayList<>();
+            for (File file : allFiles) {
+                filenames.add(file.getName());
+            }
+            //model.put("file_path", Path.Directories.FILE_DIRECTORY + File.separator);
+            model.put("files", filenames);
             model.put("html_content", db.getSelector().getHandledarePageHtml());
             model.put("page_title", "VFU-portal SOCIONOM");
             model.put("home_link", Path.Web.ADMIN_SHOW_EDIT_HANDLEDARE_MAIN);
@@ -1208,8 +1183,94 @@ public class AdminController {
             return null;
         }
     };
+    public static Route handleUploadHandledareFilePost = (Request request, Response response) -> {
+        if (isAdmin(request)) {
+            request.attribute("org.eclipse.jetty.multipartConfig",
+                    new MultipartConfigElement(System.getProperty("java.io.tmpdir")));
 
-    public static Route handleChangePlaceReservedStatus= (Request request, Response response)-> {
+            try {
+                Part part = request.raw().getPart("handledare_file");
+                part.getInputStream();
+                String filename = extractFileName(part);
+                String uploadPath = new File(".").getCanonicalPath() + File.separator + Path.Directories.FILE_DIRECTORY;
+                File fileUploadDirectory = new File(uploadPath);
+                if (!fileUploadDirectory.exists()) {
+                    fileUploadDirectory.mkdirs();
+                }
+                FileOutputStream outputStream = new FileOutputStream(uploadPath + File.separator + filename);
+
+                InputStream filecontent = part.getInputStream();
+
+                int read = 0;
+                final byte[] bytes = new byte[1024];
+
+                while ((read = filecontent.read(bytes)) != -1) {
+                    outputStream.write(bytes, 0, read);
+                }
+                outputStream.close();
+                filecontent.close();
+
+
+            } catch (Exception e) {
+                return "Det gick inte att spara filen på servern";
+            }
+
+            return serveEditHandledareFirstPage.handle(request, response);
+        } else {
+            response.redirect(Path.Web.LOGIN);
+            return null;
+        }
+    };
+
+    public static Route handleDeleteHandledareFilePost = (Request request, Response response) -> {
+        if (isAdmin(request)) {
+            String name = request.queryParams("fileToRemove");
+            String path = new File(".").getCanonicalPath() + File.separator + Path.Directories.FILE_DIRECTORY;
+            String fileName = path + File.separator + name;
+            File file = new File(fileName);
+            if(file.delete()) {
+                return serveEditHandledareFirstPage.handle(request, response);
+            } else {
+                return "Kunde inte ta bort filen";
+            }
+        } else {
+            response.redirect(Path.Web.LOGIN);
+            return null;
+        }
+    };
+    public static Route handleAdminDownloadHandledareFile = (Request request, Response response) -> {
+        if(isAdmin(request)) {
+            String debug = request.queryParams("fileToDownload");
+            String fileName = request.queryParams("fileToDownload");
+            String path = new File(".").getCanonicalPath() + File.separator + Path.Directories.FILE_DIRECTORY + File.separator;
+            String filePath = path + fileName;
+            File file = new File(filePath);
+            OutputStream outputStream = null;
+            FileInputStream inputStream = null;
+            if (file.exists()) {
+                String headerKey = "Content-Disposition";
+                String headerValue = String.format("attachment; filename=\"%s\"", file.getName());
+                outputStream = response.raw().getOutputStream();
+                response.raw().setHeader(headerKey, headerValue);
+                inputStream = new FileInputStream(file);
+
+                byte[] buffer = new byte[4096];
+                int length;
+                while ((length = inputStream.read(buffer)) > 0){
+                    outputStream.write(buffer, 0, length);
+                }
+                inputStream.close();
+                outputStream.flush();
+                return serveEditHandledareFirstPage.handle(request, response);
+
+            }
+            return "";
+        } else {
+            response.redirect(Path.Web.LOGIN);
+            return null;
+        }
+    };
+    public static Route handleChangePlaceReservedStatus = (Request request, Response response)-> {
         if (isAdmin(request)) {
 
 
