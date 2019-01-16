@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="has-navbar-fixed-top">
+<head th:replace="common_fragments/header :: header">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<nav th:replace="logged_in/admin/fragments/navbar :: nav"></nav>
+
+<main>
+    <section class="section">
+        <div class="container">
+
+
+            <div class="content is-medium">
+
+                <div th:id="dynamic_html">
+
+                </div>
+
+                <br>
+                <div class="field">
+                    <label class="label">Namn</label>
+                    <p class="is-size-5" th:text="${name}"></p>
+                </div>
+                <div class="field">
+                    <label class="label">Email</label>
+                    <p class="is-size-5" th:text="${stud_email}"></p>
+                </div>
+                <div class="field">
+                    <label class="label">Födelseår</label>
+                    <p class="is-size-5" th:text="${stud_yob}"></p>
+                </div>
+                <br>
+                <div th:if="${error}" class="notification is-danger is-size-5">
+                    <p th:text="${error_msg}"></p>
+                </div>
+                <div id="form-vue">
+                    <form onsubmit="return confirm('Är du säker på att du är klar med ditt brev? Du kan inte redigera brevet senare.')" action="/student/apply-first/" method="post">
+                        <div class="field">
+                            <label class="label">Studieort</label>
+                            <p>
+                                Om du vill utföra VFU på annan än din egen studieort logga ut nu
+                                och kontakta läraren innan du loggar in igen och fortsätter
+                            </p>
+                            <div class="control">
+                                <div class="select is-medium">
+                                    <select name="studieort" v-model="regionSelected">
+                                        <option selected disabled>Välj..</option>
+                                        <option th:each="region: ${all_regions}" th:text="${region}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Telefonnummer</label>
+                            <div class="control">
+                                <input class="input is-medium" type="text" name="tfnnummer" placeholder="07..."
+                                       th:value="${stud_tfn}">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Personligt brev</label>
+                            <p>
+                                Om du har speciella önskemål angående platsval skriv det i ditt personliga brev
+                                och kontakta läraren
+                            </p>
+                            <div class="control">
+                                <textarea class="textarea is-medium" placeholder="Skriv här..." rows="10" name="pbrev"
+                                          maxlength="10000" v-model="personalLetter"></textarea>
+                            </div>
+                            <p class="help is-pulled-right" v-cloak>{{ personalLetterLength }} / 10000</p>
+                        </div>
+                        <div class="field">
+                            <div class="control">
+
+                                <button type="submit" class="button is-primary is-large"
+                                        :title="invalidInput ? 'Fyll i fälten först' : ''" :disabled="invalidInput">
+                                    Skicka in
+                                </button>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="common_fragments/footer :: footer"></footer>
+
+<script th:src="'/js/vue.min.js'" src="../../../../public/js/vue.js"></script>
+<script th:inline="javascript">
+    document.getElementById("dynamic_html").innerHTML = [[${html_content}]];
+
+</script>
+<script>
+function submitForm() {
+    return confirm('Är du säker på att du är färdig med ditt personliga brev?
+    Du kommer inte ha möjlighet att redigera ditt brev vid ett senare tillfälle.');
+}
+</script>
+<script>
+    function init() {
+        new Vue({
+            el: "#form-vue",
+            data: {
+                regionSelected: "Välj..",
+                personalLetter: ""
+            },
+            computed: {
+                personalLetterLength: function() {
+                    return this.personalLetter.length;
+                },
+                invalidInput: function() {
+                    return this.regionSelected === "Välj.." || this.personalLetterLength < 2;
+                }
+            }
+        });
+    }
+    window.addEventListener("DOMContentLoaded", init);
+</script>
+
+</body>
+</html>

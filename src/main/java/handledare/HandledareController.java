@@ -9,7 +9,12 @@ import spark.Response;
 import spark.Route;
 import util.Path;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static login.LoginController.*;
@@ -37,6 +42,20 @@ public class HandledareController {
                 model.put("contact_student_phone_number", place.getStudent().getStudentData().getPhoneNumber());
             }
 
+            String uploadPath = new File(".").getCanonicalPath() + File.separator + Path.Directories.FILE_DIRECTORY;
+
+            File fileUploadDirectory = new File(uploadPath);
+            if (!fileUploadDirectory.exists()) {
+                fileUploadDirectory.mkdirs();
+            }
+            File[] allFiles = fileUploadDirectory.listFiles();
+            List<String> filenames = new ArrayList<>();
+            for (File file : allFiles) {
+                filenames.add(file.getName());
+            }
+            //model.put("file_path", Path.Directories.FILE_DIRECTORY + File.separator);
+            model.put("files", filenames);
+
             model.put("home_link", Path.Web.HANDLEDARE_HOME);
             model.put(ATTR_ROLE, LoggedInRole.HANDLEDARE.getRoleName());
             model.put(ATTR_NAME, request.session().attribute(ATTR_NAME));
@@ -59,6 +78,37 @@ public class HandledareController {
             return null;
         }
 
+    };
+    public static Route handleHandledareDownloadHandledareFile = (Request request, Response response) -> {
+        if(isHandledare(request)) {
+            String fileName = request.queryParams("fileToDownload");
+            String path = new File(".").getCanonicalPath() + File.separator + Path.Directories.FILE_DIRECTORY + File.separator;
+            String filePath = path + fileName;
+            File file = new File(filePath);
+            OutputStream outputStream = null;
+            FileInputStream inputStream = null;
+            if (file.exists()) {
+                String headerKey = "Content-Disposition";
+                String headerValue = String.format("attachment; filename=\"%s\"", file.getName());
+                outputStream = response.raw().getOutputStream();
+                response.raw().setHeader(headerKey, headerValue);
+                inputStream = new FileInputStream(file);
+
+                byte[] buffer = new byte[4096];
+                int length;
+                while ((length = inputStream.read(buffer)) > 0){
+                    outputStream.write(buffer, 0, length);
+                }
+                inputStream.close();
+                outputStream.flush();
+                return serveHandledareHomePage.handle(request, response);
+
+            }
+            return "";
+        } else {
+            response.redirect(Path.Web.LOGIN);
+            return null;
+        }
     };
 
 }

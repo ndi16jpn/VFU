@@ -93,6 +93,11 @@ public class Main {
         get(Path.Web.ADMIN_SHOW_EDIT_VFU_SAMORDNARE_MAIN, AdminController.serveEditVFUsamordnareFirstPage);
         get(Path.Web.ADMIN_SHOW_EDIT_STUDENT_STATUS, AdminController.serveAdminEditStudentStatusPage);
 
+        get(Path.Web.ADMIN_SHOW_EDIT_STUDENT_MAIN_PREVIEW, AdminController.serveAdminEditStudentFirstPagePreview);
+        get(Path.Web.ADMIN_SHOW_EDIT_STUDENT_STATUS_PREWIEW, AdminController.serveAdminEditStudentStatusPagePreview);
+        get(Path.Web.ADMIN_SHOW_EDIT_HANDLEDARE_MAIN_PREWIEW, AdminController.serveEditHandledareFirstPagePreview);
+        get(Path.Web.ADMIN_SHOW_EDIT_VFU_SAMORDNARE_MAIN_PREWIEW, AdminController.serveEditVFUsamordnareFirstPagePreview);
+
         get(Path.Web.STUDENT_HOME, StudentController.serveStudentHomePage);
         post(Path.Web.STUDENT_APPLY_FIRST, StudentController.handleApplyFirst);
         post(Path.Web.STUDENT_CONFIRM_LETTER,StudentController.handleConfirmLetter);
@@ -100,6 +105,7 @@ public class Main {
 
         get(Path.Web.HANDLEDARE_HOME, HandledareController.serveHandledareHomePage);
         get(Path.Web.HANDLEDARE_CRITERIA,HandledareController.serveHandledareCriteriaPage);
+        post(Path.Web.HANDLEDARE_DOWNLOAD_FILE_LINK, HandledareController.handleHandledareDownloadHandledareFile);
 
         get(Path.Web.VFU_SAMORDNARE_HOME, VfuSamordnareController.serveVfuSamordnareHomePage);
         get(Path.Web.VFU_SAMORDNARE_ADD_PLACE, VfuSamordnareController.serveVfuSamordnareAddPlacePage);

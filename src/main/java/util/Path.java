@@ -53,6 +53,12 @@ public class Path {
         public static final String ADMIN_SHOW_EDIT_STUDENT_STATUS = "/admin/edit/show_edit_student_status/";
         public static final String ADMIN_SHOW_EDIT_HANDLEDARE_MAIN = "/admin/edit/show_edit_handledare_main/";
         public static final String ADMIN_SHOW_EDIT_VFU_SAMORDNARE_MAIN = "/admin/edit/show_edit_VFU_samordnare_main/";
+
+        public static final String ADMIN_SHOW_EDIT_STUDENT_MAIN_PREVIEW = "/admin/edit/show_edit_student_main_preview/";
+        public static final String ADMIN_SHOW_EDIT_STUDENT_STATUS_PREWIEW = "/admin/edit/show_edit_student_status_preview/";
+        public static final String ADMIN_SHOW_EDIT_HANDLEDARE_MAIN_PREWIEW = "/admin/edit/show_edit_handledare_main_preview/";
+        public static final String ADMIN_SHOW_EDIT_VFU_SAMORDNARE_MAIN_PREWIEW = "/admin/edit/show_edit_VFU_samordnare_main_preview/";
+
         public static final String ADMIN_EDIT_STUDENT_FIRST_TEXT = "/admin/edit-studentFirstText/";
         public static final String ADMIN_EDIT_STUDENT_FIRST_HTML = "/admin/edit-student-first-HTML/";
         public static final String ADMIN_EDIT_STUDENT_STATUS_HTML = "/admin/edit-student-status-HTML/";
@@ -110,6 +116,12 @@ public class Path {
         public static final String ADMIN_SHOW_EDIT_VFU_SAMORDNARE_MAIN = "logged_in/admin/edit/show_edit_VFU_samordnare_main";
         public static final String ADMIN_SHOW_EDIT_HANDLEDARE_MAIN = "logged_in/admin/edit/show_edit_handledare_main";
         public static final String ADMIN_SHOW_EDIT_STUDENT_STATUS = "logged_in/admin/edit/show_edit_student_status_page";
+
+        public static final String ADMIN_SHOW_EDIT_STUDENT_MAIN_PREVIEW = "logged_in/admin/edit/show_edit_student_main_preview";
+        public static final String ADMIN_SHOW_EDIT_VFU_SAMORDNARE_MAIN_PREVIEW = "logged_in/admin/edit/show_edit_VFU_samordnare_main_preview";
+        public static final String ADMIN_SHOW_EDIT_HANDLEDARE_MAIN_PREVIEW = "logged_in/admin/edit/show_edit_handledare_main_preview";
+        public static final String ADMIN_SHOW_EDIT_STUDENT_STATUS_PREVIEW = "logged_in/admin/edit/show_edit_student_status_page_preview";
+
         public static final String ADMIN_SEND_EMAILS = "logged_in/admin/send_handledare_reg_mail";
 
         public static final String STUDENT_FIRST = "logged_in/student/first/first";
@@ -121,6 +133,7 @@ public class Path {
         public static final String HANDLEDARE_HOME = "logged_in/handledare/handledare";
         public static final String HANDLEDAER_CRITERIA = "logged_in/handledare/evaluation_criteria/evaluation_criteria";
         public static final String HANDLEDARE_ERROR = "logged_in/handledare/error";
+
 
         public static final String VFU_SAMORDNARE_HOME = "logged_in/vfu_samordnare/vfu_samordnare";
         public static final String VFU_SAMORDNARE_ERROR = "logged_in/vfu_samordnare/error";

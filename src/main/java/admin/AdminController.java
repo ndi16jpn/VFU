@@ -1183,6 +1183,84 @@ public class AdminController {
             return null;
         }
     };
+    public static Route serveAdminEditStudentFirstPagePreview = (Request request, Response response)-> {
+        if (isAdmin(request)) {
+            Database db = DatabaseHandler.getDatabase();
+            Map<String, Object> model = new HashMap<>();
+
+            model.put("html_content", db.getSelector().getStudentFirstPageHtml());
+            model.put("page_title", "VFU-portal SOCIONOM");
+            model.put("home_link", Path.Web.ADMIN_SHOW_EDIT_STUDENT_MAIN_PREVIEW);
+            model.put(ATTR_ROLE, LoggedInRole.ADMIN.getRoleName());
+            model.put(ATTR_NAME, request.session().attribute(ATTR_NAME));
+            return render(model, Path.Template.ADMIN_SHOW_EDIT_STUDENT_MAIN_PREVIEW);
+        } else {
+            response.redirect(Path.Web.LOGIN);
+            return null;
+        }
+    };
+
+    public static Route serveAdminEditStudentStatusPagePreview = (Request request, Response response)-> {
+        if (isAdmin(request)) {
+            Database db = DatabaseHandler.getDatabase();
+            Map<String, Object> model = new HashMap<>();
+
+            model.put("html_content", db.getSelector().getStudentStatusPageHtml());
+            model.put("page_title", "VFU-portal SOCIONOM");
+            model.put("home_link", Path.Web.ADMIN_SHOW_EDIT_STUDENT_STATUS_PREWIEW);
+            model.put(ATTR_ROLE, LoggedInRole.ADMIN.getRoleName());
+            model.put(ATTR_NAME, request.session().attribute(ATTR_NAME));
+            return render(model, Path.Template.ADMIN_SHOW_EDIT_STUDENT_STATUS_PREVIEW);
+        } else {
+            response.redirect(Path.Web.LOGIN);
+            return null;
+        }
+    };
+
+    public static Route serveEditVFUsamordnareFirstPagePreview = (Request request, Response response)-> {
+        if (isAdmin(request)) {
+            Database db = DatabaseHandler.getDatabase();
+            Map<String, Object> model = new HashMap<>();
+            model.put("html_content", db.getSelector().getVFUSamordePageHTML());
+            model.put("page_title", "VFU-portal SOCIONOM");
+            model.put("home_link", Path.Web.ADMIN_SHOW_EDIT_VFU_SAMORDNARE_MAIN_PREWIEW);
+            model.put(ATTR_ROLE, LoggedInRole.ADMIN.getRoleName());
+            model.put(ATTR_NAME, request.session().attribute(ATTR_NAME));
+            return render(model, Path.Template.ADMIN_SHOW_EDIT_VFU_SAMORDNARE_MAIN_PREVIEW);
+        } else {
+            response.redirect(Path.Web.LOGIN);
+            return null;
+        }
+    };
+
+    public static Route serveEditHandledareFirstPagePreview = (Request request, Response response)-> {
+        if (isAdmin(request)) {
+            Database db = DatabaseHandler.getDatabase();
+            Map<String, Object> model = new HashMap<>();
+            String uploadPath = new File(".").getCanonicalPath() + File.separator + Path.Directories.FILE_DIRECTORY;
+
+            File fileUploadDirectory = new File(uploadPath);
+            if (!fileUploadDirectory.exists()) {
+                fileUploadDirectory.mkdirs();
+            }
+            File[] allFiles = fileUploadDirectory.listFiles();
+            List<String> filenames = new ArrayList<>();
+            for (File file : allFiles) {
+                filenames.add(file.getName());
+            }
+            //model.put("file_path", Path.Directories.FILE_DIRECTORY + File.separator);
+            model.put("files", filenames);
+            model.put("html_content", db.getSelector().getHandledarePageHtml());
+            model.put("page_title", "VFU-portal SOCIONOM");
+            model.put("home_link", Path.Web.ADMIN_SHOW_EDIT_HANDLEDARE_MAIN_PREWIEW);
+            model.put(ATTR_ROLE, LoggedInRole.ADMIN.getRoleName());
+            model.put(ATTR_NAME, request.session().attribute(ATTR_NAME));
+            return render(model, Path.Template.ADMIN_SHOW_EDIT_HANDLEDARE_MAIN_PREVIEW);
+        } else {
+            response.redirect(Path.Web.LOGIN);
+            return null;
+        }
+    };
     public static Route handleUploadHandledareFilePost = (Request request, Response response) -> {
         if (isAdmin(request)) {
             request.attribute("org.eclipse.jetty.multipartConfig",
@@ -1240,7 +1318,6 @@ public class AdminController {
     };
     public static Route handleAdminDownloadHandledareFile = (Request request, Response response) -> {
         if(isAdmin(request)) {
-            String debug = request.queryParams("fileToDownload");
             String fileName = request.queryParams("fileToDownload");
             String path = new File(".").getCanonicalPath() + File.separator + Path.Directories.FILE_DIRECTORY + File.separator;
             String filePath = path + fileName;
