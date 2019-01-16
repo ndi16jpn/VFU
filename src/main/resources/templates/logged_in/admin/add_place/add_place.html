@@ -156,12 +156,12 @@
                 </div>
             </div>
             <hr>
-            <form action="/admin/send_handledare_reg_mail/" method= "post">
-                <button class="button is-primary" th:id="'send-email-to-handledare'">
+
+            <form onsubmit="return submitEmail(this)" class="block" action="/admin/send_handledare_reg_mail/"  method="post">
+                <button type="submit" class="button is-primary" id="'send-email-to-handledare'">
                     Skicka mail till alla handledare
                 </button>
             </form>
-
 
             <hr>
 
@@ -523,14 +523,15 @@ for(i = 0; i < places.length; i++){
     })();
 </script>
 
-<script th:inline="javascript">
-    var sendEmailButton = document.getElemetdById("send-email-to-handledare");
-    sendEmailButton.onclick = (function(){ return function(){
-
+<script>
+    function showname2 () {
+      alert('Alla Email skickas vid ok ');
     };
-    })();
-
-
+</script>
+<script>
+function submitEmail() {
+    return confirm('Är du säker på att du vill skicka alla email?');
+}
 </script>
 
 
