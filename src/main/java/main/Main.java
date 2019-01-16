@@ -116,6 +116,7 @@ public class Main {
         post(Path.Web.VFU_SAMORDNARE_DELETE_HANDLEDARE_SINGLE, VfuSamordnareController.handleVfuSamordnareDeleteHandledarePost);
         post(Path.Web.VFU_SAMORDNARE_HANDLE_DELETE_SINGLE_PLACE, VfuSamordnareController.handleDeleteSinglePlacePost);
         post(Path.Web.VFU_SAMORDNARE_HANDLE_ADD_SINGLE_PLACE, VfuSamordnareController.handleAddSinglePlacePost);
+        get(Path.Web.VFU_SAMORDNARE_PLACE_LIST, VfuSamordnareController.serveVfuSamordnarePlaceListPage);
 
         get(Path.Web.REG_VFU_SAMORDNARE, RegistrationController.serveRegVfuSam);
         post(Path.Web.REG_VFU_SAMORDNARE, RegistrationController.handleRegVfuSam);

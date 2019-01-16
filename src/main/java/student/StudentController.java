@@ -62,8 +62,16 @@ public class StudentController {
         model.put(ATTR_NAME, studentData.getName());
         List<Unit> allUnitsForRegion = db.getSelector()
                 .getAllUnitFromRegionForStudentChoice(student.getRegion().getName());
-        request.session().attribute("allUnitsForRegion", allUnitsForRegion);
-        model.put("unitsForRegion", allUnitsForRegion);
+        List<Unit> allUnitsWithPlacesForRegion = new ArrayList<>();
+
+        for (Unit unit: allUnitsForRegion) {
+            if(db.getSelector().getnumberOfUnreservedPlacesInUnit(unit.getId()) > 0){
+                allUnitsWithPlacesForRegion.add(unit);
+            }
+        }
+
+        request.session().attribute("allUnitsForRegion", allUnitsWithPlacesForRegion);
+        model.put("unitsForRegion", allUnitsWithPlacesForRegion);
         model.put("region", student.getRegion().getName());
         String errorMsg = request.attribute("error_msg");
         if (errorMsg != null) {

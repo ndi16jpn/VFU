@@ -1000,4 +1000,27 @@ class SelectDbContent implements DatabaseSelector {
             throw new DatabaseException("database error", e);
         }
     }
+
+    @Override
+    public int getnumberOfUnreservedPlacesInUnit(int unitId) throws DatabaseException {
+        try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
+            String sqlRequest = "SELECT * FROM "
+                    + PLACE_TABLE + " WHERE " + PLACE_COLUMN_UNIT + " =?";
+
+            PreparedStatement statement = connection.prepareStatement(sqlRequest);
+            statement.setInt(1, unitId);
+            ResultSet resultSet = statement.executeQuery();
+            int count = 0;
+            while (resultSet.next()) {
+                if(!resultSet.getBoolean(PLACE_COLUMN_RESERVED)) {
+                    count++;
+                }
+
+            }
+            return count;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseException("database error", e);
+        }
+    }
 }

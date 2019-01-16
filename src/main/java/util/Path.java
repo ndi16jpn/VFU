@@ -86,6 +86,7 @@ public class Path {
         public static final String VFU_SAMORDNARE_ADD_HANDLEDARE = "/vfu-samordnare/add-handledare/";
         public static final String VFU_SAMORDNARE_HANDLE_ADD_SINGLE_PLACE = "/vfu-samordnare/add-one-place/";
         public static final String VFU_SAMORDNARE_HANDLE_DELETE_SINGLE_PLACE = "/vfu-samordnare/delete-one-place/";
+        public static final String VFU_SAMORDNARE_PLACE_LIST  = "/vfu_samordnare/list-of-places/";
 
         public static final String REG_HANDLEDARE = "/reg/handledare/:regLink/";
         public static final String REG_VFU_SAMORDNARE = "/reg/vfu-samordnare/:regLink/";
@@ -138,6 +139,7 @@ public class Path {
         public static final String VFU_SAMORDNARE_HOME = "logged_in/vfu_samordnare/vfu_samordnare";
         public static final String VFU_SAMORDNARE_ERROR = "logged_in/vfu_samordnare/error";
         public static final String VFU_SAMORDNARE_ADD_PLACE  = "logged_in/vfu_samordnare/add_place/add_place";
+        public static final String VFU_SAMORDNARE_PLACE_LIST  = "logged_in/vfu_samordnare/list_of_places";
 
         public static final String REG_HANDLEDARE  = "logged_out/registration/regmail_handledare";
         public static final String REG_VFU_SAMORDNARE  = "logged_out/registration/regmail_vfusam";

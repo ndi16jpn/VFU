@@ -334,4 +334,9 @@ public interface DatabaseSelector {
      * @throws DatabaseException
      */
     String getVFUSamordePageHTML() throws DatabaseException;
+    /**
+     * Get number of unreserved places in unit
+     * @throws DatabaseException
+     */
+    int getnumberOfUnreservedPlacesInUnit(int unitId) throws DatabaseException;
 }

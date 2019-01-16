@@ -82,6 +82,32 @@ public class VfuSamordnareController {
             return null;
         }
     };
+    public static Route serveVfuSamordnarePlaceListPage = (Request request, Response response) -> {
+        if (isVfuSamordnare(request)) {
+            Map<String, Object> model = new HashMap<>();
+            model.put("text_content", "...");
+            model.put("home_link", Path.Web.VFU_SAMORDNARE_HOME);
+            model.put(ATTR_ROLE, LoggedInRole.VFU_SAMORDNARE.getRoleName());
+            model.put(ATTR_NAME, request.session().attribute(ATTR_NAME));
+            Database db = DatabaseHandler.getDatabase();
+
+            String region = db.getSelector().getRegionFromVfuSamEmail(request.session().attribute(ATTR_NAME)).getName();
+            List<Unit> units = db.getSelector().getAllUnitFromRegion((region));
+            List<Place> places = db.getSelector().getAllPlaces();
+
+            List<Place> filteredPlaces = places.stream().filter(place -> place.getUnit().getMunicipality().getRegions().stream()
+                    .map(region1 -> region1.getName()).collect(Collectors.toList()).contains(region)).collect(Collectors.toList());
+
+            model.put("filtered_list", filteredPlaces);
+            model.put("unit_list", units);
+            model.put("place_id", places);
+
+            return render(model, Path.Template.VFU_SAMORDNARE_PLACE_LIST);
+        } else {
+            response.redirect(Path.Web.LOGIN);
+            return null;
+        }
+    };
     public static Route handleVfuSamordnareAddSinglePost = (Request request, Response response) -> {
         if (isVfuSamordnare(request)) {
             Map<String, Object> model = new HashMap<>();

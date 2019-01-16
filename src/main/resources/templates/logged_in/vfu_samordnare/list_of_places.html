@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="has-navbar-fixed-top">
+<head th:replace="common_fragments/header :: header">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../public/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../../../public/css/bulma_custom.min.css"/>
+</head>
+<body>
+
+<nav th:replace="logged_in/vfu_samordnare/fragments/navbar :: nav"></nav>
+
+<main>
+    <section class="section">
+        <div class="container">
+            <h1 class="title">
+                Platser
+            </h1>
+            <hr>
+
+            <div th:each="unit : ${unit_list}">
+                <h1>
+                    <b>[[${unit.name}]]</b>
+                </h1>
+                Studenter
+                <div th:each="place : ${filtered_list}" th:if="${place.unit.id} == ${unit.id}">
+                    <div th:if="${place.student}">
+                        <span>Student: [[${place.student.studentData.name}]], </span>
+                        <span th:each="handledare: ${place.handledare}">
+                            <span>Handledare: [[${handledare.name}]], </span>
+                            <span>epost: [[${handledare.email}]]</span>
+                        </span>
+                        <span th:if="${not place.handledare}">Handledare: Ingen handledare</span>
+                        <br>
+                    </div>
+                    <br>
+                </div>
+                Handledare utan tilldelad student
+                <div th:each="place : ${filtered_list}" th:if="${place.unit.id} == ${unit.id}">
+                    <div th:if="${not place.student}">
+                        <span th:each="handledare: ${place.handledare}">
+                            <span>Handledare: [[${handledare.name}]], </span>
+                            <span>epost: [[${handledare.email}]]</span>
+                        </span>
+                        <br>
+                    </div>
+                    <br>
+                </div>
+
+                <hr>
+
+
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="common_fragments/footer :: footer"></footer>
+
+</body>
+</html>
+
