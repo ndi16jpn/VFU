@@ -38,7 +38,7 @@
                 <div th:each="place : ${filtered_list}" th:if="${place.unit.id} == ${unit.id}">
                     <div th:if="${not place.student}">
                         <span th:each="handledare: ${place.handledare}">
-                            <span>Handledare: [[${handledare.name}]], </span>
+                            <span>[[${handledare.name}]], </span>
                             <span>epost: [[${handledare.email}]]</span>
                         </span>
                         <br>
