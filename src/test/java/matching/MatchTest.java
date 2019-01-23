@@ -36,8 +36,8 @@ public class MatchTest {
             studentList.add(new Student("hej" + i + "@email.com", new StudentData("hej" + i + "@email.com", "Adam" + i, String.valueOf(1990 + i), "07012345" + i), regionGavle, "Hej", socialtjansten, forsakringskassan, null, null, null));
         }
         for(int i = 1; i< studentList.size()+1; i++){
-            placeList.add(new Place(i,socialtjansten));
-            placeList.add(new Place(i+5,forsakringskassan));
+            placeList.add(new Place(i,socialtjansten, false));
+            placeList.add(new Place(i+5,forsakringskassan, false));
         }
     }
 

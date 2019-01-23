@@ -14,7 +14,7 @@ import java.nio.file.Paths;
 public class PrivateMailSenderProvider {
 
     private static final SmtpSettings defaultSmtpSettings = new SmtpSettings(
-            "smtp.gmail.com", 465,
+            "vm-smtp-01.hig.se", 25,
             "", "",
             SmtpSettings.SmtpProtocol.ssl
     );

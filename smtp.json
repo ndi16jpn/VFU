@@ -1,6 +1,6 @@
 {
-  "host": "smtp.gmail.com",
-  "port": 465,
+  "host": "vm-smtp-01.hig.se",
+  "port": 25,
   "username": "",
   "password": "",
   "smtpProtocol": "ssl"

@@ -1806,16 +1806,16 @@ a.box:active {
 }
 
 .button.is-primary {
-	background-color: #C5E1A5;
+	background-color: #6e6e96;
 	border-color: transparent;
-	color: rgba(0, 0, 0, 0.7)
+	color: rgba(255, 255, 255, 1.0)
 }
 
 .button.is-primary:hover,
 .button.is-primary.is-hovered {
-	background-color: #bfde9b;
+	background-color: #3c3c78;
 	border-color: transparent;
-	color: rgba(0, 0, 0, 0.7)
+	color: rgba(255, 255, 255, 1.0)
 }
 
 .button.is-primary:focus,
@@ -1831,9 +1831,9 @@ a.box:active {
 
 .button.is-primary:active,
 .button.is-primary.is-active {
-	background-color: #b9db92;
+	background-color: #3c3c78;
 	border-color: transparent;
-	color: rgba(0, 0, 0, 0.7)
+	color: rgba(255, 255, 255, 1.0)
 }
 
 .button.is-primary[disabled] {
@@ -3704,7 +3704,7 @@ a.box:active {
 
 .file.is-primary:active .file-cta,
 .file.is-primary.is-active .file-cta {
-	background-color: #b9db92;
+	background-color: #3c3c78;
 	border-color: transparent;
 	color: rgba(0, 0, 0, 0.7)
 }
@@ -5152,8 +5152,8 @@ print {
 }
 
 .tag:not(body).is-primary {
-	background-color: #C5E1A5;
-	color: rgba(0, 0, 0, 0.7)
+	background-color: #6e6e96;
+	color: rgba(255, 255, 255, 1.0)
 }
 
 .tag:not(body).is-link {
@@ -6650,21 +6650,21 @@ print {
 }
 
 .navbar.is-primary {
-	background-color: #C5E1A5;
-	color: rgba(0, 0, 0, 0.7)
+	background-color: #6e6e96;
+	color: rgba(255, 255, 255, 1.0)
 }
 
 .navbar.is-primary .navbar-brand>.navbar-item,
 .navbar.is-primary .navbar-brand .navbar-link {
-	color: rgba(0, 0, 0, 0.7)
+	color: rgba(255, 255, 255, 1.0)
 }
 
 .navbar.is-primary .navbar-brand>a.navbar-item:hover,
 .navbar.is-primary .navbar-brand>a.navbar-item.is-active,
 .navbar.is-primary .navbar-brand .navbar-link:hover,
 .navbar.is-primary .navbar-brand .navbar-link.is-active {
-	background-color: #b9db92;
-	color: rgba(0, 0, 0, 0.7)
+	background-color: #3c3c78;
+	color: rgba(255, 255, 255, 1.0)
 }
 
 .navbar.is-primary .navbar-brand .navbar-link::after {
@@ -6686,8 +6686,8 @@ print {
 	.navbar.is-primary .navbar-end>a.navbar-item.is-active,
 	.navbar.is-primary .navbar-end .navbar-link:hover,
 	.navbar.is-primary .navbar-end .navbar-link.is-active {
-		background-color: #b9db92;
-		color: rgba(0, 0, 0, 0.7)
+		background-color: #3c3c78;
+		color: rgba(255, 255, 255, 1.0)
 	}
 	.navbar.is-primary .navbar-start .navbar-link::after,
 	.navbar.is-primary .navbar-end .navbar-link::after {
@@ -6695,12 +6695,12 @@ print {
 	}
 	.navbar.is-primary .navbar-item.has-dropdown:hover .navbar-link,
 	.navbar.is-primary .navbar-item.has-dropdown.is-active .navbar-link {
-		background-color: #b9db92;
-		color: rgba(0, 0, 0, 0.7)
+		background-color: #3c3c78;
+		color: rgba(255, 255, 255, 1.0)
 	}
 	.navbar.is-primary .navbar-dropdown a.navbar-item.is-active {
-		background-color: #C5E1A5;
-		color: rgba(0, 0, 0, 0.7)
+		background-color: #6e6e96;
+		color: rgba(255, 255, 255, 1.0)
 	}
 }
 
@@ -6815,7 +6815,7 @@ print {
 }
 
 .navbar.is-success {
-	background-color: #8BC34A;
+	background-color: #6e6e96;
 	color: #fff
 }
 
@@ -6828,7 +6828,7 @@ print {
 .navbar.is-success .navbar-brand>a.navbar-item.is-active,
 .navbar.is-success .navbar-brand .navbar-link:hover,
 .navbar.is-success .navbar-brand .navbar-link.is-active {
-	background-color: #7eb73d;
+	background-color: #6e6e96;
 	color: #fff
 }
 
@@ -6851,7 +6851,7 @@ print {
 	.navbar.is-success .navbar-end>a.navbar-item.is-active,
 	.navbar.is-success .navbar-end .navbar-link:hover,
 	.navbar.is-success .navbar-end .navbar-link.is-active {
-		background-color: #7eb73d;
+		background-color: #6e6e96;
 		color: #fff
 	}
 	.navbar.is-success .navbar-start .navbar-link::after,
@@ -6860,7 +6860,7 @@ print {
 	}
 	.navbar.is-success .navbar-item.has-dropdown:hover .navbar-link,
 	.navbar.is-success .navbar-item.has-dropdown.is-active .navbar-link {
-		background-color: #7eb73d;
+		background-color: #6e6e96;
 		color: #fff
 	}
 	.navbar.is-success .navbar-dropdown a.navbar-item.is-active {
@@ -9698,7 +9698,7 @@ print {
 
 @media screen and (max-width: 1023px) {
 	.hero.is-primary .navbar-menu {
-		background-color: #C5E1A5
+		background-color: #6e6e96
 	}
 }
 
@@ -9711,8 +9711,8 @@ print {
 .hero.is-primary a.navbar-item.is-active,
 .hero.is-primary .navbar-link:hover,
 .hero.is-primary .navbar-link.is-active {
-	background-color: #b9db92;
-	color: rgba(0, 0, 0, 0.7)
+	background-color: #3c3c78;
+	color: rgba(255, 255, 255, 1.0)
 }
 
 .hero.is-primary .tabs a {
