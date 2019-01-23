@@ -18,7 +18,7 @@ public class MailSenderProvider {
             "", "",
             SmtpSettings.SmtpProtocol.plain
     );
-    private static final Path SMTP_CONF_PATH = Paths.get("gmailsmtp.json");
+    private static final Path SMTP_CONF_PATH = Paths.get("smtp.json");
 
     private static SmtpSettings smtpSettings;
 
