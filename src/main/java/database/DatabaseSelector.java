@@ -1,7 +1,6 @@
 package database;
 
 import data.StudentData;
-import javafx.util.Pair;
 import organisations.Municipality;
 import organisations.Place;
 import organisations.Region;
@@ -10,6 +9,7 @@ import roles.Admin;
 import roles.Handledare;
 import roles.Student;
 import roles.VFUSamordnare;
+import util.MailRecieverAndContentHolder;
 
 import java.sql.ResultSet;
 import java.util.List;
@@ -308,7 +308,7 @@ public interface DatabaseSelector {
      * Get handledare registration mails
      * @throws DatabaseException
      */
-    List<Pair<String, String>> getAllHandledareRegistrationMail() throws DatabaseException;
+    List<MailRecieverAndContentHolder> getAllHandledareRegistrationMail() throws DatabaseException;
 
     /**
      * Get html for student's first page

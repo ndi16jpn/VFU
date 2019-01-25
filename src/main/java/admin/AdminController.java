@@ -6,7 +6,6 @@ import data.StudentData;
 import database.*;
 import email.MailSender;
 import email.MailSenderProvider;
-import javafx.util.Pair;
 import json.JsonHandler;
 import json.JsonHelper;
 import matching.Match;
@@ -24,6 +23,7 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 import util.CSVParser;
+import util.MailRecieverAndContentHolder;
 import util.Path;
 import util.ViewUtil;
 
@@ -310,12 +310,12 @@ public class AdminController {
 
             Database db = DatabaseHandler.getDatabase();
 
-            List<Pair<String, String>> mails = db.getSelector().getAllHandledareRegistrationMail();
+            List<MailRecieverAndContentHolder> mails = db.getSelector().getAllHandledareRegistrationMail();
 
             MailSender sender = MailSenderProvider.getMailSender();
 
-            for (Pair<String, String> mail: mails) {
-                sender.sendMail(mail.getKey(),"Lösenord till Vfusocionm",mail.getValue());
+            for (MailRecieverAndContentHolder mail: mails) {
+                sender.sendMail(mail.getReciever(),"Lösenord till Vfusocionm",mail.getContent());
             }
 
             db.getDeleter().deleteAllHandledareRegistrationEmails();

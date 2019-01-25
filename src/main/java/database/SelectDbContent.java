@@ -1,7 +1,6 @@
 package database;
 
 import data.StudentData;
-import javafx.util.Pair;
 import organisations.Municipality;
 import organisations.Place;
 import organisations.Region;
@@ -10,6 +9,7 @@ import roles.Admin;
 import roles.Handledare;
 import roles.Student;
 import roles.VFUSamordnare;
+import util.MailRecieverAndContentHolder;
 
 import java.sql.*;
 import java.util.*;
@@ -906,15 +906,16 @@ class SelectDbContent implements DatabaseSelector {
     }
 
     @Override
-    public List<Pair<String, String>> getAllHandledareRegistrationMail() throws DatabaseException {
+    public List<MailRecieverAndContentHolder> getAllHandledareRegistrationMail() throws DatabaseException {
         try (Connection connection = DriverManager.getConnection(dbUrl, sqLiteConfig)) {
             String sqlRequest = "Select * FROM " + MAIL_HANDLEDARE_REGISTRATION_MAIL_TABLE;
 
             PreparedStatement statement = connection.prepareStatement(sqlRequest);
             ResultSet resultSet = statement.executeQuery();
-            List<Pair<String, String>> mails = new ArrayList<>();
+            List<MailRecieverAndContentHolder> mails = new ArrayList<>();
             while (resultSet.next()) {
-                mails.add(new Pair<String, String>(resultSet.getString(1), resultSet.getString(2)));
+                mails.add(new MailRecieverAndContentHolder(resultSet.getString(MAIL_HANDLEDARE_REGISTRATION_MAIL_COLUMN_ID),
+                        resultSet.getString(MAIL_HANDLEDARE_REGISTRATION_MAIL_COLUMN_EMAIL)));
             }
 
 
