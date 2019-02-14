@@ -23,8 +23,6 @@
             </h1>
             <hr>
             <td class="content">
-
-
                     <div class="container">
                         <div class="card is-fullwidth">
                             <header class="card-header">
@@ -36,35 +34,25 @@
                             <div class="card-content is-hidden">
                                 <div class="content">
                                     <p>
-
                                         <span class="has-text-weight-bold is-size-4" th:text="${total_num_students-num_stud_region}"></span>
                                         Studenter har ej valt studieort
-
                                     </p>
                                     <p>
-
                                         <span class="has-text-weight-bold is-size-4" th:text="${all_students_without_place}"></span>
                                         /
                                         <span class="has-text-weight-bold is-size-4" th:text="${total_num_students}"></span>
                                         Studenter har ingen plats
-
                                     </p>
                                     <p>
-
                                         <span class="has-text-weight-bold is-size-4" th:text="${all_places_without_student}"></span>
                                         /
                                         <span class="has-text-weight-bold is-size-4" th:text="${all_places.size}"></span>
                                         Platser har ingen student
                                     </p>
-
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
-
-
                     <div class="container" th:each="region : ${all_regions}">
                         <div class="card is-fullwidth">
                             <header class="card-header">
@@ -83,7 +71,6 @@
                                         <span class="has-text-weight-bold is-size-4" th:text="${region_places.get(region)}"></span>
                                         platser i [[${region}]]
                                     </p>
-
                                 </div>
                             </div>
                         </div>
@@ -92,7 +79,6 @@
                     <span class="has-text-weight-bold is-size-4 is-medium"></span>
                     Om det finns någon student som ska matchas manuellt så är det bäst att göra det innan du genomför den automatiska matchningen.
                 </p>
-
                 <form
                         th:if="(${#lists.size(unmatched_students)}== 0)"
                         onsubmit="return submitForm(this)"
@@ -100,8 +86,6 @@
                     <button type="submit" class="button is-large is-primary">
                         Genomför automatisk matchning
                     </button>
-
-
                 </form>
                 <form
                         th:if="${#lists.size(unmatched_students)!= 0}"
@@ -110,8 +94,6 @@
                     <button type="submit" class="button is-large is-primary">
                         Genomför automatisk matchning
                     </button>
-
-
                 </form>
                 <br>
                 <br>

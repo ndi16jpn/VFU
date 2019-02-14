@@ -126,7 +126,7 @@
             <div class="content">
 
                 <ul class="is-size-5">
-                    <li> För att lägga till en Handledare till en plats, Klicka på Plats ikonen</li>
+                    <li> För att ta bort en Handledare till en plats, klicka på Plats ikonen. I fönstret som öppnas kan du ta bort handledare.</li>
                     <li> När en handledare läggs till så skickas ett mail till handledaren med ett lösenord</li>
                     <li> Det går <span class="has-text-danger is-size-4">inte</span> att ta bort en enhet som har en student </li>
                     <li> Det går <span class="has-text-danger is-size-4">inte</span> att ta bort en enhet som en student har som ett val</li>
@@ -157,9 +157,9 @@
             </div>
             <hr>
 
-            <form onsubmit="return submitEmail(this)" class="block" action="/admin/send_handledare_reg_mail/"  method="post">
+            <form onsubmit="return submitEmail(this)" class="block" action="/admin/send_handledare_reg_mail/"  method="post" style="height: 100%">
                 <button type="submit" class="button is-primary" id="'send-email-to-handledare'">
-                    Skicka mail till alla handledare
+                    Skicka registreringsmail till alla handledare
                 </button>
             </form>
 
